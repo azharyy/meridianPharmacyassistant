@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(make check)",
+      "Bash(make fmt)",
+      "Bash(make contracts)",
+      "Bash(make seed-data)",
+      "Bash(make fetch-labels)",
+      "Bash(.venv/Scripts/python.exe -m ruff *)",
+      "Bash(.venv/Scripts/python.exe -m pytest *)",
+      "Bash(uv sync *)",
+      "Bash(uv run *)",
+      "Bash(git status)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git branch --show-current)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git switch *)",
+      "Bash(git fetch *)",
+      "Bash(git pull)",
+      "Bash(git pull *)",
+      "Bash(git push -u origin claude/*)",
+      "Bash(git push origin claude/*)",
+      "Bash(gh pr create *)",
+      "Bash(gh pr view *)",
+      "Bash(gh pr checks *)",
+      "Bash(gh pr merge *)",
+      "Bash(gh run list *)",
+      "Bash(gh run view *)",
+      "Bash(gh run watch *)"
+    ],
+    "ask": [
+      "Bash(git push)",
+      "Bash(git push origin main)",
+      "Bash(git push origin main *)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Bash(make run)",
+      "Bash(make eval)",
+      "Bash(make eval-dev)",
+      "Bash(make eval-baseline)",
+      "Bash(make eval-compare)",
+      "Bash(make judge-calibrate)",
+      "Bash(git stash)",
+      "Bash(git stash *)"
+    ]
+  }
+}
