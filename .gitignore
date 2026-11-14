@@ -8,3 +8,18 @@ wheels/
 
 # Virtual environments
 .venv
+
+# Agent working note: one per working folder, never committed
+HANDOFF.md
+
+# Keys: real ones live outside the repo; this is a second line of defense
+.env
+.env.*
+!.env.example
+
+# Claude Code: personal settings
+.claude/settings.local.json
+
+# Tool caches
+.pytest_cache/
+.ruff_cache/
