@@ -5,9 +5,12 @@
 In live mode without the runtime's key, it stops at startup with a message naming the key.
 """
 
+from contextlib import asynccontextmanager
+from functools import partial
 from pathlib import Path
 
 import httpx
+import yaml
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
@@ -16,11 +19,25 @@ from fastapi.staticfiles import StaticFiles
 from assistant import escalation, pipeline
 from assistant.api_client import connect
 from assistant.llm import FakeSender, make_client
+from assistant.retrieval.index import SearchIndex
 from assistant.session import SessionStore
 from assistant.settings import Settings, load_settings
-from contracts.chat import ChatReply, ChatRequest, HandoffReply, HandoffRequest
+from assistant.tools import execute
+from contracts.chat import ChatReply, ChatRequest, HandoffReply, HandoffRequest, OrderFormRequest
 
 WIDGET = Path(__file__).resolve().parent.parent / "widget"
+
+
+def default_steps(settings: Settings) -> tuple[pipeline.Steps, SearchIndex]:
+    """Bind startup search and trusted public-tool identities once."""
+    index = SearchIndex(exact_match=settings.exact_match)
+    stores = yaml.safe_load((WIDGET.parent / "data" / "stores.yaml").read_text(encoding="utf-8"))
+    executor = partial(
+        execute,
+        skus={product.sku for product in index.products},
+        store_ids={store["store_id"] for store in stores},
+    )
+    return pipeline.Steps(retrieve=index.search, execute=executor), index
 
 
 def create_app(
@@ -33,9 +50,20 @@ def create_app(
     settings = settings or load_settings()
     llm = make_client(settings, settings.runtime, fake)
     api = http or connect(settings)
-    turn_steps = steps or pipeline.Steps()
+    turn_steps, index = (steps, None) if steps is not None else default_steps(settings)
     sessions = SessionStore()
-    app = FastAPI(title="Meridian assistant", version="0.1.0")
+
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        try:
+            yield
+        finally:
+            if index is not None:
+                index.close()
+            if http is None:
+                api.close()
+
+    app = FastAPI(title="Meridian assistant", version="0.1.0", lifespan=lifespan)
     # The embeddable widget calls this public API without cookies or browser credentials.
     app.add_middleware(
         CORSMiddleware,
@@ -48,6 +76,10 @@ def create_app(
     def chat(request: ChatRequest) -> ChatReply:
         session = sessions.get(request.session_id)
         return pipeline.run_turn(request, session, turn_steps, llm, api).reply
+
+    @app.post("/orders/verify", response_model=ChatReply)
+    def verify_order(request: OrderFormRequest) -> ChatReply:
+        return pipeline.verify_order(request, sessions.get(request.session_id), turn_steps, api)
 
     @app.post("/handoff", response_model=HandoffReply)
     def handoff(request: HandoffRequest) -> HandoffReply:
