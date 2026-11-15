@@ -31,7 +31,7 @@ def body(role, usage):
 
 @pytest.mark.parametrize(
     "runtime_model,cost",
-    [(DEFAULT_RUNTIME_MODEL, 0.000238), (COMPARISON_RUNTIME_MODEL, 0.0005106)],
+    [(DEFAULT_RUNTIME_MODEL, 0.000238), (COMPARISON_RUNTIME_MODEL, 0.002166)],
 )
 def test_actual_sdk_response_hooks_capture_cache_counts_without_double_counting_reasoning(
     runtime_model, cost

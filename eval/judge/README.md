@@ -2,7 +2,7 @@
 
 The judge is `kimi-k3.1-pro` on OpenCode Go, using strict structured outputs and the
 same `OPENCODE_API_KEY` as the runtime. Its reasoning effort is `low`. It comes from a
-different model family than both runtimes, GLM-5.3-Flash and DeepSeek V4.1 Flash.
+different model family than both runtimes, GLM-5.3-Flash and GLM-5.3.
 
 The held-out runs in `eval/REPORT.md` used the earlier Groq-hosted `qwen/qwen3.8-27b`
 judge; its calibration on the same pairs and prompt is kept in

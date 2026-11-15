@@ -5,12 +5,12 @@
   "disagreements": [],
   "prompt_sha256": "f3d18cdf3851611ad835e7ccc5e658dbd1754ed5ed64e068a5f9dd61523a3a1a",
   "judge": {
-    "provider": "groq",
-    "base_url": "https://api.groq.com/openai/v1",
-    "model": "qwen/qwen3.8-27b",
-    "reasoning_effort": "none",
+    "provider": "opencode",
+    "base_url": "https://opencode.ai/inference/go/openai/v1",
+    "model": "kimi-k3.1-pro",
+    "reasoning_effort": "low",
     "timeout": 30.0,
-    "key_variable": "GROQ_API_KEY"
+    "key_variable": "OPENCODE_API_KEY"
   },
   "service_tier": "provider_default",
   "label_source": "AI (user authorized)"

@@ -96,6 +96,7 @@ def test_an_openai_key_is_ignored_and_cannot_replace_the_opencode_key(role_name)
         {"MERIDIAN_RUNTIME_PROVIDER": "groq", "MERIDIAN_RUNTIME_MODEL": "glm-5.3-flash"},
         {"MERIDIAN_RUNTIME_PROVIDER": "opencode", "MERIDIAN_RUNTIME_MODEL": "openai/gpt-oss-120b"},
         {"MERIDIAN_RUNTIME_PROVIDER": "opencode", "MERIDIAN_RUNTIME_MODEL": "beam-free"},
+        {"MERIDIAN_RUNTIME_PROVIDER": "opencode", "MERIDIAN_RUNTIME_MODEL": "deepseek-v4.1-flash"},
         {"MERIDIAN_RUNTIME_PROVIDER": "opencode", "MERIDIAN_RUNTIME_MODEL": "kimi-k3"},
     ],
 )
@@ -111,7 +112,7 @@ def test_exact_match_flag_and_api_url():
 
 @pytest.mark.parametrize(
     ("model", "expected"),
-    [(None, "glm-5.3-flash"), ("deepseek-v4.1-flash", "deepseek-v4.1-flash")],
+    [(None, "glm-5.3-flash"), ("glm-5.3", "glm-5.3")],
 )
 def test_the_runtime_moves_to_an_opencode_go_model_by_settings_alone(model, expected):
     env = {"MERIDIAN_RUNTIME_PROVIDER": "opencode"}

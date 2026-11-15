@@ -35,19 +35,19 @@ def test_comparison_shows_accuracy_latency_and_actual_runtime_cost_with_pricing_
         requests=1, responses_with_usage=1, prompt_tokens=1000, completion_tokens=100
     ).snapshot(COMPARE.runtime)
     text = build(before, after)
-    assert "| Metric | opencode glm-5.3-flash | opencode deepseek-v4.1-flash |" in text
+    assert "| Metric | opencode glm-5.3-flash | opencode glm-5.3 |" in text
     assert "| Answer accuracy | 1/1 (100.0%) | 1/1 (100.0%) |" in text
     assert "| Latency p50 / p95 |" in text
-    assert "| Estimated runtime cost (USD) | $0.00020000 | $0.00042000 |" in text
+    assert "| Estimated runtime cost (USD) | $0.00020000 | $0.00184000 |" in text
     assert "reasoning tokens" in text and "Judge calls are excluded" in text
     assert "Rate-limited (429) attempts return no completion and count as unbilled" in text
     assert "monthly allowance instead of being billed" in text
     assert "[opencode glm-5.3-flash](https://opencode.ai/docs/go/)" in text
-    assert "(peak rate, so an upper bound; off-peak is half)" in text
+    assert "[opencode glm-5.3](https://opencode.ai/docs/go/): input $1.4" in text
     assert "gpt-oss" not in text  # only the two compared runtimes are priced
-    assert "## Failed opencode deepseek-v4.1-flash cases" in text and "2026-11-15" in text
+    assert "## Failed opencode glm-5.3 cases" in text and "2026-11-15" in text
     after["runtime_usage"]["unaccounted"] = 2
-    assert "| $0.00020000 | at least $0.00042000 (2 attempts without usage) |" in build(
+    assert "| $0.00020000 | at least $0.00184000 (2 attempts without usage) |" in build(
         before, after
     )
     after["runtime_usage"]["estimated_cost_usd"] = None
@@ -141,11 +141,11 @@ def test_fake_full_comparison_selects_runtime_by_settings_and_excludes_judge_tok
     assert started == [COMPARISON_RUNTIME_MODEL, "fresh-api"]
     assert result["runtime_usage"]["prompt_tokens"] == 100
     assert result["runtime_usage"]["completion_tokens"] == 20
-    assert result["runtime_usage"]["estimated_cost_usd"] == 0.000054
+    assert result["runtime_usage"]["estimated_cost_usd"] == 0.000228
     assert result["metrics"]["accuracy"]["passed"] == 1
     assert result == json.loads((tmp_path / "dev-compare.json").read_text())
     text = (tmp_path / "dev-compare.md").read_text()
-    assert "Development runtime comparison" in text and "unavailable | $0.00005400" in text
+    assert "Development runtime comparison" in text and "unavailable | $0.00022800" in text
 
 
 def test_comparison_make_target_selects_the_comparison_runtime_using_settings_only():

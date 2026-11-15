@@ -88,11 +88,10 @@ def build(baseline: dict, comparison: dict) -> str:
             lines.append(f"- {runtime_label(run)}: no verified price.")
             continue
         write = "unsupported" if price["cache_write"] is None else f"${price['cache_write']}"
-        note = f" ({price['note']})" if "note" in price else ""
         lines.append(
             f"- [{runtime_label(run)}]({price['source']}): input ${price['input']},"
             f" cached input ${price['cached_input']}, cache write {write},"
-            f" output ${price['output']}{note}."
+            f" output ${price['output']}."
         )
     lines += ["", f"## Failed {runtime_label(comparison)} cases", ""]
     lines += [f"- {case}: {'; '.join(reasons)}" for case, reasons in failures.items()] or ["None."]
