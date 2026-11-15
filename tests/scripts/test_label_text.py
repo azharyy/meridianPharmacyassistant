@@ -99,6 +99,10 @@ def test_a_usable_label_has_no_problems():
         ({"indications_and_usage": ["Uses  runny nose"]}, "a symbol-font or broken character"),
         ({"indications_and_usage": ["Uses compare to Brandname®"]}, "a trademark sign"),
         (
+            {"dosage_and_administration": ["Directions use daily Image Image"]},
+            "a figure placeholder",
+        ),
+        (
             {"indications_and_usage": ["Uses like Sample Allergy Care"]},
             "a brand or manufacturer name",
         ),

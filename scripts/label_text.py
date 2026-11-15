@@ -51,6 +51,7 @@ COMBINATION = re.compile(r",|/|&|\bAND\b|\bWITH\b", re.IGNORECASE)
 PHONE = re.compile(r"\(?\b\d{3}\)?[\s.-]?\d{3}[\s.-]\d{4}\b|\b1-8\d\d\b")
 UNREADABLE = re.compile("[-�]")  # private-use symbol-font glyphs, or broken text
 TRADEMARK = re.compile("[®™]")  # ® or ™
+FIGURE = re.compile(r"\bImage\b")  # a figure's placeholder left in flattened text
 CHILDREN = re.compile(r"(?i)\b(child|children|childrens|children's|infant|infants|junior|kids)\b")
 # Words that don't make a brand name distinctive: a brand made only of these and the generic
 # name ("Loratadine 10mg", "Fexofenadine HCL") is just the ingredient.
@@ -150,6 +151,7 @@ def problems(label: dict) -> list[str]:
         "a phone number": PHONE.search(text),
         "a symbol-font or broken character": UNREADABLE.search(text),
         "a trademark sign": TRADEMARK.search(text),
+        "a figure placeholder": FIGURE.search(text),
         "a brand or manufacturer name": any(n.lower() in text.lower() for n in real_names(label)),
         "more than one active ingredient": len(generic) != 1 or COMBINATION.search(generic[0]),
         "a children's product": CHILDREN.search(" ".join(fda.get("brand_name", []))),
