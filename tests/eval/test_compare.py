@@ -39,6 +39,7 @@ def test_comparison_shows_accuracy_latency_and_actual_runtime_cost_with_pricing_
     assert "| Latency p50 / p95 |" in text
     assert "| Estimated runtime cost (USD) | $0.00021000 | $0.00010500 |" in text
     assert "reasoning tokens" in text and "Judge calls are excluded" in text
+    assert "Rate-limited (429) attempts return no completion and count as unbilled" in text
     assert "https://console.groq.com/docs/model/openai/gpt-oss-120b" in text
     assert "https://console.groq.com/docs/model/openai/gpt-oss-20b" in text
     assert "Groq GPT-OSS 120B | Groq GPT-OSS 20B" in text
