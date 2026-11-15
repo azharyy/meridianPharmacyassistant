@@ -121,6 +121,22 @@ def test_a_transport_failure_then_retry_does_not_disappear_from_usage_accounting
     assert result["estimated_cost_usd"] is None and result["completion_tokens"] is None
 
 
+def test_rate_limited_attempts_count_as_unbilled_but_other_failures_stay_unknown():
+    role, capture = runtime_role(), UsageCapture()
+    for response in (
+        httpx.Response(429, headers={"Retry-After": "6"}),
+        httpx.Response(200, json=body(role, {"prompt_tokens": 1000, "completion_tokens": 100})),
+    ):
+        capture.request(httpx.Request("POST", "https://model.test"))
+        capture.response(response)
+    result = capture.snapshot(role)
+    assert result["complete"] and result["rate_limited"] == 1
+    assert result["prompt_tokens"] == 1000 and result["estimated_cost_usd"] == 0.00021
+    capture.request(httpx.Request("POST", "https://model.test"))
+    capture.response(httpx.Response(500))
+    assert capture.snapshot(role)["estimated_cost_usd"] is None
+
+
 def test_unknown_pricing_and_unsupported_cache_writes_are_unavailable():
     role = runtime_role()
     capture = UsageCapture(requests=1, responses_with_usage=1, prompt_tokens=100)

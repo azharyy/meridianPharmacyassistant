@@ -65,8 +65,9 @@ def build(baseline: dict, comparison: dict) -> str:
         *[f"| {name} | {before[name]} | {after[name]} |" for name in before],
         "",
         "Cost is estimated from actual provider prompt, cached-input, cache-write and completion"
-        " token counts. Completion totals already include reasoning tokens. Missing or invalid"
-        " usage, unknown pricing and unsupported cache writes make cost unavailable. Judge calls"
+        " token counts. Completion totals already include reasoning tokens. Rate-limited (429)"
+        " attempts return no completion and count as unbilled. Any other attempt without usage,"
+        " unknown pricing and unsupported cache writes make cost unavailable. Judge calls"
         " are excluded from both runtime cost and stage latency.",
         "",
         f"Pricing verified {PRICING_DATE}, USD per million tokens:",
