@@ -71,6 +71,10 @@ def test_an_openai_key_is_ignored_and_cannot_replace_the_groq_key(role_name):
         {"MERIDIAN_RUNTIME_PROVIDER": "openai"},
         {"MERIDIAN_RUNTIME_MODEL": "gpt-6-luna"},
         {"MERIDIAN_RUNTIME_MODEL": "qwen/qwen3.8-27b"},
+        {"MERIDIAN_RUNTIME_MODEL": "glm-5.3-flash"},  # a Go model needs the opencode provider
+        {"MERIDIAN_RUNTIME_PROVIDER": "opencode", "MERIDIAN_RUNTIME_MODEL": "openai/gpt-oss-120b"},
+        {"MERIDIAN_RUNTIME_PROVIDER": "opencode", "MERIDIAN_RUNTIME_MODEL": "beam-free"},
+        {"MERIDIAN_RUNTIME_PROVIDER": "opencode", "MERIDIAN_RUNTIME_MODEL": "kimi-k3"},
     ],
 )
 def test_unknown_values_are_rejected(env):
@@ -85,6 +89,35 @@ def test_exact_match_flag_and_api_url():
 
 def test_legacy_groq_provider_still_uses_the_groq_runtime():
     assert load_settings({"MERIDIAN_RUNTIME_PROVIDER": "groq"}).runtime == runtime_role()
+
+
+@pytest.mark.parametrize(
+    ("model", "expected"),
+    [(None, "glm-5.3-flash"), ("deepseek-v4.1-flash", "deepseek-v4.1-flash")],
+)
+def test_the_runtime_moves_to_an_opencode_go_model_by_settings_alone(model, expected):
+    env = {"MERIDIAN_RUNTIME_PROVIDER": "opencode"}
+    settings = load_settings(env | ({"MERIDIAN_RUNTIME_MODEL": model} if model else {}))
+    runtime = settings.runtime
+    assert (runtime.provider, runtime.model, runtime.reasoning_effort) == (
+        "opencode",
+        expected,
+        "low",
+    )
+    assert (runtime.base_url, runtime.key_variable) == (
+        "https://opencode.ai/inference/go/openai/v1",
+        "OPENCODE_API_KEY",
+    )
+    assert settings.judge == load_settings({}).judge  # the calibrated Groq judge stays
+
+
+def test_an_opencode_runtime_needs_its_own_key_which_is_never_shown():
+    env = {"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_PROVIDER": "opencode", "GROQ_API_KEY": "gsk_x"}
+    with pytest.raises(MissingKey, match="OPENCODE_API_KEY"):
+        load_settings(env).api_key(load_settings(env).runtime)
+    settings = load_settings(env | {"OPENCODE_API_KEY": " oc_secret "})
+    assert settings.api_key(settings.runtime) == "oc_secret"
+    assert "oc_secret" not in repr(settings)
 
 
 def test_no_other_module_reads_the_environment():

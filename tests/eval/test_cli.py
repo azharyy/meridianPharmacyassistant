@@ -120,6 +120,7 @@ def test_missing_live_keys_stop_before_models_or_api_start():
         SETTINGS,
         load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_EXACT_MATCH": "0"}),
         load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_MODEL": "openai/gpt-oss-20b"}),
+        load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_PROVIDER": "opencode"}),
     ],
 )
 def test_wrong_variant_settings_stop_before_models_or_api_start(setting):

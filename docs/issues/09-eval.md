@@ -1,5 +1,5 @@
 Builder: Claude · Review: CI and the user's read · Starts after: 2 and 3
-Folders: `eval/`, `tests/eval/`, `assistant/settings.py`, `tests/assistant/test_settings.py`, `tests/assistant/test_llm.py`. A narrow README setup correction is allowed. Adds the make targets `eval-dev`, `eval-baseline`, `eval`, `eval-compare` and `judge-calibrate`.
+Folders: `eval/`, `tests/eval/`, `assistant/settings.py`, `tests/assistant/test_settings.py`, `tests/assistant/test_llm.py`, `.env.example`. A narrow README setup correction is allowed. Adds the make targets `eval-dev`, `eval-baseline`, `eval`, `eval-compare` and `judge-calibrate`.
 Plan sections: Evaluation; Architecture (Model calls); Module map and rules.
 
 User amendment (2026-11-15): use the Groq API exclusively. The runtime remains
@@ -11,6 +11,13 @@ through settings alone. Pin the runtime model in every eval target. The user als
 authorized live runs and independent AI labeling; report AI provenance and the lack
 of independent human validation. These changes supersede the original provider and
 human-label requirements below; contracts, dependencies and PLAN stay unchanged.
+
+User amendment 2 (2026-11-15): `make run` may use the user's OpenCode Go subscription
+instead of Groq, chosen in `.env` (`MERIDIAN_RUNTIME_PROVIDER=opencode` and
+`OPENCODE_API_KEY`). Only Go-plan models that OpenCode lists with structured output on its
+chat-completions API and "low" reasoning effort are accepted: `glm-5.3-flash` (default) and
+`deepseek-v4.1-flash`. Groq stays the default runtime; the judge and every eval target stay
+on Groq, so the measured results and the calibration are unchanged.
 
 The harness, the metrics, the judge, the report and drafted cases for the user to label. One pull request; the three parts below are its order of work. Keep the loader, the runner, each metric, the judge and the report in separate modules, and make each metric a pure function over recorded results.
 

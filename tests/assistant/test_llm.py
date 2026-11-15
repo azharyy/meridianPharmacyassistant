@@ -13,7 +13,7 @@ from assistant.llm import (
     make_client,
     sdk_sender,
 )
-from assistant.settings import MissingKey, load_settings
+from assistant.settings import MissingKey, Role, load_settings
 from contracts.router import RouterOutput
 
 ROUTED = {
@@ -47,7 +47,9 @@ def completion(content: str) -> httpx.Response:
     )
 
 
-def live_client(*answers: httpx.Response | str) -> tuple[ModelClient, list[httpx.Request]]:
+def live_client(
+    *answers: httpx.Response | str, role: Role = RUNTIME
+) -> tuple[ModelClient, list[httpx.Request]]:
     """The real SDK sender, with each HTTP call answered in turn; "timeout" raises a timeout."""
     seen: list[httpx.Request] = []
     queue = list(answers)
@@ -60,16 +62,29 @@ def live_client(*answers: httpx.Response | str) -> tuple[ModelClient, list[httpx
         return answer
 
     http = httpx.Client(transport=httpx.MockTransport(handle))
-    return ModelClient(RUNTIME, sdk_sender(RUNTIME, "gsk_test", http_client=http)), seen
+    return ModelClient(role, sdk_sender(role, "gsk_test", http_client=http)), seen
 
 
-def test_the_request_is_strict_structured_output_without_tools():
-    client, seen = live_client(completion(json.dumps(ROUTED)))
+@pytest.mark.parametrize(
+    ("provider", "url", "model"),
+    [
+        ("groq", "https://api.groq.com/openai/v1/chat/completions", "openai/gpt-oss-120b"),
+        (
+            "opencode",
+            "https://opencode.ai/inference/go/openai/v1/chat/completions",
+            "glm-5.3-flash",
+        ),
+    ],
+)
+def test_the_request_is_strict_structured_output_without_tools(provider, url, model):
+    role = load_settings({"MERIDIAN_RUNTIME_PROVIDER": provider}).runtime
+    client, seen = live_client(completion(json.dumps(ROUTED)), role=role)
     assert client.complete(MESSAGES, RouterOutput) == RouterOutput(**ROUTED)
-    assert str(seen[0].url) == "https://api.groq.com/openai/v1/chat/completions"
+    assert str(seen[0].url) == url
+    assert seen[0].headers["authorization"] == "Bearer gsk_test"
     body = json.loads(seen[0].content)
     assert "tools" not in body
-    assert (body["model"], body["reasoning_effort"]) == ("openai/gpt-oss-120b", "low")
+    assert (body["model"], body["reasoning_effort"]) == (model, "low")
     assert body["messages"] == MESSAGES
     response_format = body["response_format"]
     assert response_format["type"] == "json_schema"
