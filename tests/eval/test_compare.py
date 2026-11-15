@@ -50,6 +50,8 @@ def test_comparison_shows_accuracy_latency_and_actual_runtime_cost_with_pricing_
     assert "| $0.00020000 | at least $0.00184000 (2 attempts without usage) |" in build(
         before, after
     )
+    after["runtime_usage"]["unaccounted"] = 1
+    assert "at least $0.00184000 (1 attempt without usage) |" in build(before, after)
     after["runtime_usage"]["estimated_cost_usd"] = None
     assert "$0.00020000 | unavailable" in build(before, after)
 

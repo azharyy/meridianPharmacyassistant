@@ -41,8 +41,10 @@ def comparison_rows(run: dict) -> dict[str, str]:
     if cost is not None and (type(cost) not in (int, float) or not math.isfinite(cost) or cost < 0):
         raise ValueError("invalid estimated runtime cost")
     shown = "unavailable" if cost is None else f"${cost:.8f}"
-    if cost is not None and usage.get("unaccounted", 0):
-        shown = f"at least {shown} ({usage['unaccounted']} attempts without usage)"
+    unknown = usage.get("unaccounted", 0)
+    if cost is not None and unknown:
+        plural = "s" if unknown > 1 else ""
+        shown = f"at least {shown} ({unknown} attempt{plural} without usage)"
     return {
         "Answer accuracy": percent(accuracy["passed"], accuracy["total"]),
         "Latency p50 / p95": f"{ms(latency['p50_ms'])} / {ms(latency['p95_ms'])}",
