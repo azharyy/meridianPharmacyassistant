@@ -1,0 +1,12 @@
+{
+  "reply_type": "prompt_injection",
+  "blocks": [
+    {
+      "type": "text",
+      "text": "I can't help with that request. I can answer questions about our products, stores, policies and your orders."
+    }
+  ],
+  "sources": [],
+  "handoff_offered": true,
+  "emergency": false
+}

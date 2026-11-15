@@ -1,0 +1,50 @@
+{
+  "reply_type": "product_list",
+  "blocks": [
+    {
+      "type": "product_list",
+      "products": [
+        {
+          "sku": "MRD-ALG-012",
+          "name": "Meridian All Day Allergy",
+          "uses": "temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: • runny nose • sneezing • itchy, watery eyes • itching of the nose or throat",
+          "source_id": "MRD-ALG-012#uses"
+        },
+        {
+          "sku": "MRD-ALG-013",
+          "name": "Meridian Allergy Relief",
+          "uses": "temporarily relieves these symptoms due to hay fever and other upper respiratory allergies: runny nose sneezing itching of the nose and throat itchy, watery eyes",
+          "source_id": "MRD-ALG-013#uses"
+        },
+        {
+          "sku": "MRD-ALG-014",
+          "name": "Meridian 24-Hour Allergy",
+          "uses": "temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: runny nose itchy, watery eyes sneezing itching of the nose or throat",
+          "source_id": "MRD-ALG-014#uses"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "MRD-ALG-012#uses",
+      "title": "Meridian All Day Allergy: Uses",
+      "text": "temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: • runny nose • sneezing • itchy, watery eyes • itching of the nose or throat",
+      "retrieved_at": null
+    },
+    {
+      "id": "MRD-ALG-013#uses",
+      "title": "Meridian Allergy Relief: Uses",
+      "text": "temporarily relieves these symptoms due to hay fever and other upper respiratory allergies: runny nose sneezing itching of the nose and throat itchy, watery eyes",
+      "retrieved_at": null
+    },
+    {
+      "id": "MRD-ALG-014#uses",
+      "title": "Meridian 24-Hour Allergy: Uses",
+      "text": "temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: runny nose itchy, watery eyes sneezing itching of the nose or throat",
+      "retrieved_at": null
+    }
+  ],
+  "handoff_offered": false,
+  "emergency": false
+}

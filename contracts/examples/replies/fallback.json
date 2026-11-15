@@ -1,0 +1,12 @@
+{
+  "reply_type": "fallback",
+  "blocks": [
+    {
+      "type": "text",
+      "text": "Sorry, I can't answer right now. If this is an emergency, call 911."
+    }
+  ],
+  "sources": [],
+  "handoff_offered": true,
+  "emergency": false
+}

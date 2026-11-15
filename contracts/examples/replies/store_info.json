@@ -1,0 +1,39 @@
+{
+  "reply_type": "store_info",
+  "blocks": [
+    {
+      "type": "store_info",
+      "store": {
+        "store_id": "store-001",
+        "name": "Meridian Downtown",
+        "address": "120 Harbor Street, Springfield",
+        "phone": "(217) 555-0142",
+        "hours": {
+          "Monday": "08:00-21:00",
+          "Tuesday": "08:00-21:00",
+          "Wednesday": "08:00-21:00",
+          "Thursday": "08:00-21:00",
+          "Friday": "08:00-21:00",
+          "Saturday": "09:00-18:00",
+          "Sunday": "10:00-16:00"
+        },
+        "services": [
+          "Pharmacist consultation",
+          "Prescription pickup",
+          "Home delivery"
+        ]
+      },
+      "source_id": "api:stores/store-001"
+    }
+  ],
+  "sources": [
+    {
+      "id": "api:stores/store-001",
+      "title": "Store details",
+      "text": null,
+      "retrieved_at": "2026-11-15T10:42:00Z"
+    }
+  ],
+  "handoff_offered": false,
+  "emergency": false
+}

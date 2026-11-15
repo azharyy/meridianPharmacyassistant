@@ -16,6 +16,9 @@ dependencies = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
+# Tests mirror the tree, so two test files can share a name (tests/api/test_app.py and
+# tests/assistant/test_app.py). importlib mode imports each under its full path.
+addopts = ["--import-mode=importlib"]
 
 [tool.ruff]
 line-length = 100

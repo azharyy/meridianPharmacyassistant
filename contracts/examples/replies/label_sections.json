@@ -1,0 +1,24 @@
+{
+  "reply_type": "label_sections",
+  "blocks": [
+    {
+      "type": "label_section",
+      "sku": "MRD-ALG-012",
+      "name": "Meridian All Day Allergy",
+      "section": "directions",
+      "title": "Directions",
+      "text": "adults and children 6 years and over one 10 mg tablet once daily; do not take more than one 10 mg tablet in 24 hours. A 5 mg product may be appropriate for less severe symptoms. adults 65 years and over ask a doctor children under 6 years of age ask a doctor consumers with liver or kidney disease ask a doctor",
+      "source_id": "MRD-ALG-012#directions"
+    }
+  ],
+  "sources": [
+    {
+      "id": "MRD-ALG-012#directions",
+      "title": "Meridian All Day Allergy: Directions",
+      "text": "adults and children 6 years and over one 10 mg tablet once daily; do not take more than one 10 mg tablet in 24 hours. A 5 mg product may be appropriate for less severe symptoms. adults 65 years and over ask a doctor children under 6 years of age ask a doctor consumers with liver or kidney disease ask a doctor",
+      "retrieved_at": null
+    }
+  ],
+  "handoff_offered": false,
+  "emergency": false
+}

@@ -1,0 +1,1080 @@
+{
+  "CatalogPlan": {
+    "$defs": {
+      "AvailabilityRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "const": "check_availability",
+            "title": "Name",
+            "type": "string"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "sku"
+        ],
+        "title": "AvailabilityRequest",
+        "type": "object"
+      },
+      "LabelSection": {
+        "enum": [
+          "active_ingredients",
+          "uses",
+          "warnings",
+          "directions"
+        ],
+        "title": "LabelSection",
+        "type": "string"
+      },
+      "RecordSelection": {
+        "additionalProperties": false,
+        "properties": {
+          "record_id": {
+            "title": "Record Id",
+            "type": "string"
+          },
+          "sections": {
+            "items": {
+              "$ref": "#/$defs/LabelSection"
+            },
+            "title": "Sections",
+            "type": "array"
+          }
+        },
+        "required": [
+          "record_id",
+          "sections"
+        ],
+        "title": "RecordSelection",
+        "type": "object"
+      },
+      "ReplyType": {
+        "enum": [
+          "label_sections",
+          "comparison",
+          "product_list",
+          "availability",
+          "store_info",
+          "policy",
+          "order_status",
+          "order_form",
+          "order_not_verified",
+          "emergency",
+          "medical_advice",
+          "dosing_beyond_label",
+          "prescription",
+          "prompt_injection",
+          "fallback",
+          "off_topic",
+          "not_found",
+          "lookup_failed"
+        ],
+        "title": "ReplyType",
+        "type": "string"
+      },
+      "StoreRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "const": "get_store_info",
+            "title": "Name",
+            "type": "string"
+          },
+          "store_id": {
+            "title": "Store Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "store_id"
+        ],
+        "title": "StoreRequest",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "records": {
+        "items": {
+          "$ref": "#/$defs/RecordSelection"
+        },
+        "title": "Records",
+        "type": "array"
+      },
+      "reply_type": {
+        "$ref": "#/$defs/ReplyType"
+      },
+      "tool": {
+        "anyOf": [
+          {
+            "$ref": "#/$defs/AvailabilityRequest"
+          },
+          {
+            "$ref": "#/$defs/StoreRequest"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Tool"
+      }
+    },
+    "required": [
+      "reply_type",
+      "records",
+      "tool"
+    ],
+    "title": "CatalogPlan",
+    "type": "object"
+  },
+  "ChatReply": {
+    "$defs": {
+      "AvailabilityBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sku": {
+            "pattern": "^MRD-[A-Z]{3}-\\d{3}$",
+            "title": "Sku",
+            "type": "string"
+          },
+          "source_id": {
+            "pattern": "^(MRD-[A-Z]{3}-\\d{3}#(active_ingredients|uses|warnings|directions)|policies/[a-z0-9-]+\\.md#[a-z0-9-]+|api:(stores/[a-z0-9-]+|availability/MRD-[A-Z]{3}-\\d{3}|orders))$",
+            "title": "Source Id",
+            "type": "string"
+          },
+          "stores": {
+            "items": {
+              "$ref": "#/$defs/StoreAvailability"
+            },
+            "title": "Stores",
+            "type": "array"
+          },
+          "type": {
+            "const": "availability",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "sku",
+          "name",
+          "stores",
+          "source_id"
+        ],
+        "title": "AvailabilityBlock",
+        "type": "object"
+      },
+      "ComparisonBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "products": {
+            "items": {
+              "$ref": "#/$defs/ProductRef"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Products",
+            "type": "array"
+          },
+          "rows": {
+            "items": {
+              "$ref": "#/$defs/ComparisonRow"
+            },
+            "maxItems": 4,
+            "minItems": 1,
+            "title": "Rows",
+            "type": "array"
+          },
+          "type": {
+            "const": "comparison",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "products",
+          "rows"
+        ],
+        "title": "ComparisonBlock",
+        "type": "object"
+      },
+      "ComparisonRow": {
+        "additionalProperties": false,
+        "properties": {
+          "section": {
+            "$ref": "#/$defs/LabelSection"
+          },
+          "texts": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 2,
+            "minItems": 2,
+            "title": "Texts",
+            "type": "array"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "section",
+          "title",
+          "texts"
+        ],
+        "title": "ComparisonRow",
+        "type": "object"
+      },
+      "LabelSection": {
+        "enum": [
+          "active_ingredients",
+          "uses",
+          "warnings",
+          "directions"
+        ],
+        "title": "LabelSection",
+        "type": "string"
+      },
+      "LabelSectionBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "section": {
+            "$ref": "#/$defs/LabelSection"
+          },
+          "sku": {
+            "pattern": "^MRD-[A-Z]{3}-\\d{3}$",
+            "title": "Sku",
+            "type": "string"
+          },
+          "source_id": {
+            "pattern": "^(MRD-[A-Z]{3}-\\d{3}#(active_ingredients|uses|warnings|directions)|policies/[a-z0-9-]+\\.md#[a-z0-9-]+|api:(stores/[a-z0-9-]+|availability/MRD-[A-Z]{3}-\\d{3}|orders))$",
+            "title": "Source Id",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "type": {
+            "const": "label_section",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "sku",
+          "name",
+          "section",
+          "title",
+          "text",
+          "source_id"
+        ],
+        "title": "LabelSectionBlock",
+        "type": "object"
+      },
+      "OrderFormBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "contact_label": {
+            "title": "Contact Label",
+            "type": "string"
+          },
+          "order_number_label": {
+            "title": "Order Number Label",
+            "type": "string"
+          },
+          "submit_label": {
+            "title": "Submit Label",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "order_form",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "text",
+          "order_number_label",
+          "contact_label",
+          "submit_label"
+        ],
+        "title": "OrderFormBlock",
+        "type": "object"
+      },
+      "OrderStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "delivery_estimate": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delivery Estimate"
+          },
+          "item_count": {
+            "minimum": 0,
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "processing",
+              "ready_for_pickup",
+              "shipped",
+              "delivered",
+              "cancelled"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "delivery_estimate",
+          "item_count"
+        ],
+        "title": "OrderStatus",
+        "type": "object"
+      },
+      "OrderStatusBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "order": {
+            "$ref": "#/$defs/OrderStatus"
+          },
+          "source_id": {
+            "pattern": "^(MRD-[A-Z]{3}-\\d{3}#(active_ingredients|uses|warnings|directions)|policies/[a-z0-9-]+\\.md#[a-z0-9-]+|api:(stores/[a-z0-9-]+|availability/MRD-[A-Z]{3}-\\d{3}|orders))$",
+            "title": "Source Id",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "order_status",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "text",
+          "order",
+          "source_id"
+        ],
+        "title": "OrderStatusBlock",
+        "type": "object"
+      },
+      "PolicyExcerptBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "source_id": {
+            "pattern": "^(MRD-[A-Z]{3}-\\d{3}#(active_ingredients|uses|warnings|directions)|policies/[a-z0-9-]+\\.md#[a-z0-9-]+|api:(stores/[a-z0-9-]+|availability/MRD-[A-Z]{3}-\\d{3}|orders))$",
+            "title": "Source Id",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "type": {
+            "const": "policy_excerpt",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "source_id",
+          "title",
+          "text"
+        ],
+        "title": "PolicyExcerptBlock",
+        "type": "object"
+      },
+      "ProductListBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "products": {
+            "items": {
+              "$ref": "#/$defs/ProductSummary"
+            },
+            "minItems": 1,
+            "title": "Products",
+            "type": "array"
+          },
+          "type": {
+            "const": "product_list",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "products"
+        ],
+        "title": "ProductListBlock",
+        "type": "object"
+      },
+      "ProductRef": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sku": {
+            "pattern": "^MRD-[A-Z]{3}-\\d{3}$",
+            "title": "Sku",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sku",
+          "name"
+        ],
+        "title": "ProductRef",
+        "type": "object"
+      },
+      "ProductSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sku": {
+            "pattern": "^MRD-[A-Z]{3}-\\d{3}$",
+            "title": "Sku",
+            "type": "string"
+          },
+          "source_id": {
+            "pattern": "^(MRD-[A-Z]{3}-\\d{3}#(active_ingredients|uses|warnings|directions)|policies/[a-z0-9-]+\\.md#[a-z0-9-]+|api:(stores/[a-z0-9-]+|availability/MRD-[A-Z]{3}-\\d{3}|orders))$",
+            "title": "Source Id",
+            "type": "string"
+          },
+          "uses": {
+            "title": "Uses",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sku",
+          "name",
+          "uses",
+          "source_id"
+        ],
+        "title": "ProductSummary",
+        "type": "object"
+      },
+      "ReplyType": {
+        "enum": [
+          "label_sections",
+          "comparison",
+          "product_list",
+          "availability",
+          "store_info",
+          "policy",
+          "order_status",
+          "order_form",
+          "order_not_verified",
+          "emergency",
+          "medical_advice",
+          "dosing_beyond_label",
+          "prescription",
+          "prompt_injection",
+          "fallback",
+          "off_topic",
+          "not_found",
+          "lookup_failed"
+        ],
+        "title": "ReplyType",
+        "type": "string"
+      },
+      "Source": {
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "pattern": "^(MRD-[A-Z]{3}-\\d{3}#(active_ingredients|uses|warnings|directions)|policies/[a-z0-9-]+\\.md#[a-z0-9-]+|api:(stores/[a-z0-9-]+|availability/MRD-[A-Z]{3}-\\d{3}|orders))$",
+            "title": "Id",
+            "type": "string"
+          },
+          "retrieved_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Retrieved At"
+          },
+          "text": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Text"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "text",
+          "retrieved_at"
+        ],
+        "title": "Source",
+        "type": "object"
+      },
+      "StoreAvailability": {
+        "additionalProperties": false,
+        "properties": {
+          "quantity": {
+            "minimum": 0,
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "store_id": {
+            "title": "Store Id",
+            "type": "string"
+          },
+          "store_name": {
+            "title": "Store Name",
+            "type": "string"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id",
+          "store_name",
+          "quantity",
+          "text"
+        ],
+        "title": "StoreAvailability",
+        "type": "object"
+      },
+      "StoreInfo": {
+        "additionalProperties": false,
+        "properties": {
+          "address": {
+            "title": "Address",
+            "type": "string"
+          },
+          "hours": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Hours",
+            "type": "object"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "phone": {
+            "title": "Phone",
+            "type": "string"
+          },
+          "services": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Services",
+            "type": "array"
+          },
+          "store_id": {
+            "title": "Store Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id",
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "services"
+        ],
+        "title": "StoreInfo",
+        "type": "object"
+      },
+      "StoreInfoBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "source_id": {
+            "pattern": "^(MRD-[A-Z]{3}-\\d{3}#(active_ingredients|uses|warnings|directions)|policies/[a-z0-9-]+\\.md#[a-z0-9-]+|api:(stores/[a-z0-9-]+|availability/MRD-[A-Z]{3}-\\d{3}|orders))$",
+            "title": "Source Id",
+            "type": "string"
+          },
+          "store": {
+            "$ref": "#/$defs/StoreInfo"
+          },
+          "type": {
+            "const": "store_info",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "store",
+          "source_id"
+        ],
+        "title": "StoreInfoBlock",
+        "type": "object"
+      },
+      "TextBlock": {
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string"
+          },
+          "type": {
+            "const": "text",
+            "title": "Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "text"
+        ],
+        "title": "TextBlock",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "blocks": {
+        "items": {
+          "discriminator": {
+            "mapping": {
+              "availability": "#/$defs/AvailabilityBlock",
+              "comparison": "#/$defs/ComparisonBlock",
+              "label_section": "#/$defs/LabelSectionBlock",
+              "order_form": "#/$defs/OrderFormBlock",
+              "order_status": "#/$defs/OrderStatusBlock",
+              "policy_excerpt": "#/$defs/PolicyExcerptBlock",
+              "product_list": "#/$defs/ProductListBlock",
+              "store_info": "#/$defs/StoreInfoBlock",
+              "text": "#/$defs/TextBlock"
+            },
+            "propertyName": "type"
+          },
+          "oneOf": [
+            {
+              "$ref": "#/$defs/TextBlock"
+            },
+            {
+              "$ref": "#/$defs/LabelSectionBlock"
+            },
+            {
+              "$ref": "#/$defs/ComparisonBlock"
+            },
+            {
+              "$ref": "#/$defs/ProductListBlock"
+            },
+            {
+              "$ref": "#/$defs/AvailabilityBlock"
+            },
+            {
+              "$ref": "#/$defs/StoreInfoBlock"
+            },
+            {
+              "$ref": "#/$defs/PolicyExcerptBlock"
+            },
+            {
+              "$ref": "#/$defs/OrderStatusBlock"
+            },
+            {
+              "$ref": "#/$defs/OrderFormBlock"
+            }
+          ]
+        },
+        "title": "Blocks",
+        "type": "array"
+      },
+      "emergency": {
+        "title": "Emergency",
+        "type": "boolean"
+      },
+      "handoff_offered": {
+        "title": "Handoff Offered",
+        "type": "boolean"
+      },
+      "reply_type": {
+        "$ref": "#/$defs/ReplyType"
+      },
+      "sources": {
+        "items": {
+          "$ref": "#/$defs/Source"
+        },
+        "title": "Sources",
+        "type": "array"
+      }
+    },
+    "required": [
+      "reply_type",
+      "blocks",
+      "sources",
+      "handoff_offered",
+      "emergency"
+    ],
+    "title": "ChatReply",
+    "type": "object"
+  },
+  "ChatRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "message": {
+        "maxLength": 2000,
+        "minLength": 1,
+        "title": "Message",
+        "type": "string"
+      },
+      "session_id": {
+        "pattern": "^[A-Za-z0-9_-]{8,64}$",
+        "title": "Session Id",
+        "type": "string"
+      },
+      "store_id": {
+        "anyOf": [
+          {
+            "pattern": "^[a-z0-9-]{1,32}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Store Id"
+      }
+    },
+    "required": [
+      "session_id",
+      "message"
+    ],
+    "title": "ChatRequest",
+    "type": "object"
+  },
+  "HandoffReply": {
+    "additionalProperties": false,
+    "properties": {
+      "text": {
+        "title": "Text",
+        "type": "string"
+      },
+      "ticket_id": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Ticket Id"
+      }
+    },
+    "required": [
+      "ticket_id",
+      "text"
+    ],
+    "title": "HandoffReply",
+    "type": "object"
+  },
+  "HandoffRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "confirmed": {
+        "const": true,
+        "title": "Confirmed",
+        "type": "boolean"
+      },
+      "session_id": {
+        "pattern": "^[A-Za-z0-9_-]{8,64}$",
+        "title": "Session Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "session_id",
+      "confirmed"
+    ],
+    "title": "HandoffRequest",
+    "type": "object"
+  },
+  "OrderFormRequest": {
+    "additionalProperties": false,
+    "properties": {
+      "contact": {
+        "maxLength": 254,
+        "minLength": 1,
+        "title": "Contact",
+        "type": "string"
+      },
+      "order_number": {
+        "maxLength": 64,
+        "minLength": 1,
+        "title": "Order Number",
+        "type": "string"
+      },
+      "session_id": {
+        "pattern": "^[A-Za-z0-9_-]{8,64}$",
+        "title": "Session Id",
+        "type": "string"
+      }
+    },
+    "required": [
+      "session_id",
+      "order_number",
+      "contact"
+    ],
+    "title": "OrderFormRequest",
+    "type": "object"
+  },
+  "PolicyRecord": {
+    "additionalProperties": false,
+    "properties": {
+      "source_id": {
+        "title": "Source Id",
+        "type": "string"
+      },
+      "text": {
+        "title": "Text",
+        "type": "string"
+      },
+      "title": {
+        "title": "Title",
+        "type": "string"
+      }
+    },
+    "required": [
+      "source_id",
+      "title",
+      "text"
+    ],
+    "title": "PolicyRecord",
+    "type": "object"
+  },
+  "ProductRecord": {
+    "additionalProperties": false,
+    "properties": {
+      "active_ingredients": {
+        "minLength": 1,
+        "title": "Active Ingredients",
+        "type": "string"
+      },
+      "category": {
+        "title": "Category",
+        "type": "string"
+      },
+      "directions": {
+        "minLength": 1,
+        "title": "Directions",
+        "type": "string"
+      },
+      "form": {
+        "title": "Form",
+        "type": "string"
+      },
+      "name": {
+        "minLength": 1,
+        "title": "Name",
+        "type": "string"
+      },
+      "price": {
+        "anyOf": [
+          {
+            "minimum": 0.0,
+            "type": "number"
+          },
+          {
+            "type": "string"
+          }
+        ],
+        "title": "Price"
+      },
+      "sku": {
+        "pattern": "^MRD-[A-Z]{3}-\\d{3}$",
+        "title": "Sku",
+        "type": "string"
+      },
+      "source_date": {
+        "format": "date",
+        "title": "Source Date",
+        "type": "string"
+      },
+      "source_set_id": {
+        "minLength": 1,
+        "title": "Source Set Id",
+        "type": "string"
+      },
+      "strength": {
+        "title": "Strength",
+        "type": "string"
+      },
+      "uses": {
+        "minLength": 1,
+        "title": "Uses",
+        "type": "string"
+      },
+      "warnings": {
+        "minLength": 1,
+        "title": "Warnings",
+        "type": "string"
+      }
+    },
+    "required": [
+      "sku",
+      "name",
+      "category",
+      "form",
+      "strength",
+      "price",
+      "active_ingredients",
+      "uses",
+      "warnings",
+      "directions",
+      "source_set_id",
+      "source_date"
+    ],
+    "title": "ProductRecord",
+    "type": "object"
+  },
+  "RouterOutput": {
+    "$defs": {
+      "Intent": {
+        "enum": [
+          "product_info",
+          "compare",
+          "availability",
+          "store_info",
+          "policy",
+          "order_status",
+          "off_topic"
+        ],
+        "title": "Intent",
+        "type": "string"
+      },
+      "LabelSection": {
+        "enum": [
+          "active_ingredients",
+          "uses",
+          "warnings",
+          "directions"
+        ],
+        "title": "LabelSection",
+        "type": "string"
+      },
+      "RiskLabel": {
+        "enum": [
+          "none",
+          "emergency",
+          "medical_advice",
+          "dosing_beyond_label",
+          "prescription",
+          "prompt_injection"
+        ],
+        "title": "RiskLabel",
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "intent": {
+        "$ref": "#/$defs/Intent"
+      },
+      "label_sections": {
+        "items": {
+          "$ref": "#/$defs/LabelSection"
+        },
+        "title": "Label Sections",
+        "type": "array"
+      },
+      "product_mentions": {
+        "items": {
+          "type": "string"
+        },
+        "title": "Product Mentions",
+        "type": "array"
+      },
+      "risk_label": {
+        "$ref": "#/$defs/RiskLabel"
+      },
+      "store_topic": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "title": "Store Topic"
+      }
+    },
+    "required": [
+      "intent",
+      "risk_label",
+      "product_mentions",
+      "label_sections",
+      "store_topic"
+    ],
+    "title": "RouterOutput",
+    "type": "object"
+  }
+}

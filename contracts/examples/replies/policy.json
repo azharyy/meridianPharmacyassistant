@@ -1,0 +1,21 @@
+{
+  "reply_type": "policy",
+  "blocks": [
+    {
+      "type": "policy_excerpt",
+      "source_id": "policies/delivery.md#delivery-area",
+      "title": "Delivery area",
+      "text": "We deliver to addresses within 10 miles of a Meridian store. Orders placed before 2 p.m. on a weekday arrive the next weekday."
+    }
+  ],
+  "sources": [
+    {
+      "id": "policies/delivery.md#delivery-area",
+      "title": "Delivery policy: Delivery area",
+      "text": "We deliver to addresses within 10 miles of a Meridian store. Orders placed before 2 p.m. on a weekday arrive the next weekday.",
+      "retrieved_at": null
+    }
+  ],
+  "handoff_offered": false,
+  "emergency": false
+}

@@ -1,0 +1,829 @@
+{
+  "components": {
+    "schemas": {
+      "APIError": {
+        "additionalProperties": false,
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          }
+        },
+        "required": [
+          "detail"
+        ],
+        "title": "APIError",
+        "type": "object"
+      },
+      "Availability": {
+        "additionalProperties": false,
+        "properties": {
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "stores": {
+            "items": {
+              "$ref": "#/components/schemas/StoreStock"
+            },
+            "title": "Stores",
+            "type": "array"
+          }
+        },
+        "required": [
+          "sku",
+          "stores"
+        ],
+        "title": "Availability",
+        "type": "object"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "title": "Detail",
+            "type": "array"
+          }
+        },
+        "title": "HTTPValidationError",
+        "type": "object"
+      },
+      "OrderLookupRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "contact": {
+            "maxLength": 254,
+            "minLength": 1,
+            "title": "Contact",
+            "type": "string"
+          },
+          "order_number": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Order Number",
+            "type": "string"
+          }
+        },
+        "required": [
+          "order_number",
+          "contact"
+        ],
+        "title": "OrderLookupRequest",
+        "type": "object"
+      },
+      "OrderStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "delivery_estimate": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delivery Estimate"
+          },
+          "item_count": {
+            "minimum": 0.0,
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "processing",
+              "ready_for_pickup",
+              "shipped",
+              "delivered",
+              "cancelled"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status",
+          "delivery_estimate",
+          "item_count"
+        ],
+        "title": "OrderStatus",
+        "type": "object"
+      },
+      "RiskLabel": {
+        "enum": [
+          "none",
+          "emergency",
+          "medical_advice",
+          "dosing_beyond_label",
+          "prescription",
+          "prompt_injection"
+        ],
+        "title": "RiskLabel",
+        "type": "string"
+      },
+      "StoreInfo": {
+        "additionalProperties": false,
+        "properties": {
+          "address": {
+            "title": "Address",
+            "type": "string"
+          },
+          "hours": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Hours",
+            "type": "object"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "phone": {
+            "title": "Phone",
+            "type": "string"
+          },
+          "services": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Services",
+            "type": "array"
+          },
+          "store_id": {
+            "title": "Store Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id",
+          "name",
+          "address",
+          "phone",
+          "hours",
+          "services"
+        ],
+        "title": "StoreInfo",
+        "type": "object"
+      },
+      "StoreStock": {
+        "additionalProperties": false,
+        "properties": {
+          "quantity": {
+            "minimum": 0.0,
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "store_id": {
+            "title": "Store Id",
+            "type": "string"
+          },
+          "store_name": {
+            "title": "Store Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "store_id",
+          "store_name",
+          "quantity"
+        ],
+        "title": "StoreStock",
+        "type": "object"
+      },
+      "TicketCreateRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "idempotency_key": {
+            "maxLength": 128,
+            "minLength": 1,
+            "title": "Idempotency Key",
+            "type": "string"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/TicketSummary"
+          }
+        },
+        "required": [
+          "idempotency_key",
+          "summary"
+        ],
+        "title": "TicketCreateRequest",
+        "type": "object"
+      },
+      "TicketCreated": {
+        "additionalProperties": false,
+        "properties": {
+          "ticket_id": {
+            "title": "Ticket Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id"
+        ],
+        "title": "TicketCreated",
+        "type": "object"
+      },
+      "TicketRecord": {
+        "additionalProperties": false,
+        "properties": {
+          "summary": {
+            "$ref": "#/components/schemas/TicketSummary"
+          },
+          "ticket_id": {
+            "title": "Ticket Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "ticket_id",
+          "summary"
+        ],
+        "title": "TicketRecord",
+        "type": "object"
+      },
+      "TicketSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "assistant_replies": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Assistant Replies",
+            "type": "array"
+          },
+          "customer_messages": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Customer Messages",
+            "type": "array"
+          },
+          "product_mentions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Product Mentions",
+            "type": "array"
+          },
+          "reason": {
+            "enum": [
+              "risk",
+              "fallback",
+              "customer_requested"
+            ],
+            "title": "Reason",
+            "type": "string"
+          },
+          "risk_label": {
+            "$ref": "#/components/schemas/RiskLabel"
+          },
+          "urgency": {
+            "enum": [
+              "routine",
+              "urgent",
+              "emergency"
+            ],
+            "title": "Urgency",
+            "type": "string"
+          }
+        },
+        "required": [
+          "risk_label",
+          "urgency",
+          "customer_messages",
+          "product_mentions",
+          "assistant_replies",
+          "reason"
+        ],
+        "title": "TicketSummary",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "ctx": {
+            "title": "Context",
+            "type": "object"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "title": "Location",
+            "type": "array"
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        },
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError",
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "Meridian API",
+    "version": "0.1.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/v1/orders/lookup": {
+      "post": {
+        "description": "Status, delivery estimate and item count, only when the order number and the email or\nphone both match one order. Every failure, including a lockout after five failed tries\nfor one contact or one order number, gets the same 404 status and body.",
+        "operationId": "lookup_order_v1_orders_lookup_post",
+        "parameters": [
+          {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+            "in": "header",
+            "name": "X-Meridian-Test",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+              "title": "X-Meridian-Test"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderLookupRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderStatus"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "The test header asked for a timeout"
+          }
+        },
+        "summary": "Lookup Order"
+      }
+    },
+    "/v1/products/{sku}/availability": {
+      "get": {
+        "description": "Stock of one product at each store. An unknown SKU gets a 404.",
+        "operationId": "get_availability_v1_products__sku__availability_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "sku",
+            "required": true,
+            "schema": {
+              "title": "Sku",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+            "in": "header",
+            "name": "X-Meridian-Test",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+              "title": "X-Meridian-Test"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Availability"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "The test header asked for a timeout"
+          }
+        },
+        "summary": "Get Availability"
+      }
+    },
+    "/v1/stores": {
+      "get": {
+        "description": "Every store's address, phone, hours by weekday and services.",
+        "operationId": "list_stores_v1_stores_get",
+        "parameters": [
+          {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+            "in": "header",
+            "name": "X-Meridian-Test",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+              "title": "X-Meridian-Test"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StoreInfo"
+                  },
+                  "title": "Response List Stores V1 Stores Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "The test header asked for a timeout"
+          }
+        },
+        "summary": "List Stores"
+      }
+    },
+    "/v1/stores/{store_id}": {
+      "get": {
+        "description": "One store's address, phone, hours by weekday and services. An unknown store gets a 404.",
+        "operationId": "get_store_v1_stores__store_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "store_id",
+            "required": true,
+            "schema": {
+              "title": "Store Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+            "in": "header",
+            "name": "X-Meridian-Test",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+              "title": "X-Meridian-Test"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StoreInfo"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "The test header asked for a timeout"
+          }
+        },
+        "summary": "Get Store"
+      }
+    },
+    "/v1/tickets": {
+      "post": {
+        "description": "Create a pharmacist ticket. The same idempotency key returns the same ticket, with the\nsame 201, and never creates a second one.",
+        "operationId": "create_ticket_v1_tickets_post",
+        "parameters": [
+          {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+            "in": "header",
+            "name": "X-Meridian-Test",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+              "title": "X-Meridian-Test"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TicketCreateRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketCreated"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "The test header asked for a timeout"
+          }
+        },
+        "summary": "Create Ticket"
+      }
+    },
+    "/v1/tickets/{ticket_id}": {
+      "get": {
+        "description": "Read a ticket back. Without the right X-Staff-Key header the answer is 401.",
+        "operationId": "get_ticket_v1_tickets__ticket_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "ticket_id",
+            "required": true,
+            "schema": {
+              "title": "Ticket Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Staff only. Needed to read a ticket.",
+            "in": "header",
+            "name": "X-Staff-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Staff only. Needed to read a ticket.",
+              "title": "X-Staff-Key"
+            }
+          },
+          {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+            "in": "header",
+            "name": "X-Meridian-Test",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
+              "title": "X-Meridian-Test"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TicketRecord"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          },
+          "504": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIError"
+                }
+              }
+            },
+            "description": "The test header asked for a timeout"
+          }
+        },
+        "summary": "Get Ticket"
+      }
+    }
+  }
+}
