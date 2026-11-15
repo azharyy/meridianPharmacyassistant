@@ -14,8 +14,8 @@ class APIError(Contract):
 
 
 class OrderLookupRequest(Contract):
-    order_number: str = Field(min_length=1)
-    contact: str = Field(min_length=1)
+    order_number: str = Field(min_length=1, max_length=64)
+    contact: str = Field(min_length=1, max_length=254)
 
 
 class OrderStatus(Contract):
@@ -26,6 +26,7 @@ class OrderStatus(Contract):
 
 class StoreStock(Contract):
     store_id: str
+    store_name: str
     quantity: int = Field(ge=0)
 
 
@@ -39,6 +40,7 @@ class StoreInfo(Contract):
     name: str
     address: str
     phone: str
+    # Display day name to opening hours, in week order: {"Monday": "08:00-20:00", ...}
     hours: dict[str, str]
     services: list[str]
 
@@ -53,7 +55,7 @@ class TicketSummary(Contract):
 
 
 class TicketCreateRequest(Contract):
-    idempotency_key: str = Field(min_length=1)
+    idempotency_key: str = Field(min_length=1, max_length=128)
     summary: TicketSummary
 
 

@@ -46,9 +46,11 @@ def test_openapi_declares_typed_success_errors_and_headers(method, path, model, 
         assert schema["type"] == "array"
         schema = schema["items"]
     assert schema["$ref"] == f"#/components/schemas/{model}"
-    for code in errors | {501}:
+    for code in errors | {504}:
         error = operation["responses"][str(code)]["content"]["application/json"]["schema"]
         assert error["$ref"] == "#/components/schemas/APIError"
+    # The spec documents the finished API, so the stubs' 501 must not be in it.
+    assert "501" not in operation["responses"]
     headers = {p["name"]: p for p in operation["parameters"] if p["in"] == "header"}
     assert headers["X-Meridian-Test"]["required"] is False
     if model == "TicketRecord":

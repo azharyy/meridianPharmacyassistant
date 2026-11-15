@@ -54,11 +54,13 @@
         "additionalProperties": false,
         "properties": {
           "contact": {
+            "maxLength": 254,
             "minLength": 1,
             "title": "Contact",
             "type": "string"
           },
           "order_number": {
+            "maxLength": 64,
             "minLength": 1,
             "title": "Order Number",
             "type": "string"
@@ -179,10 +181,15 @@
           "store_id": {
             "title": "Store Id",
             "type": "string"
+          },
+          "store_name": {
+            "title": "Store Name",
+            "type": "string"
           }
         },
         "required": [
           "store_id",
+          "store_name",
           "quantity"
         ],
         "title": "StoreStock",
@@ -192,6 +199,7 @@
         "additionalProperties": false,
         "properties": {
           "idempotency_key": {
+            "maxLength": 128,
             "minLength": 1,
             "title": "Idempotency Key",
             "type": "string"
@@ -346,9 +354,11 @@
   "paths": {
     "/v1/orders/lookup": {
       "post": {
+        "description": "Status, delivery estimate and item count, only when the order number and the email or\nphone both match one order. Every failure, including a lockout after five failed tries\nfor one contact or one order number, gets the same 404 status and body.",
         "operationId": "lookup_order_v1_orders_lookup_post",
         "parameters": [
           {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
             "in": "header",
             "name": "X-Meridian-Test",
             "required": false,
@@ -361,6 +371,7 @@
                   "type": "null"
                 }
               ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
               "title": "X-Meridian-Test"
             }
           }
@@ -406,7 +417,7 @@
             },
             "description": "Validation Error"
           },
-          "501": {
+          "504": {
             "content": {
               "application/json": {
                 "schema": {
@@ -414,7 +425,7 @@
                 }
               }
             },
-            "description": "Not Implemented"
+            "description": "The test header asked for a timeout"
           }
         },
         "summary": "Lookup Order"
@@ -422,6 +433,7 @@
     },
     "/v1/products/{sku}/availability": {
       "get": {
+        "description": "Stock of one product at each store. An unknown SKU gets a 404.",
         "operationId": "get_availability_v1_products__sku__availability_get",
         "parameters": [
           {
@@ -434,6 +446,7 @@
             }
           },
           {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
             "in": "header",
             "name": "X-Meridian-Test",
             "required": false,
@@ -446,6 +459,7 @@
                   "type": "null"
                 }
               ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
               "title": "X-Meridian-Test"
             }
           }
@@ -481,7 +495,7 @@
             },
             "description": "Validation Error"
           },
-          "501": {
+          "504": {
             "content": {
               "application/json": {
                 "schema": {
@@ -489,7 +503,7 @@
                 }
               }
             },
-            "description": "Not Implemented"
+            "description": "The test header asked for a timeout"
           }
         },
         "summary": "Get Availability"
@@ -497,9 +511,11 @@
     },
     "/v1/stores": {
       "get": {
+        "description": "Every store's address, phone, hours by weekday and services.",
         "operationId": "list_stores_v1_stores_get",
         "parameters": [
           {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
             "in": "header",
             "name": "X-Meridian-Test",
             "required": false,
@@ -512,6 +528,7 @@
                   "type": "null"
                 }
               ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
               "title": "X-Meridian-Test"
             }
           }
@@ -541,7 +558,7 @@
             },
             "description": "Validation Error"
           },
-          "501": {
+          "504": {
             "content": {
               "application/json": {
                 "schema": {
@@ -549,7 +566,7 @@
                 }
               }
             },
-            "description": "Not Implemented"
+            "description": "The test header asked for a timeout"
           }
         },
         "summary": "List Stores"
@@ -557,6 +574,7 @@
     },
     "/v1/stores/{store_id}": {
       "get": {
+        "description": "One store's address, phone, hours by weekday and services. An unknown store gets a 404.",
         "operationId": "get_store_v1_stores__store_id__get",
         "parameters": [
           {
@@ -569,6 +587,7 @@
             }
           },
           {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
             "in": "header",
             "name": "X-Meridian-Test",
             "required": false,
@@ -581,6 +600,7 @@
                   "type": "null"
                 }
               ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
               "title": "X-Meridian-Test"
             }
           }
@@ -616,7 +636,7 @@
             },
             "description": "Validation Error"
           },
-          "501": {
+          "504": {
             "content": {
               "application/json": {
                 "schema": {
@@ -624,7 +644,7 @@
                 }
               }
             },
-            "description": "Not Implemented"
+            "description": "The test header asked for a timeout"
           }
         },
         "summary": "Get Store"
@@ -632,9 +652,11 @@
     },
     "/v1/tickets": {
       "post": {
+        "description": "Create a pharmacist ticket. The same idempotency key returns the same ticket, with the\nsame 201, and never creates a second one.",
         "operationId": "create_ticket_v1_tickets_post",
         "parameters": [
           {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
             "in": "header",
             "name": "X-Meridian-Test",
             "required": false,
@@ -647,6 +669,7 @@
                   "type": "null"
                 }
               ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
               "title": "X-Meridian-Test"
             }
           }
@@ -682,7 +705,7 @@
             },
             "description": "Validation Error"
           },
-          "501": {
+          "504": {
             "content": {
               "application/json": {
                 "schema": {
@@ -690,7 +713,7 @@
                 }
               }
             },
-            "description": "Not Implemented"
+            "description": "The test header asked for a timeout"
           }
         },
         "summary": "Create Ticket"
@@ -698,6 +721,7 @@
     },
     "/v1/tickets/{ticket_id}": {
       "get": {
+        "description": "Read a ticket back. Without the right X-Staff-Key header the answer is 401.",
         "operationId": "get_ticket_v1_tickets__ticket_id__get",
         "parameters": [
           {
@@ -710,6 +734,7 @@
             }
           },
           {
+            "description": "Staff only. Needed to read a ticket.",
             "in": "header",
             "name": "X-Staff-Key",
             "required": false,
@@ -722,10 +747,12 @@
                   "type": "null"
                 }
               ],
+              "description": "Staff only. Needed to read a ticket.",
               "title": "X-Staff-Key"
             }
           },
           {
+            "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
             "in": "header",
             "name": "X-Meridian-Test",
             "required": false,
@@ -738,6 +765,7 @@
                   "type": "null"
                 }
               ],
+              "description": "Test only. `timeout` makes the endpoint answer 504 at once.",
               "title": "X-Meridian-Test"
             }
           }
@@ -783,7 +811,7 @@
             },
             "description": "Validation Error"
           },
-          "501": {
+          "504": {
             "content": {
               "application/json": {
                 "schema": {
@@ -791,7 +819,7 @@
                 }
               }
             },
-            "description": "Not Implemented"
+            "description": "The test header asked for a timeout"
           }
         },
         "summary": "Get Ticket"

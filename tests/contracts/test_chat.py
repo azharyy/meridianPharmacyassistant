@@ -45,7 +45,7 @@ BLOCKS = [
         "type": "availability",
         "availability": {
             "sku": "MRD-TEST-001",
-            "stores": [{"store_id": "store-001", "quantity": 3}],
+            "stores": [{"store_id": "store-001", "store_name": "Sample store", "quantity": 3}],
         },
     },
     {

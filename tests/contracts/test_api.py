@@ -3,7 +3,13 @@
 import pytest
 from pydantic import ValidationError
 
-from contracts.api import OrderStatus, StoreStock, TicketCreateRequest, TicketSummary
+from contracts.api import (
+    OrderLookupRequest,
+    OrderStatus,
+    StoreStock,
+    TicketCreateRequest,
+    TicketSummary,
+)
 
 
 def test_order_status_has_only_public_fields():
@@ -19,7 +25,22 @@ def test_counts_cannot_be_negative():
     with pytest.raises(ValidationError):
         OrderStatus(status="cancelled", delivery_estimate=None, item_count=-1)
     with pytest.raises(ValidationError):
-        StoreStock(store_id="store-001", quantity=-1)
+        StoreStock(store_id="store-001", store_name="Meridian Downtown", quantity=-1)
+
+
+def test_stock_names_the_store():
+    stock = StoreStock(store_id="store-001", store_name="Meridian Downtown", quantity=0)
+    assert stock.store_name == "Meridian Downtown"
+    with pytest.raises(ValidationError, match="store_name"):
+        StoreStock(store_id="store-001", quantity=0)
+
+
+@pytest.mark.parametrize("field,limit", [("order_number", 64), ("contact", 254)])
+def test_order_lookup_input_is_bounded(field, limit):
+    request = {"order_number": "MRD-ORD-48213", "contact": "sample@example.com"}
+    assert OrderLookupRequest(**(request | {field: "x" * limit}))
+    with pytest.raises(ValidationError):
+        OrderLookupRequest(**(request | {field: "x" * (limit + 1)}))
 
 
 def test_ticket_summary_is_structured_and_rejects_private_extra_fields():
