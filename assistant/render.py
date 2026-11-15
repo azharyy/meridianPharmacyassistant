@@ -2,7 +2,8 @@
 
 A reply is built from templates, record text copied word for word and API results. Code, not a
 model, sets `handoff_offered`, from the policy table. A plan this module can't build safely gets
-the fallback reply instead, never a partial answer.
+the fallback reply instead, never a partial answer. The fixed replies for risk labels, the 911
+reply among them, are built here too, from assistant/policy.py.
 """
 
 from assistant import templates
@@ -64,6 +65,29 @@ def render_fallback() -> ChatReply:
         sources=[],
         handoff_offered=fixed.handoff_offered,
         emergency=False,
+    )
+
+
+def render_risk(risk: RiskLabel, product: ProductRecord | None) -> ChatReply:
+    """The reply the policy table fixes for a risk label other than none: its text first, then,
+    for a named product, the label sections that label may show, word for word. For an
+    emergency this is the 911 reply; the widget draws the pharmacist card after it."""
+    rule = POLICY[risk]
+    if rule.text is None:
+        raise ValueError(f"{risk} has no fixed reply")
+    blocks: list = [TextBlock(type="text", text=rule.text)]
+    sources = []
+    for section in sorted(rule.sections) if product is not None else []:
+        block, source = label_section(product, section)
+        blocks.append(block)
+        sources.append(source)
+    [reply_type] = rule.reply_types
+    return ChatReply(
+        reply_type=reply_type,
+        blocks=blocks,
+        sources=sources,
+        handoff_offered=rule.handoff_offered,
+        emergency=risk is RiskLabel.EMERGENCY,
     )
 
 
