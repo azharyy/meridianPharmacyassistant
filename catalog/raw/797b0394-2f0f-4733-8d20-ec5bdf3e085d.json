@@ -1,0 +1,97 @@
+{
+ "active_ingredient": [
+  "Active ingredient (In each unit dose) Sodium Carboxymethylcellulose 0.25%"
+ ],
+ "do_not_use": [
+  "Do not use If solution changes color or becomes cloudy."
+ ],
+ "dosage_and_administration": [
+  "Directions To open, twist tab completely off. Instill 1 or 2 drops in the affected eye(s) as needed."
+ ],
+ "effective_time": "20261015",
+ "id": "5de4b737-f6bd-27d8-e063-6294a90a5f81",
+ "inactive_ingredient": [
+  "Inactive ingredients boric acid , calcium chloride, magnesium chloride, potassium chloride, sodium bicarbonate, sodium borate, sodium chloride, sodium phosphate, water"
+ ],
+ "indications_and_usage": [
+  "Uses As a lubricant to relieve dryness of the eye. As a protectant against further irritation of the eye. For temporary relief of burning, irritation, and discomfort including exposure to wind or sun."
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center immediately."
+ ],
+ "openfda": {
+  "application_number": [
+   "M018"
+  ],
+  "brand_name": [
+   "TheraTears Lubricant"
+  ],
+  "generic_name": [
+   "CARBOXYMETHYLCELLULOSE SODIUM"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "MEDTECH PRODUCTS INC"
+  ],
+  "package_ndc": [
+   "58790-000-32",
+   "58790-000-24",
+   "58790-000-20",
+   "58790-000-30",
+   "58790-000-00"
+  ],
+  "product_ndc": [
+   "58790-000"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "OPHTHALMIC"
+  ],
+  "rxcui": [
+   "1547948",
+   "2106821"
+  ],
+  "spl_id": [
+   "5de4b737-f6bd-27d8-e063-6294a90a5f81"
+  ],
+  "spl_set_id": [
+   "797b0394-2f0f-4733-8d20-ec5bdf3e085d"
+  ],
+  "substance_name": [
+   "CARBOXYMETHYLCELLULOSE SODIUM, UNSPECIFIED FORM"
+  ],
+  "unii": [
+   "K679OBS311"
+  ]
+ },
+ "other_safety_information": [
+  "Other information Store between 15-25 C (59-77F) Do not touch unit-dose tip to eye."
+ ],
+ "package_label_principal_display_panel": [
+  "Principal Display Panel PRESERVATIVE FREE thera tears® THERAPY FOR YOUR EYES TM dry eye therapy LUBRICANT EYE DROPS IMMEDIATE LONG LASTING RELIEF 30 STERILE Single-Use Vials 0.60 FL OZ (18.0mL) TOTAL Principal Display Panel PRESERVATIVE FREE thera tears® THERAPY FOR YOUR EYES TM dry eye therapy LUBRICANT EYE DROPS IMMEDIATE LONG LASTING RELIEF 30 STERILE Single-Use Vials 0.60 FL OZ (18.0mL) TOTA"
+ ],
+ "purpose": [
+  "Purpose Eye lubricant"
+ ],
+ "questions": [
+  "Questions and comments? 1-800-579-8327"
+ ],
+ "set_id": "797b0394-2f0f-4733-8d20-ec5bdf3e085d",
+ "spl_product_data_elements": [
+  "TheraTears Lubricant carboxymethylcellulose sodium CARBOXYMETHYLCELLULOSE SODIUM, UNSPECIFIED FORM CARBOXYMETHYLCELLULOSE BORIC ACID CALCIUM CHLORIDE MAGNESIUM CHLORIDE POTASSIUM CHLORIDE SODIUM BICARBONATE SODIUM CHLORIDE SODIUM BORATE WATER SODIUM PHOSPHATE"
+ ],
+ "spl_unclassified_section": [
+  "THERATEARS LUBRICANT- carboxymethylcellulose sodium solution/ drops Medtech Products Inc., a Prestige Consumer Healthcare company Disclaimer: Most OTC drugs are not reviewed and approved by FDA, however they may be marketed if they comply with applicable regulations and policies. FDA has not evaluated whether this product complies. ---------- Drug Facts"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if You experience eye pain, changes in vision, continued redness or irritation. Condition worsens or persists for more than 72 hours."
+ ],
+ "version": "12",
+ "warnings": [
+  "Warnings For external use only To avoid contamination do not touch tip of opened container to any surface. Do not reuse. Once opened discard. Use individual vials within 90 days of opening foil pouch. This product contains no preservatives. Any solution not used immediately after opening should be discarded. Re-use of this single-use product may lead to inflammation of the eye and/or discomfort, based on potential contamination during handling. Do not use If solution changes color or becomes cloudy. Stop use and ask a doctor if You experience eye pain, changes in vision, continued redness or irritation. Condition worsens or persists for more than 72 hours. Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center immediately."
+ ]
+}

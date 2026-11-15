@@ -1,0 +1,92 @@
+{
+ "active_ingredient": [
+  "Terbinafine Hydrochloride 1%"
+ ],
+ "do_not_use": [
+  "on nails or scalp in or near the mouth or eyes for vaginal yeast infections"
+ ],
+ "dosage_and_administration": [
+  "■ adults and children 12 years and over ■ use the tip of the cap to break the seal and open the tube ■ wash the affected skin with soap and water and dry completely before applying ■ for athlete’s foot wear well-fitting, ventilated shoes. Change shoes and socks at least once daily. ■ between the toes only: apply twice a day (morning and night) for 1 week or as directed by a doctor ■ on the bottom or sides of the foot: apply twice a day (morning and night) for 2 weeks or as directed by a doctor ■ for jock itch and ringworm: apply once a day (morning or night) for 1 week or as directed by a doctor ■ wash hands after each use ■ children under 12 years: ask a doctor"
+ ],
+ "effective_time": "20260629",
+ "id": "5567002c-6358-9fe7-e063-6294a90ab509",
+ "inactive_ingredient": [
+  "Allantoin, Glycerin, Propylene Glycol, PCA Dimethicone, Ethylparaben, Glyceryl Stearate, Primary Alcohol Ethoxylate, Alumen, Sodium Acrylate/Sodium Acryloyldimethyl Taurate Copolymer, Isohexadecane, Polysorbate 80, Aloe Barbadensis Leaf Juice, Parfum"
+ ],
+ "indications_and_usage": [
+  "cures most athlete's foot (tinea pedis) cures most jock itch (tinea crurs) and ringworm (tinea corporis) relieves itching, burning, cracking and scaling which accompany these conditions"
+ ],
+ "keep_out_of_reach_of_children": [
+  "if swallowed, call a poison control centre or get medical help right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M005"
+  ],
+  "brand_name": [
+   "Athlete Foot Cream"
+  ],
+  "generic_name": [
+   "TERBINAFINE HYDROCHLORIDE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Beautivity LLC"
+  ],
+  "package_ndc": [
+   "85398-006-01"
+  ],
+  "product_ndc": [
+   "85398-006"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "rxcui": [
+   "992528"
+  ],
+  "spl_id": [
+   "5567002c-6358-9fe7-e063-6294a90ab509"
+  ],
+  "spl_set_id": [
+   "3b2c1d7f-32c3-aa3b-e063-6394a90a6267"
+  ],
+  "substance_name": [
+   "TERBINAFINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "012C11ZU6G"
+  ]
+ },
+ "other_safety_information": [
+  "■ Do not use if seal on tube is broken or is not visible. ■ Store at 68–77°F (20–25°C)"
+ ],
+ "package_label_principal_display_panel": [
+  "foot cream"
+ ],
+ "purpose": [
+  "Antifungal"
+ ],
+ "questions": [
+  "service@hermonhealth.com"
+ ],
+ "set_id": "3b2c1d7f-32c3-aa3b-e063-6394a90a6267",
+ "spl_product_data_elements": [
+  "Athlete Foot Cream Terbinafine Hydrochloride POTASSIUM ALUM SODIUM ACRYLATE/SODIUM ACRYLOYLDIMETHYLTAURATE COPOLYMER (4000000 MW) GLYCERIN GLYCERYL STEARATE ALOE BARBADENSIS LEAF JUICE DIMETHICONE C12-15 PARETH-7 ALLANTOIN POLYSORBATE 80 TERBINAFINE HYDROCHLORIDE TERBINAFINE PROPYLENE GLYCOL ETHYLPARABEN ISOHEXADECANE"
+ ],
+ "stop_use": [
+  "stop use and ask a doctor if too much irritation occurs or gets worse."
+ ],
+ "version": "3",
+ "warnings": [
+  "For external use only on nails or scalp in or near the mouth or eyes for vaginal yeast infections do not get into eyes, if eye contact occurs, rinse thoroughly with water. stop use and ask a doctor if too much irritation occurs or gets worse. if swallowed, call a poison control centre or get medical help right away."
+ ],
+ "when_using": [
+  "do not get into eyes, if eye contact occurs, rinse thoroughly with water."
+ ]
+}

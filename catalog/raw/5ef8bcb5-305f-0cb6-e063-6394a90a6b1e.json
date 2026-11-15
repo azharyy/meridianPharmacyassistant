@@ -1,0 +1,87 @@
+{
+ "active_ingredient": [
+  "Active Ingredient Clotrimazole 1% Purpose Antifungal"
+ ],
+ "dosage_and_administration": [
+  "clean the affected area and dry thoroughly apply a thin layer of the product over affected area twice daily (morning and night) or as directed by a doctor supervise children inthe use of this product pay special attention to spaces between the toes;"
+ ],
+ "effective_time": "20261029",
+ "id": "5ef8bcb5-3060-0cb6-e063-6394a90a6b1e",
+ "inactive_ingredient": [
+  "Inactive Ingredients Cetostearyl Alcohol, Butylated Hydroxytoluene (BHT), Pr opylene Glycol, Phenoxyethanol, Purified Water."
+ ],
+ "indications_and_usage": [
+  "clean the affected area and dry thoroughly apply a thin layer of the product over affected area twice daily (morning and night) or as directed by a doctor supervise children inthe use of this product pay special attention to spaces between the toes; wear well-fitting, ventilated shoes, and change shoes and socks at least once daily if condition persists longer, consult a doctor this product is not effective on the scalp or nails"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M005"
+  ],
+  "brand_name": [
+   "ATHLETES FOOT"
+  ],
+  "generic_name": [
+   "CLOTRIMAZOLE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Jiangxi He-Oumei Health Industry Co., Ltd."
+  ],
+  "nui": [
+   "N0000175487",
+   "M0002083"
+  ],
+  "package_ndc": [
+   "87365-004-01"
+  ],
+  "pharm_class_cs": [
+   "Azoles [CS]"
+  ],
+  "pharm_class_epc": [
+   "Azole Antifungal [EPC]"
+  ],
+  "product_ndc": [
+   "87365-004"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "rxcui": [
+   "309367"
+  ],
+  "spl_id": [
+   "5ef8bcb5-3060-0cb6-e063-6394a90a6b1e"
+  ],
+  "spl_set_id": [
+   "5ef8bcb5-305f-0cb6-e063-6394a90a6b1e"
+  ],
+  "substance_name": [
+   "CLOTRIMAZOLE"
+  ],
+  "unii": [
+   "G07GZ97H65"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "package"
+ ],
+ "purpose": [
+  "Uses cures most athlete's foot (tinea pedis) relieves itching, burning, cracking, scaling, and discomf ort associated with athlete's foot"
+ ],
+ "set_id": "5ef8bcb5-305f-0cb6-e063-6394a90a6b1e",
+ "spl_product_data_elements": [
+  "ATHLETES FOOT Clotrimazole CLOTRIMAZOLE CLOTRIMAZOLE CETOSTEARYL ALCOHOL BHT PROPYLENE GLYCOL PHENOXYETHANOL WATER"
+ ],
+ "version": "1",
+ "warnings": [
+  "Warnings For external use only. Do not use on children under 2years of age unless directe d by a doctor. When using this product avoid contact with the eyes. Stop use and ask a doctor if irritation occurs there is no im provement within 4 weeks. Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ]
+}

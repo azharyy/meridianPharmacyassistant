@@ -1,0 +1,109 @@
+{
+ "active_ingredient": [
+  "Active ingredients (in each LiquiCap) Doxylamine succinate 6.25 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have glaucoma trouble urinating due to enlarged prostate gland cough that occurs with too much phlegm (mucus) a breathing problem that lasts or occurs with chronic bronchitis or emphysema"
+ ],
+ "ask_doctor_or_pharmacist": [
+  "Ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers"
+ ],
+ "dosage_and_administration": [
+  "Directions take only as directed do not exceed 4 doses (8 LiquiCaps) per 24 hrs adults & children 12 yrs & over 2 LiquiCaps every 4 hrs children 4 to under 12 yrs ask a doctor children under 4 yrs do not use"
+ ],
+ "dosage_and_administration_table": [
+  "<table width=\"100%\"> <caption/> <tbody> <tr> <td> adults &amp; children 12 yrs &amp; over</td> <td> 2 LiquiCaps every 4 hrs</td> </tr> <tr> <td> children 4 to under 12 yrs </td> <td> ask a doctor</td> </tr> <tr> <td> children under 4 yrs </td> <td> do not use</td> </tr> </tbody> </table>"
+ ],
+ "effective_time": "20261009",
+ "id": "5d6c59b2-a24b-e852-e063-6294a90a3e12",
+ "inactive_ingredient": [
+  "Inactive ingredients 1,4-sorbitan, ascorbic acid, D&C Red No.33, gelatin, glycerin, mannitol, polyethylene glycol 400, povidone, propylene glycol, sorbitol, water"
+ ],
+ "indications_and_usage": [
+  "Uses temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: runny nose sneezing itchy, watery eyes itching of the nose or throat"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children."
+ ],
+ "openfda": {
+  "application_number": [
+   "M012"
+  ],
+  "brand_name": [
+   "Vicks NyQuil Allergy"
+  ],
+  "generic_name": [
+   "DOXYLAMINE SUCCINATE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "The Procter & Gamble Manufacturing Company"
+  ],
+  "package_ndc": [
+   "84126-381-24"
+  ],
+  "product_ndc": [
+   "84126-381"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "2745969"
+  ],
+  "spl_id": [
+   "5d6c59b2-a24b-e852-e063-6294a90a3e12"
+  ],
+  "spl_set_id": [
+   "559149ac-1784-c677-e063-6294a90a0673"
+  ],
+  "substance_name": [
+   "DOXYLAMINE SUCCINATE"
+  ],
+  "unii": [
+   "V9BI9B5YI2"
+  ],
+  "upc": [
+   "0323900048973"
+  ]
+ },
+ "overdosage": [
+  "In case of overdose, get medical help or contact a Poison Control Center right away. Quick medical attention is critical for adults as well as for children even if you do not notice any signs or symptoms."
+ ],
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL - 24 LIQUICAPS VICKS NyQuil ALLERGY Doxylamine Succinate - Antihistamine Runny Nose Sneezing Itchy, Watery Eyes Itchy Throat and Nose 24 LIQUICAPS 381"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding , ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Antihistamine"
+ ],
+ "questions": [
+  "Questions? 1-800-362-1683"
+ ],
+ "set_id": "559149ac-1784-c677-e063-6294a90a0673",
+ "spl_product_data_elements": [
+  "Vicks NyQuil Allergy Doxylamine succinate DOXYLAMINE SUCCINATE DOXYLAMINE POVIDONE 1,4-SORBITAN ASCORBIC ACID D&C RED NO. 33 GELATIN GLYCERIN MANNITOL POLYETHYLENE GLYCOL 400 PROPYLENE GLYCOL SORBITOL WATER NQA"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "TAMPER EVIDENT: DO NOT USE IF BLISTER IS OPENED OR TORN. IF DIFFICULT TO OPEN, USE SCISSORS.",
+  "MADE IN CANADA DIST. BY PROCTER & GAMBLE CINCINNATI OH 45202."
+ ],
+ "storage_and_handling": [
+  "Other information store at no greater than 25°C (77°F)"
+ ],
+ "version": "2",
+ "warnings": [
+  "Warnings Ask a doctor before use if you have glaucoma trouble urinating due to enlarged prostate gland cough that occurs with too much phlegm (mucus) a breathing problem that lasts or occurs with chronic bronchitis or emphysema Ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers When using this product excitability may occur, especially in children marked drowsiness may occur alcohol, sedatives, and tranquilizers may increase drowsiness avoid alcoholic drinks be careful when driving a motor vehicle or operating machinery If pregnant or breast-feeding , ask a health professional before use. Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away. Quick medical attention is critical for adults as well as for children even if you do not notice any signs or symptoms."
+ ],
+ "when_using": [
+  "When using this product excitability may occur, especially in children marked drowsiness may occur alcohol, sedatives, and tranquilizers may increase drowsiness avoid alcoholic drinks be careful when driving a motor vehicle or operating machinery"
+ ]
+}

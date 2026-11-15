@@ -1,0 +1,100 @@
+{
+ "active_ingredient": [
+  "Active ingredient Tetrahydrozoline HCl 0.05%"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have narrow angle glaucoma."
+ ],
+ "dosage_and_administration": [
+  "Directions adults and children 6 years of age and over: put 1 or 2 drops in the affected eye(s) up to 4 times a day children under 6 years of age: consult a doctor children under 2 years of age: do not use"
+ ],
+ "effective_time": "20241113",
+ "id": "21d6bf1e-40c6-2b49-e063-6294a90a3ede",
+ "inactive_ingredient": [
+  "Inactive ingredients ascorbic acid, boric acid, dextrose, glycerin, glycine, magnesium chloride, polyquaternium-42, potassium chloride, purified water, sodium borate, sodium citrate, sodium lactate, sodium phosphate dibasic"
+ ],
+ "indications_and_usage": [
+  "Use for the relief of redness of the eye due to minor eye irritations"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M018"
+  ],
+  "brand_name": [
+   "Visine Red Eye Comfort"
+  ],
+  "generic_name": [
+   "TETRAHYDROZOLINE HYDROCHLORIDE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Kenvue Brands LLC"
+  ],
+  "package_ndc": [
+   "69968-0355-1"
+  ],
+  "product_ndc": [
+   "69968-0355"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "OPHTHALMIC"
+  ],
+  "rxcui": [
+   "1052943",
+   "1088126"
+  ],
+  "spl_id": [
+   "21d6bf1e-40c6-2b49-e063-6294a90a3ede"
+  ],
+  "spl_set_id": [
+   "d7abd7cb-e094-481f-bea5-a5983e2c9ef4"
+  ],
+  "substance_name": [
+   "TETRAHYDROZOLINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "0YZT43HS7D"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL - 15 mL Bottle Carton VISINE ® RED EYE COMFORT REDNESS RELIEVER EYE DROPS FAST ACTING Redness Relief STERILE 1/2 FL OZ (15mL) PRINCIPAL DISPLAY PANEL - 15 mL Bottle Carton"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Redness reliever"
+ ],
+ "questions": [
+  "Questions? call toll-free 888-734-7648 or 215-273-8755 (collect)"
+ ],
+ "set_id": "d7abd7cb-e094-481f-bea5-a5983e2c9ef4",
+ "spl_product_data_elements": [
+  "Visine Red Eye Comfort Tetrahydrozoline Hydrochloride ASCORBIC ACID BORIC ACID DEXTROSE, UNSPECIFIED FORM GLYCERIN GLYCINE MAGNESIUM CHLORIDE POLIXETONIUM CHLORIDE POTASSIUM CHLORIDE WATER SODIUM BORATE SODIUM CITRATE, UNSPECIFIED FORM SODIUM LACTATE SODIUM PHOSPHATE, DIBASIC, ANHYDROUS TETRAHYDROZOLINE HYDROCHLORIDE TETRAHYDROZOLINE"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "Distributed by: JOHNSON & JOHNSON CONSUMER INC. Skillman, NJ 08558"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if you feel eye pain changes in vision occur redness or irritation of the eye lasts condition worsens or lasts more than 72 hours"
+ ],
+ "storage_and_handling": [
+  "Other information Store at 20° to 25°C (68° to 77°F)"
+ ],
+ "version": "4",
+ "warnings": [
+  "Warnings For external use only Ask a doctor before use if you have narrow angle glaucoma. When using this product pupils may become enlarged temporarily overuse may cause more eye redness remove contact lenses before using do not use if this solution changes color or becomes cloudy do not touch tip of container to any surface to avoid contamination replace cap after each use Stop use and ask a doctor if you feel eye pain changes in vision occur redness or irritation of the eye lasts condition worsens or lasts more than 72 hours If pregnant or breast-feeding, ask a health professional before use. Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product pupils may become enlarged temporarily overuse may cause more eye redness remove contact lenses before using do not use if this solution changes color or becomes cloudy do not touch tip of container to any surface to avoid contamination replace cap after each use"
+ ]
+}

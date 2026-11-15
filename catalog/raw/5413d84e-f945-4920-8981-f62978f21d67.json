@@ -1,0 +1,100 @@
+{
+ "active_ingredient": [
+  "Drug Facts Active ingredient (in each tablet) Fexofenadine HCl USP, 60 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have kidney disease. Your doctor should determine if you need a different dose."
+ ],
+ "dosage_and_administration": [
+  "Directions adults and children 12 years of age and over take one 60 mg tablet with water every 12 hours; do not take more than 2 tablets in 24 hours children under 12 years of age do not use adults 65 years of age and older ask a doctor consumers with kidney disease ask a doctor"
+ ],
+ "dosage_and_administration_table": [
+  "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" width=\"100%\"><tbody><tr styleCode=\"Botrule\"><td styleCode=\"Lrule Rrule\" valign=\"top\">adults and children 12 years of age and over </td><td styleCode=\"Rrule\" align=\"justify\" valign=\"top\">take one 60 mg tablet with water every 12 hours; do not take more than 2 tablets in 24 hours </td></tr><tr styleCode=\"Botrule\"><td styleCode=\"Lrule Rrule\" align=\"justify\" valign=\"top\">children under 12 years of age </td><td styleCode=\"Rrule\" align=\"justify\" valign=\"top\">do not use </td></tr><tr styleCode=\"Botrule\"><td styleCode=\"Lrule Rrule\" align=\"justify\" valign=\"top\">adults 65 years of age and older </td><td styleCode=\"Rrule\" align=\"justify\" valign=\"top\">ask a doctor </td></tr><tr><td styleCode=\"Lrule Rrule\" align=\"justify\" valign=\"top\">consumers with kidney disease </td><td styleCode=\"Rrule\" align=\"justify\" valign=\"top\">ask a doctor </td></tr></tbody></table>"
+ ],
+ "effective_time": "20260806",
+ "id": "5413d84e-f945-4920-8981-f62978f21d67",
+ "inactive_ingredient": [
+  "Inactive ingredients anhydrous lactose, colloidal silicon dioxide, corn starch, croscarmellose sodium, hypromellose, lactose monohydrate, polyethylene glycol, pregelatinized starch (maize), red iron oxide, stearic acid, titanium dioxide, and yellow iron oxide"
+ ],
+ "indications_and_usage": [
+  "Uses temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: runny nose itchy, watery eyes sneezing itching of the nose or throat"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA202039"
+  ],
+  "brand_name": [
+   "Fexofenadine Hydrochloride"
+  ],
+  "generic_name": [
+   "FEXOFENADINE HYDROCHLORIDE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Aurohealth LLC"
+  ],
+  "package_ndc": [
+   "58602-877-09",
+   "58602-877-40",
+   "58602-877-74"
+  ],
+  "product_ndc": [
+   "58602-877"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "997501"
+  ],
+  "spl_id": [
+   "5413d84e-f945-4920-8981-f62978f21d67"
+  ],
+  "spl_set_id": [
+   "5413d84e-f945-4920-8981-f62978f21d67"
+  ],
+  "substance_name": [
+   "FEXOFENADINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "2S068B75ZU"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PACKAGE LABEL-PRINCIPAL DISPLAY PANEL - 60 mg (30 Tablets Container Label) AUROHEALTH NDC 58602-877-09 NON-DROWSY Fexofenadine Hydrochloride Tablets USP, 60 mg A ntihistamine Allergy INDOOR / OUTDOOR ALLERGY RELIEF √ Sneezing √ Runny Nose √ Itchy, Watery Eyes √ Itchy Nose or Throat 12 Hour 30 TABLETS PACKAGE LABEL-PRINCIPAL DISPLAY PANEL -30 mg (30 Tablets Container Label)",
+  "PACKAGE LABEL-PRINCIPAL DISPLAY PANEL - 60 mg (30 Tablets Container Carton Label) AUROHEALTH NDC 58602-877-09 *Compare to 12 Hour Allegra ® Allergy active ingredient NON-DROWSY Fexofenadine Hydrochloride Tablets USP, 60 mg A ntihistamine Allergy 12 Hour INDOOR / OUTDOOR ALLERGY RELIEF √ Sneezing √ Runny Nose √ Itchy, Watery Eyes √ Itchy Nose or Throat DO NOT USE IF FOIL SEAL IS TORN OR MISSING 30 TABLETS PACKAGE LABEL-PRINCIPAL DISPLAY PANEL -30 mg (30 Tablets Container Carton Label)",
+  "PACKAGE LABEL-PRINCIPAL DISPLAY PANEL - 60 mg Blister Carton (1 x 6 Unit-dose) AUROHEALTH NDC 58602-877-74 *Compare to 12 Hour Allegra ® Allergy active ingredient NON-DROWSY Fexofenadine Hydrochloride Tablets USP, 60 mg Antihistamine Allergy 12 Hour INDOOR / OUTDOOR ALLERGY RELIEF √ Sneezing √ Runny Nose √ Itchy, Watery Eyes √ Itchy Nose or Throat DO NOT USE IF BLISTER UNITS ARE BROKEN OR TORN 6 TABLETS PACKAGE LABEL-PRINCIPAL DISPLAY PANEL - 60 mg Blister Carton (1 x 6 Unit-dose)"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Antihistamine"
+ ],
+ "set_id": "5413d84e-f945-4920-8981-f62978f21d67",
+ "spl_product_data_elements": [
+  "Fexofenadine Hydrochloride Fexofenadine Hydrochloride FEXOFENADINE HYDROCHLORIDE FEXOFENADINE ANHYDROUS LACTOSE SILICON DIOXIDE STARCH, CORN CROSCARMELLOSE SODIUM HYPROMELLOSE 2910 (6 MPA.S) LACTOSE MONOHYDRATE POLYETHYLENE GLYCOL 400 FERRIC OXIDE RED STEARIC ACID TITANIUM DIOXIDE FERRIC OXIDE YELLOW PEACH Bevel Edge, Biconvex E;42"
+ ],
+ "spl_unclassified_section": [
+  "Other information safety sealed: do not use if carton is opened or if printed foil inner seal on bottle is torn or missing store between 20° and 25°C (68° and 77°F) protect from excessive moisture and light",
+  "Questions or comments? call 1-855-274-4122 (Monday - Friday 8:30 AM to 5:00 PM EST) Distributed by: AUROHEALTH LLC 279 Princeton-Hightstown Road East Windsor, NJ 08520 Made in India"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if an allergic reaction to this product occurs. Seek medical help right away."
+ ],
+ "version": "1",
+ "warnings": [
+  "Warnings Do not use if you have ever had an allergic reaction to this product or any of its ingredients."
+ ],
+ "when_using": [
+  "When using this product do not take more than directed do not take at the same time as aluminum or magnesium antacids do not take with fruit juices (see Directions)"
+ ]
+}

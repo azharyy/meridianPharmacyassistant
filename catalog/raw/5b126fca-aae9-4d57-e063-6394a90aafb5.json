@@ -1,0 +1,115 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each 15 mL dose) Bismuth subsalicylate 262 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have fever mucus in the stool"
+ ],
+ "ask_doctor_or_pharmacist": [
+  "Ask a doctor or pharmacist before use if you are taking any drug for anticoagulation (thinning the blood) diabetes gout arthritis"
+ ],
+ "do_not_use": [
+  "Do not use if you have an ulcer a bleeding problem bloody or black stool"
+ ],
+ "dosage_and_administration": [
+  "Directions shake well before use adults and children 12 years and over: 30 mL (1 dose) every 1/2 hour or 60 mL (2 doses) every hour as needed for diarrhea/traveler’s diarrhea 30 mL (1 dose) every 1/2 hour as needed for overindulgence (upset stomach, heartburn, indigestion, nausea) do not exceed 8 doses (240 mL) in 24 hours use until diarrhea stops but no more than 2 days children under 12 years: ask a doctor drink plenty of clear fluids to help prevent dehydration caused by diarrhea"
+ ],
+ "effective_time": "20261109",
+ "id": "5b126fca-aaea-4d57-e063-6394a90aafb5",
+ "inactive_ingredient": [
+  "Inactive ingredients anhydrous citric acid, benzoic acid, D&C Red #22, D&C Red #28, flavor, purified water, salicylic acid, sodium citrate, sodium salicylate, sorbic acid, sucralose, xanthan gum."
+ ],
+ "indications_and_usage": [
+  "Uses relieves travelers’ diarrhea diarrhea upset stomach due to overindulgence in food and drink, including: heartbun indigestion nausea gas belching fullness"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of the reach of children . In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M008"
+  ],
+  "brand_name": [
+   "Bismuth Subsalicylate"
+  ],
+  "generic_name": [
+   "BISMUTH SUBSALICYLATE"
+  ],
+  "manufacturer_name": [
+   "Kesin Pharma"
+  ],
+  "nui": [
+   "M0002611",
+   "N0000180183"
+  ],
+  "original_packager_product_ndc": [
+   "84379-283"
+  ],
+  "package_ndc": [
+   "81033-046-15",
+   "81033-046-34"
+  ],
+  "pharm_class_cs": [
+   "Bismuth [CS]"
+  ],
+  "pharm_class_epc": [
+   "Bismuth [EPC]"
+  ],
+  "product_ndc": [
+   "81033-046"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "308762"
+  ],
+  "spl_id": [
+   "5b126fca-aaea-4d57-e063-6394a90aafb5"
+  ],
+  "spl_set_id": [
+   "5b126fca-aae9-4d57-e063-6394a90aafb5"
+  ],
+  "substance_name": [
+   "BISMUTH SUBSALICYLATE"
+  ],
+  "unii": [
+   "62TEY51RR1"
+  ]
+ },
+ "other_safety_information": [
+  "Other information each 15 mL dose contains: sodium 11 mg salicylate 125 mg protect from freezing avoid excessive heat (over 104°F or 40°C) Bismuth subsalicylate is a pink liquid with mint odor and available in the following: NDC 81033-046-15: 15 mL unit-dose cup NDC 81033-046-34: Carton containing 30 unit-dose cups of 15 mL each"
+ ],
+ "package_label_principal_display_panel": [
+  "NDC: 81033-046-34 Bismuth Subsalicylate Liquid 262 mg per 15 mL Delivers 15 mL 30 x 15 mL Unit Dose Cups Bismuth Carton 30 ct"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Upset stomach reliever and antidiarrheal"
+ ],
+ "questions": [
+  "Questions or comments Call 1-833-537-4679"
+ ],
+ "set_id": "5b126fca-aae9-4d57-e063-6394a90aafb5",
+ "spl_product_data_elements": [
+  "Bismuth Subsalicylate Bismuth subsalicylate BISMUTH SUBSALICYLATE SALICYLIC ACID BISMUTH CATION ANHYDROUS CITRIC ACID SALICYLIC ACID XANTHAN GUM METHYL SALICYLATE WATER SODIUM SALICYLATE SUCRALOSE SODIUM CITRATE SORBIC ACID D&C RED NO. 22 D&C RED NO. 28 BENZOIC ACID"
+ ],
+ "spl_unclassified_section": [
+  "*This product is not manufactured or distributed by The Procter and Gamble Company. Pepto-Bismol® is a registered trademark of The Procter and Gamble Company. Distributed by: Kesin Pharma Oldsmar, FL 34677 PIS-046-V01 Rev. 08/2026 Kesin Pharma Logo"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if symptoms get worse or last more than 2 days ringing in the ears or loss of hearing occurs diarrhea lasts more than 2 days"
+ ],
+ "version": "1",
+ "warnings": [
+  "Warnings Reye’s syndrome: Children and teenagers who have or are recovering from chicken pox or flu-like symptoms should not use this product. When using this product, if changes in behavior with nausea and vomiting occur, consult a doctor because these symptoms could be an early sign of Reye’s syndrome, a rare but serious illness. Allergy alert: Contains salicylate. Do not take if you are allergic to salicylates (including aspirin) taking other salicylate products"
+ ],
+ "when_using": [
+  "When using this product a temporary, but harmless, darkening of the stool and/or tongue may occur"
+ ]
+}

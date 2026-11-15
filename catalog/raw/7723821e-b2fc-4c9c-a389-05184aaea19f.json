@@ -1,0 +1,92 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each chewable tablet) Simethicone 125 mg"
+ ],
+ "dosage_and_administration": [
+  "Directions do not take more than directed chew or crush tablets completely before swallowing; do not swallow tablets whole adults and children 12 years and over: take 1 or 2 chewable tablets as needed after meals and at bedtime do not exceed 4 chewable tablets in 24 hours unless directed by a doctor children under 12 years: ask a doctor"
+ ],
+ "effective_time": "20261106",
+ "id": "9da3ef6d-eea2-4e7c-8bac-9f3d82485812",
+ "inactive_ingredient": [
+  "Inactive ingredients crospovidone, D&C red #27 aluminum lake, D&C red #30 aluminum lake, dextrates hydrated, FD&C red #40 aluminum lake, flavor, magnesium stearate, microcrystalline cellulose, silicon dioxide, starch, sucralose, tribasic calcium phosphate"
+ ],
+ "indications_and_usage": [
+  "Uses for the relief of pressure, bloating, and fullness commonly referred to as gas"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children."
+ ],
+ "openfda": {
+  "application_number": [
+   "M002"
+  ],
+  "brand_name": [
+   "Gas Relief"
+  ],
+  "generic_name": [
+   "SIMETHICONE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Meijer Distribution, Inc."
+  ],
+  "nui": [
+   "N0000010282"
+  ],
+  "package_ndc": [
+   "79481-0608-4"
+  ],
+  "pharm_class_pe": [
+   "Skin Barrier Activity [PE]"
+  ],
+  "product_ndc": [
+   "79481-0608"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "314221"
+  ],
+  "spl_id": [
+   "9da3ef6d-eea2-4e7c-8bac-9f3d82485812"
+  ],
+  "spl_set_id": [
+   "7723821e-b2fc-4c9c-a389-05184aaea19f"
+  ],
+  "substance_name": [
+   "DIMETHICONE"
+  ],
+  "unii": [
+   "92RU3N3Y1O"
+  ],
+  "upc": [
+   "0760236191803"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal display panel NDC 79481-0608-4 Meijer ® COMPARE TO GAS-X® EXTRA STRENGTH ACTIVE INGREDIENT* EXTRA STRENGTH Gas Relief SIMETHICONE 125 mg CHEWABLE TABLETS ANTI-GAS Relieves: ● Pressure ● Bloating ● Discomfort CHERRY FLAVOR 18 Tablets Actual Size Chew or crush tablets completely before swallowing. Meijer 44-608 Meijer 44-608"
+ ],
+ "purpose": [
+  "Purpose Antigas"
+ ],
+ "questions": [
+  "Questions or comments? 1-800-426-9391"
+ ],
+ "set_id": "7723821e-b2fc-4c9c-a389-05184aaea19f",
+ "spl_product_data_elements": [
+  "Gas Relief Simethicone DIMETHICONE DIMETHICONE CROSPOVIDONE, UNSPECIFIED D&C RED NO. 27 ALUMINUM LAKE D&C RED NO. 30 ALUMINUM LAKE DEXTROSE MONOHYDRATE FD&C RED NO. 40 ALUMINUM LAKE MAGNESIUM STEARATE MICROCRYSTALLINE CELLULOSE SILICON DIOXIDE STARCH, CORN SUCRALOSE TRIBASIC CALCIUM PHOSPHATE DIMETHICONE 410 44;608"
+ ],
+ "storage_and_handling": [
+  "Other information each tablet contains: calcium 85 mg TAMPER EVIDENT: DO NOT USE IF OUTER PACKAGE IS OPENED OR BLISTER IS TORN OR BROKEN store at 25°C (77°F); excursions permitted between 15°-30°C (59°-86°F) protect from moisture see end flap for expiration date and lot number"
+ ],
+ "version": "11",
+ "warnings": [
+  "Warnings Keep out of reach of children."
+ ]
+}

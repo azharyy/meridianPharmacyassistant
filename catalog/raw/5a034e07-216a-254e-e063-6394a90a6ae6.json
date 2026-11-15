@@ -1,0 +1,102 @@
+{
+ "active_ingredient": [
+  "Active Ingredient Clotrimazole 1%"
+ ],
+ "ask_doctor": [
+  "Ask Doctor ■Too much irritation occurs or irritation gets worse."
+ ],
+ "do_not_use": [
+  "Do not use ■on nails or scalp ■ in or near the mouth or the eyes ■for vaginal yeast infections"
+ ],
+ "dosage_and_administration": [
+  "Directions ■Clean the affected area and dry thoroughly before application. ■Apply a thin layer of the product over the affected area twice daily (morning and night) or as directed by a doctor. ■Supervise children when using this product. ■Children under 12 years of age: ask a doctor. ■For athlete’s foot: Pay special attention to spaces between the toes; wear well‑fitting, ventilated shoes, and change shoes and socks at least once daily. ■For athlete’s foot and ringworm, use daily for 4 weeks. ■For jock itch, use daily for 2 weeks. ■If condition persists longer, consult a doctor. ■This product is not effective on the scalp or nails."
+ ],
+ "effective_time": "20261101",
+ "id": "5f434e8d-2236-cbdd-e063-6394a90a7c23",
+ "inactive_ingredient": [
+  "Inactive ingredients Water, Glycerin, Propylene Glycol, Panthenol, Tocopheryl Acetate, Ethylparaben, Dimethicone, Cnidium monnieri Fruit Extract, Melaleuca alternifolia (Tea Tree) Leaf Oil, Sophora flavescens Root Extract"
+ ],
+ "indications_and_usage": [
+  "Uses ■cures most athlete's foot between the toes. Effectiveness on the bottom or sides of the foot is unknown. ■cures most jock itch and ringworm. ■relieves itching, burning, cracking, and scaling which accompany these conditions."
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep Out Of Reach Of Children ■If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M005"
+  ],
+  "brand_name": [
+   "SEEBEELLAR ANTIFUNGAL Cream"
+  ],
+  "generic_name": [
+   "CLOTRIMAZOLE 1% ANTIFUNGAL CREAM"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Wenzhou Yuyuan Pharmaceutical Co., Ltd."
+  ],
+  "nui": [
+   "N0000175487",
+   "M0002083"
+  ],
+  "package_ndc": [
+   "87786-051-01"
+  ],
+  "pharm_class_cs": [
+   "Azoles [CS]"
+  ],
+  "pharm_class_epc": [
+   "Azole Antifungal [EPC]"
+  ],
+  "product_ndc": [
+   "87786-051"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "rxcui": [
+   "309367"
+  ],
+  "spl_id": [
+   "5f434e8d-2236-cbdd-e063-6394a90a7c23"
+  ],
+  "spl_set_id": [
+   "5a034e07-216a-254e-e063-6394a90a6ae6"
+  ],
+  "substance_name": [
+   "CLOTRIMAZOLE"
+  ],
+  "unii": [
+   "G07GZ97H65"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL 1"
+ ],
+ "purpose": [
+  "Purpose Antifungal"
+ ],
+ "set_id": "5a034e07-216a-254e-e063-6394a90a6ae6",
+ "spl_product_data_elements": [
+  "SEEBEELLAR ANTIFUNGAL Cream Clotrimazole 1% ANTIFUNGAL Cream CLOTRIMAZOLE CLOTRIMAZOLE DIMETHICONE WATER CNIDIUM MONNIERI FRUIT SOPHORA FLAVESCENS ROOT GLYCERIN PROPYLENE GLYCOL .ALPHA.-TOCOPHEROL ACETATE PANTHENOL ETHYLPARABEN MELALEUCA ALTERNIFOLIA (TEA TREE) LEAF OIL"
+ ],
+ "stop_use": [
+  "Stop Use ■Too much irritation occurs or irritation gets worse."
+ ],
+ "storage_and_handling": [
+  "Other information ■Do not use if product shows signs of contamination,discoloration or abnormal texture. ■Store at 20°C–25°C (68°F–77°F)."
+ ],
+ "version": "4",
+ "warnings": [
+  "Warnings For external use only. If pregnant or breast‑feeding, ask a health professional before use."
+ ],
+ "when_using": [
+  "When Using Do not get into the eyes. If eye contact occurs, rinse thoroughly with water."
+ ]
+}

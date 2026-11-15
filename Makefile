@@ -15,7 +15,7 @@ include .env
 export
 endif
 
-.PHONY: check fmt contracts run
+.PHONY: check fmt contracts run fetch-labels seed-data
 
 .venv:
 	uv sync --frozen
@@ -31,6 +31,9 @@ fmt: | .venv  ## Format the code and apply safe lint fixes.
 
 contracts: | .venv  ## Regenerate the contract snapshots. Commit them in a PR of their own.
 	$(PY) -m tests.contracts.snapshots
+
+fetch-labels: | .venv  ## Fetch OTC label samples from openFDA into catalog/raw/. Needs the network.
+	$(PY) -m scripts.fetch_labels
 
 # A target-specific variable, so `make run` uses the live model with no shell syntax.
 run: export MERIDIAN_LLM := live

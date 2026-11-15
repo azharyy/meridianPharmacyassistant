@@ -1,0 +1,105 @@
+{
+ "active_ingredient": [
+  "Active Ingredient Hydrocortisone 1 %"
+ ],
+ "do_not_use": [
+  "Do not use for the treatment of diaper rash. Ask a doctor. for external genital itching if you have a vaginal discharge. Ask a doctor. for external anal itching if rectal bleeding occurs. Consult a doctor promptly."
+ ],
+ "dosage_and_administration": [
+  "Directions adults and children 2 years and over: apply to affected area not more than 3 to 4 times daily children under 2 years: ask a doctor for external anal itching in adults: when practical, cleanse the affected area with mild soap and warm water and rinse thoroughly, or by patting or blotting with an appropriate cleansing pad. gently dry by patting or blotting with toilet tissue or a soft cloth before applying. for external anal itching in children under 12 years: ask a doctor"
+ ],
+ "effective_time": "20261104",
+ "id": "5f77b9ff-98f7-acfd-e063-6394a90ab0c4",
+ "inactive_ingredient": [
+  "Inactive ingredient aloe barbadensis (aloe vera) leaf juice, cetearyl alcohol, glycerin, light mineral oil, potassium sorbate, purified water, sodium benzoate, sodium cetearyl sulfate, sodium lauryl sulfate, white petrolatum, white wax"
+ ],
+ "indications_and_usage": [
+  "Uses for the temporary relief of itching associated with minor skin irritations, inflammation, and rashes due to: eczema seborrheic dermatitis psoriasis insect bites poison ivy, poison oak, and poison sumac cosmetics jewelry detergents soaps temporarily relieves external anal and genital itching other uses of this product should be only under the advice and supervision of a doctor"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M017"
+  ],
+  "brand_name": [
+   "Quatriderm Anti-itch"
+  ],
+  "generic_name": [
+   "HYDROCORTISONE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "OPMX LLC"
+  ],
+  "nui": [
+   "N0000175576",
+   "N0000175450"
+  ],
+  "package_ndc": [
+   "69729-269-53"
+  ],
+  "pharm_class_epc": [
+   "Corticosteroid [EPC]"
+  ],
+  "pharm_class_moa": [
+   "Corticosteroid Hormone Receptor Agonists [MoA]"
+  ],
+  "product_ndc": [
+   "69729-269"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "rxcui": [
+   "106258"
+  ],
+  "spl_id": [
+   "5f77b9ff-98f7-acfd-e063-6394a90ab0c4"
+  ],
+  "spl_set_id": [
+   "83e59e10-9878-e5c2-e053-2a91aa0af25e"
+  ],
+  "substance_name": [
+   "HYDROCORTISONE"
+  ],
+  "unii": [
+   "WI4X0X7BPJ"
+  ],
+  "upc": [
+   "0856828008748"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Content of labeling NDC 69729-269-53 Quatriderm NF"
+ ],
+ "purpose": [
+  "Purpose Anti-Itch"
+ ],
+ "set_id": "83e59e10-9878-e5c2-e053-2a91aa0af25e",
+ "spl_product_data_elements": [
+  "Quatriderm Anti-itch HYDROCORTISONE HYDROCORTISONE HYDROCORTISONE SODIUM CETOSTEARYL SULFATE WHITE PETROLATUM CETOSTEARYL ALCOHOL GLYCERIN ALOE VERA LEAF SODIUM LAURYL SULFATE LIGHT MINERAL OIL WATER WHITE WAX POTASSIUM SORBATE SODIUM BENZOATE"
+ ],
+ "spl_unclassified_section": [
+  "Questions Call 619-600 5632"
+ ],
+ "stop_use": [
+  "Stop us and ask doctor if condition gets worse, or if symptoms last for more than 7 days or clear up and occur again within a few days. Do not begin use of any other hydrocortisone product."
+ ],
+ "storage_and_handling": [
+  "Other information store at 20 °C to 25 °C (68 °F to 77 °F)"
+ ],
+ "version": "9",
+ "warnings": [
+  "Warnings For external use only Do not use for the treatment of diaper rash. Ask a doctor. for external genital itching if you have a vaginal discharge. Ask a doctor. for external anal itching if rectal bleeding occurs. Consult a doctor promptly. When using this product do not get into the eyes for external anal itching, do not use more than directed unless told to do so by a doctor do not put into the rectum by using fingers or any mechanical device or applicator Stop us and ask doctor if condition gets worse, or if symptoms last for more than 7 days or clear up and occur again within a few days. Do not begin use of any other hydrocortisone product. Keep out of reach of children If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product do not get into the eyes for external anal itching, do not use more than directed unless told to do so by a doctor do not put into the rectum by using fingers or any mechanical device or applicator"
+ ]
+}

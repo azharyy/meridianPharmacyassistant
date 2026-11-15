@@ -1,0 +1,110 @@
+{
+ "active_ingredient": [
+  "Active ingredients (in each 15 mL) Doxylamine succinate 6.25 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have glaucoma trouble urinating due to enlarged prostate gland cough that occurs with too much phlegm (mucus) a breathing problem that lasts or occurs with chronic bronchitis or emphysema"
+ ],
+ "ask_doctor_or_pharmacist": [
+  "Ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers."
+ ],
+ "dosage_and_administration": [
+  "Directions take only as directed only use the dose cup provided do not exceed 4 doses per 24 hrs adults & children 12 yrs & over 30 mL every 4 hrs children 6 to under 12 yrs 15 mL every 4 hrs children 4 to under 6 yrs ask a doctor children under 4 yrs do not use"
+ ],
+ "dosage_and_administration_table": [
+  "<table width=\"50%\" border=\"2\"> <tbody> <tr> <td>adults &amp; children 12 yrs &amp; over</td> <td>30 mL every 4 hrs</td> </tr> <tr> <td>children 6 to under 12 yrs</td> <td>15 mL every 4 hrs</td> </tr> <tr> <td>children 4 to under 6 yrs</td> <td>ask a doctor</td> </tr> <tr> <td>children under 4 yrs</td> <td>do not use</td> </tr> </tbody> </table>"
+ ],
+ "effective_time": "20261005",
+ "id": "5d18d6f8-e38a-a208-e063-6394a90abffc",
+ "inactive_ingredient": [
+  "Inactive ingredients citric acid, FD&C red no. 40, flavor, glycerin, propylene glycol, saccharin sodium, sodium benzoate, sodium citrate, sorbitol, sucralose, water, xanthan gum"
+ ],
+ "indications_and_usage": [
+  "Uses temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: runny nose sneezing itchy, watery eyes itching of the nose or throat"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children."
+ ],
+ "openfda": {
+  "application_number": [
+   "M012"
+  ],
+  "brand_name": [
+   "Vicks NyQuil ALLERGY"
+  ],
+  "generic_name": [
+   "DOXYLAMINE SUCCINATE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "The Procter & Gamble Manufacturing Company"
+  ],
+  "package_ndc": [
+   "84126-346-12",
+   "84126-346-24"
+  ],
+  "product_ndc": [
+   "84126-346"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "2715412"
+  ],
+  "spl_id": [
+   "5d18d6f8-e38a-a208-e063-6394a90abffc"
+  ],
+  "spl_set_id": [
+   "2f9b3bbb-4494-065d-e063-6294a90afcd2"
+  ],
+  "substance_name": [
+   "DOXYLAMINE SUCCINATE"
+  ],
+  "unii": [
+   "V9BI9B5YI2"
+  ],
+  "upc": [
+   "0323900038905"
+  ]
+ },
+ "overdosage": [
+  "In case of overdose, get medical help or contact a Poison Control Center right away. Quick medical attention is critical for adults as well as for children even if you do not notice any signs or symptoms."
+ ],
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL - 354 ml Bottle Label VICKS ® NyQuil™ ALLERGY Doxylamine Succinate - Antihistamine Runny Nose Sneezing Itchy, Watery Eyes Itchy Throat and Nose Alcohol Free 12 FL OZ (354 mL) 346"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Antihistamine"
+ ],
+ "questions": [
+  "Questions? 1-800-362-1683"
+ ],
+ "set_id": "2f9b3bbb-4494-065d-e063-6294a90afcd2",
+ "spl_product_data_elements": [
+  "Vicks NyQuil ALLERGY Doxylamine Succinate DOXYLAMINE SUCCINATE DOXYLAMINE ANHYDROUS CITRIC ACID FD&C RED NO. 40 PROPYLENE GLYCOL WATER SUCRALOSE SACCHARIN SODIUM SODIUM BENZOATE GLYCERIN SORBITOL XANTHAN GUM TRISODIUM CITRATE DIHYDRATE"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "TAMPER EVIDENT: DO NOT USE IF PRINTED SHRINKBAND ON BOTTLE IS BROKEN OR MISSING.",
+  "DIST. BY PROCTER & GAMBLE, CINCINNATI OH 45202"
+ ],
+ "storage_and_handling": [
+  "Other information each 15 mL contains: sodium 15 mg Store at no greater than 25°C (77ºF)"
+ ],
+ "version": "5",
+ "warnings": [
+  "Warnings"
+ ],
+ "when_using": [
+  "When using this product excitability may occur, especially in children marked drowsiness may occur alcohol, sedatives, and tranquilizers may increase drowsiness avoid alcoholic drinks be careful when driving a motor vehicle or operating machinery"
+ ]
+}

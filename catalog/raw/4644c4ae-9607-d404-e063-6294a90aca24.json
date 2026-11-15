@@ -1,0 +1,109 @@
+{
+ "active_ingredient": [
+  "Active ingredient Oxymetazoline HCl 0.05%"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have heart disease thyroid disease diabetes high blood pressure trouble urinating due to enlarged prostate gland"
+ ],
+ "dosage_and_administration": [
+  "Directions adults & children 6 years & older (with adult supervision) 2 or 3 sprays in each nostril, not more often than every 10 to 12 hours. Do not exceed 2 doses in 24 hours. children 2 to under 6 years ask a doctor children under 2 years do not use"
+ ],
+ "dosage_and_administration_table": [
+  "<table width=\"100%\"> <tbody> <tr> <td>adults &amp; children 6 years &amp; older (with adult supervision)</td> <td>2 or 3 sprays in each nostril, not more often than every 10 to 12 hours. Do not exceed 2 doses in 24 hours.</td> </tr> <tr> <td>children 2 to under 6 years</td> <td>ask a doctor</td> </tr> <tr> <td>children under 2 years</td> <td>do not use</td> </tr> </tbody> </table>"
+ ],
+ "effective_time": "20261002",
+ "id": "5ce1170f-3ee4-e65e-e063-6394a90a1614",
+ "inactive_ingredient": [
+  "Inactive ingredients benzalkonium chloride, benzyl alcohol, citric acid anhydrous, edetate disodium, fragrance, polysorbate 80, propylene glycol, purified water, sodium citrate"
+ ],
+ "indications_and_usage": [
+  "Uses temporarily relieves nasal congestion due to a cold, hay fever, or other upper respiratory allergies sinus congestion and pressure"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children."
+ ],
+ "openfda": {
+  "application_number": [
+   "M012"
+  ],
+  "brand_name": [
+   "Vicks Sinex SEVERE CONGESTION"
+  ],
+  "generic_name": [
+   "OXYMETAZOLINE HYDROCHLORIDE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Procter & Gamble Manufacturing GmbH"
+  ],
+  "package_ndc": [
+   "64336-002-01"
+  ],
+  "product_ndc": [
+   "64336-002"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "NASAL"
+  ],
+  "rxcui": [
+   "1000990"
+  ],
+  "spl_id": [
+   "5ce1170f-3ee4-e65e-e063-6394a90a1614"
+  ],
+  "spl_set_id": [
+   "4644c4ae-9607-d404-e063-6294a90aca24"
+  ],
+  "substance_name": [
+   "OXYMETAZOLINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "K89MJ0S5VY"
+  ],
+  "upc": [
+   "0323900012523"
+  ]
+ },
+ "overdosage": [
+  "If swallowed, get medical help or contact a Poison Control Center right away"
+ ],
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL - 15 ml Bottle Carton VICKS ® Sinex™ SEVERE CONGESTION Oxymetazoline HCl Nasal Decongestant NASAL SPRAY Fast Relief for Sinus, Allergy & Nasal Congestion Sinus Pressure 12 HOUR RELIEF 0.5 FL OZ (15 ml) 002"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Nasal decongestant"
+ ],
+ "questions": [
+  "Questions? 1-800-873-8276"
+ ],
+ "set_id": "4644c4ae-9607-d404-e063-6294a90aca24",
+ "spl_product_data_elements": [
+  "Vicks Sinex SEVERE CONGESTION Oxymetazoline Hydrochloride OXYMETAZOLINE HYDROCHLORIDE OXYMETAZOLINE PROPYLENE GLYCOL BENZALKONIUM CHLORIDE BENZYL ALCOHOL ANHYDROUS CITRIC ACID EDETATE DISODIUM POLYSORBATE 80 WATER SODIUM CITRATE Clear"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "Note: This container is properly filled when approximately half full. Air space equal to one half of volume is necessary to propel the fine spray. Only selected information is listed on the bottle label. Keep this container for future reference. TAMPER EVIDENT: CARTON SEALED FOR YOUR PROTECTION.",
+  "MADE IN GERMANY DIST. BY PROCTER & GAMBLE, CINCINNATI OH 45202"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if symptoms persist"
+ ],
+ "storage_and_handling": [
+  "Other information store at no greater than 25ºC"
+ ],
+ "version": "2",
+ "warnings": [
+  "Warnings Ask a doctor before use if you have heart disease thyroid disease diabetes high blood pressure trouble urinating due to enlarged prostate gland"
+ ],
+ "when_using": [
+  "When using this product do not exceed recommended dosage do not use this product for more than 3 days. Use only as directed. Frequent or prolonged use may cause nasal congestion to recur or worsen temporary discomfort such as burning, stinging, sneezing, or increased nasal discharge may occur use of this container by more than one person may spread infection"
+ ]
+}
