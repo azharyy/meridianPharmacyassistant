@@ -1,0 +1,25 @@
+{
+  "reply_type": "order_status",
+  "blocks": [
+    {
+      "type": "order_status",
+      "text": "Your order has shipped. Estimated delivery: Tuesday 17 November 2026. Items in the order: 2.",
+      "order": {
+        "status": "shipped",
+        "delivery_estimate": "2026-11-17",
+        "item_count": 2
+      },
+      "source_id": "api:orders"
+    }
+  ],
+  "sources": [
+    {
+      "id": "api:orders",
+      "title": "Order lookup",
+      "text": null,
+      "retrieved_at": "2026-11-15T10:42:00Z"
+    }
+  ],
+  "handoff_offered": false,
+  "emergency": false
+}

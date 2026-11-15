@@ -1,0 +1,12 @@
+{
+  "reply_type": "prescription",
+  "blocks": [
+    {
+      "type": "text",
+      "text": "Questions about prescription medicines are for our pharmacists to answer. A pharmacist can help with that."
+    }
+  ],
+  "sources": [],
+  "handoff_offered": true,
+  "emergency": false
+}

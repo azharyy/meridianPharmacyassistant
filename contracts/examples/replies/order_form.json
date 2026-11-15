@@ -1,0 +1,15 @@
+{
+  "reply_type": "order_form",
+  "blocks": [
+    {
+      "type": "order_form",
+      "text": "To keep your order private, please enter your order number and the email or phone number on the order in this form, not in the chat.",
+      "order_number_label": "Order number",
+      "contact_label": "Email or phone number",
+      "submit_label": "Check order"
+    }
+  ],
+  "sources": [],
+  "handoff_offered": false,
+  "emergency": false
+}
