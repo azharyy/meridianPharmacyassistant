@@ -1,14 +1,26 @@
-"""Declare the mock Meridian API endpoints as typed stubs that answer 501 until issue 4.
+"""The mock Meridian API: HTTP routes over the order, product, store and ticket modules.
 
-The OpenAPI spec is frozen in contracts/meridian-api.json. It documents what the finished
-API returns, so the stubs' 501 is not in it. Issue 4 replaces each body and keeps every
-name, docstring and decorator, so the spec stays identical.
+The OpenAPI spec is frozen in contracts/meridian-api.json, so every route keeps its function
+name, docstring and decorator. `create_app` builds the modules from the data files, the clock
+and the staff key, so a test passes its own; `app` is what uvicorn and the snapshot use. The
+test header `X-Meridian-Test: timeout` makes any endpoint answer 504 at once.
 """
 
+import hmac
+import time
+from collections.abc import Callable
+from dataclasses import dataclass
+from pathlib import Path
 from typing import Annotated
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import APIRouter, Depends, FastAPI, Header, HTTPException, Request
+from fastapi.responses import JSONResponse
 
+from api import settings
+from api.orders import OrderDesk
+from api.products import StockRoom
+from api.stores import load_stores
+from api.tickets import TicketDesk
 from contracts.api import (
     APIError,
     Availability,
@@ -21,7 +33,6 @@ from contracts.api import (
 )
 
 TIMEOUT = {504: {"model": APIError, "description": "The test header asked for a timeout"}}
-app = FastAPI(title="Meridian API", version="0.1.0", responses=TIMEOUT)
 TestHeader = Annotated[
     str | None,
     Header(
@@ -34,54 +45,118 @@ StaffHeader = Annotated[
 ]
 
 
-def not_implemented() -> HTTPException:
-    return HTTPException(status_code=501, detail="not_implemented")
+@dataclass(frozen=True)
+class Desks:
+    orders: OrderDesk
+    stock: StockRoom
+    stores: dict[str, StoreInfo]
+    tickets: TicketDesk
+    staff_key: str
 
 
-@app.post("/v1/orders/lookup", response_model=OrderStatus, responses={404: {"model": APIError}})
-def lookup_order(request: OrderLookupRequest, test: TestHeader = None) -> OrderStatus:
+def desks(request: Request) -> Desks:
+    return request.app.state.desks
+
+
+Service = Annotated[Desks, Depends(desks)]
+router = APIRouter()
+
+
+def not_found() -> HTTPException:
+    return HTTPException(status_code=404, detail="not_found")
+
+
+@router.post("/v1/orders/lookup", response_model=OrderStatus, responses={404: {"model": APIError}})
+def lookup_order(
+    request: OrderLookupRequest, service: Service, test: TestHeader = None
+) -> OrderStatus:
     """Status, delivery estimate and item count, only when the order number and the email or
     phone both match one order. Every failure, including a lockout after five failed tries
     for one contact or one order number, gets the same 404 status and body."""
-    raise not_implemented()
+    status = service.orders.lookup(request.order_number, request.contact)
+    if status is None:
+        raise not_found()
+    return status
 
 
-@app.get(
+@router.get(
     "/v1/products/{sku}/availability",
     response_model=Availability,
     responses={404: {"model": APIError}},
 )
-def get_availability(sku: str, test: TestHeader = None) -> Availability:
+def get_availability(sku: str, service: Service, test: TestHeader = None) -> Availability:
     """Stock of one product at each store. An unknown SKU gets a 404."""
-    raise not_implemented()
+    availability = service.stock.availability(sku)
+    if availability is None:
+        raise not_found()
+    return availability
 
 
-@app.get("/v1/stores", response_model=list[StoreInfo])
-def list_stores(test: TestHeader = None) -> list[StoreInfo]:
+@router.get("/v1/stores", response_model=list[StoreInfo])
+def list_stores(service: Service, test: TestHeader = None) -> list[StoreInfo]:
     """Every store's address, phone, hours by weekday and services."""
-    raise not_implemented()
+    return list(service.stores.values())
 
 
-@app.get("/v1/stores/{store_id}", response_model=StoreInfo, responses={404: {"model": APIError}})
-def get_store(store_id: str, test: TestHeader = None) -> StoreInfo:
+@router.get("/v1/stores/{store_id}", response_model=StoreInfo, responses={404: {"model": APIError}})
+def get_store(store_id: str, service: Service, test: TestHeader = None) -> StoreInfo:
     """One store's address, phone, hours by weekday and services. An unknown store gets a 404."""
-    raise not_implemented()
+    store = service.stores.get(store_id)
+    if store is None:
+        raise not_found()
+    return store
 
 
-@app.post("/v1/tickets", response_model=TicketCreated, status_code=201)
-def create_ticket(request: TicketCreateRequest, test: TestHeader = None) -> TicketCreated:
+@router.post("/v1/tickets", response_model=TicketCreated, status_code=201)
+def create_ticket(
+    request: TicketCreateRequest, service: Service, test: TestHeader = None
+) -> TicketCreated:
     """Create a pharmacist ticket. The same idempotency key returns the same ticket, with the
     same 201, and never creates a second one."""
-    raise not_implemented()
+    return service.tickets.create(request)
 
 
-@app.get(
+@router.get(
     "/v1/tickets/{ticket_id}",
     response_model=TicketRecord,
     responses={401: {"model": APIError}, 404: {"model": APIError}},
 )
 def get_ticket(
-    ticket_id: str, staff_key: StaffHeader = None, test: TestHeader = None
+    ticket_id: str, service: Service, staff_key: StaffHeader = None, test: TestHeader = None
 ) -> TicketRecord:
     """Read a ticket back. Without the right X-Staff-Key header the answer is 401."""
-    raise not_implemented()
+    if not hmac.compare_digest((staff_key or "").encode(), service.staff_key.encode()):
+        raise HTTPException(status_code=401, detail="unauthorized")
+    ticket = service.tickets.get(ticket_id)
+    if ticket is None:
+        raise not_found()
+    return ticket
+
+
+async def answer_test_timeout(request: Request, call_next):
+    """`X-Meridian-Test: timeout` makes any endpoint answer 504 before it runs."""
+    if request.headers.get("X-Meridian-Test", "").strip().lower() == "timeout":
+        return JSONResponse(status_code=504, content={"detail": "timeout"})
+    return await call_next(request)
+
+
+def create_app(
+    data: Path = settings.DATA,
+    clock: Callable[[], float] = time.monotonic,
+    staff_key: str | None = None,
+) -> FastAPI:
+    stores = load_stores(data / "stores.yaml")
+    app = FastAPI(title="Meridian API", version="0.1.0", responses=TIMEOUT)
+    app.state.desks = Desks(
+        orders=OrderDesk.from_file(data / "orders.json", clock),
+        stock=StockRoom.from_file(data / "stock.json", stores),
+        stores=stores,
+        tickets=TicketDesk(),
+        staff_key=settings.staff_key() if staff_key is None else staff_key,
+    )
+    app.middleware("http")(answer_test_timeout)
+    app.include_router(router)
+    return app
+
+
+app = create_app()
