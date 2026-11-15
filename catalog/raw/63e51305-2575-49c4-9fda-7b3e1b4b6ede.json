@@ -1,0 +1,104 @@
+{
+ "active_ingredient": [
+  "Active ingredient (In Each Tablets) Phenylephrine HCl 5 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have liver disease heart disease high blood pressure thyroid disease diabetes trouble urinating due to an enlarged prostate gland"
+ ],
+ "do_not_use": [
+  "Do not use if you are now taking a prescription monoamine oxidase inhibitor (MAOI) (certain drugs for depression, psychiatric or emotional conditions, or Parkinson's disease), or for 2 weeks after stopping an MAOI drug. If you do not know if your prescription drug contains an MAOI, consult a doctor or pharmacist before taking this product."
+ ],
+ "dosage_and_administration": [
+  "Directions Adults and children 12 years of age and older take 2 tablets every 4 to 6 hours as needed, do not exceed 8 tablets in 24 hours, or as directed by a doctor Children under 12 years of age: ask a doctor"
+ ],
+ "effective_time": "20261026",
+ "id": "6c970760-6461-4580-8e7e-7c13c0ec9735",
+ "inactive_ingredient": [
+  "Inactive Ingredients croscarmellose sodium, D&C Red #27, dicalcium phosphate, magnesium stearate, microcrystalline cellulose, silicon dioxide, starch, stearic acid"
+ ],
+ "indications_and_usage": [
+  "Use temporarily relieves nasal congestion due to: common cold hay fever or other upper respiratory allergies"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M012"
+  ],
+  "brand_name": [
+   "NASAL and SINUS DECONGESTANT"
+  ],
+  "generic_name": [
+   "PHENYLEPHRINE HYDROCHLORIDE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "JHK Inc dba American Safety & First Aid"
+  ],
+  "package_ndc": [
+   "73598-1262-1",
+   "73598-1264-1"
+  ],
+  "product_ndc": [
+   "73598-1262",
+   "73598-1264"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "1299145"
+  ],
+  "spl_id": [
+   "6c970760-6461-4580-8e7e-7c13c0ec9735"
+  ],
+  "spl_set_id": [
+   "63e51305-2575-49c4-9fda-7b3e1b4b6ede"
+  ],
+  "substance_name": [
+   "PHENYLEPHRINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "04JA59TNSJ"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL - 100 Tablet Box Product #1262 Nasal & Sinus Decongestant II Nasal Decongestant Active ingredient: Phenylephrine Helps reduce nasal and sinus congestion and pressure, and helps restore free breathing through the nose These quality comfort tablets are formulated and packaged for use in the workplace and meet ANSI Z308.1-2015 standards. They are sealed in tamper-evident packets for safety and convenience. 100 Tablets • 2 Tablets Per Packet PRINCIPAL DISPLAY PANEL - 100 Tablet Box",
+  "PRINCIPAL DISPLAY PANEL - 250 Tablet Box Product #1264 Nasal & Sinus Decongestant II Nasal Decongestant Active ingredient: Phenylephrine Helps reduce nasal and sinus congestion and pressure, and helps restore free breathing through the nose These quality comfort tablets are formulated and packaged for use in the workplace and meet ANSI Z308.1-2015 standards. They are sealed in tamper-evident packets for safety and convenience. 250 Tablets • 2 Tablets Per Packet PRINCIPAL DISPLAY PANEL - 250 Tablet Box"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose nasal decongestant"
+ ],
+ "questions": [
+  "Questions? 1-866-651-3660 Monday-Friday 8:00am-5:00pm EST"
+ ],
+ "set_id": "63e51305-2575-49c4-9fda-7b3e1b4b6ede",
+ "spl_product_data_elements": [
+  "NASAL and SINUS DECONGESTANT PHENYLEPHRINE HYDROCHLORIDE PHENYLEPHRINE HYDROCHLORIDE PHENYLEPHRINE CROSCARMELLOSE SODIUM D&C RED NO. 27 ANHYDROUS DIBASIC CALCIUM PHOSPHATE MAGNESIUM STEARATE MICROCRYSTALLINE CELLULOSE SILICON DIOXIDE STARCH, CORN STEARIC ACID 271 NASAL and SINUS DECONGESTANT PHENYLEPHRINE HYDROCHLORIDE PHENYLEPHRINE HYDROCHLORIDE PHENYLEPHRINE CROSCARMELLOSE SODIUM D&C RED NO. 27 ANHYDROUS DIBASIC CALCIUM PHOSPHATE MAGNESIUM STEARATE MICROCRYSTALLINE CELLULOSE SILICON DIOXIDE STARCH, CORN STEARIC ACID 271"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if nervousness, dizziness or sleeplessness occur symptoms do not improve within 7 days or are accompanied by fever new symptoms occur"
+ ],
+ "storage_and_handling": [
+  "Other Information do not use if packet is opened or torn store at room temperature, 59° - 86°F (15° - 30°C) avoid excessive heat and humidity"
+ ],
+ "version": "3",
+ "warnings": [
+  "Warnings Do not use if you are now taking a prescription monoamine oxidase inhibitor (MAOI) (certain drugs for depression, psychiatric or emotional conditions, or Parkinson's disease), or for 2 weeks after stopping an MAOI drug. If you do not know if your prescription drug contains an MAOI, consult a doctor or pharmacist before taking this product. Ask a doctor before use if you have liver disease heart disease high blood pressure thyroid disease diabetes trouble urinating due to an enlarged prostate gland When using this product do not exceed recommended dose Stop use and ask a doctor if nervousness, dizziness or sleeplessness occur symptoms do not improve within 7 days or are accompanied by fever new symptoms occur If pregnant or breast-feeding ask a health professional before use. Keep out of reach of children In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product do not exceed recommended dose"
+ ]
+}

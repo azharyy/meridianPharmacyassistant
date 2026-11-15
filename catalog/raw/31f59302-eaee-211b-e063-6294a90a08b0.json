@@ -1,0 +1,99 @@
+{
+ "active_ingredient": [
+  "Active ingredient Terbinafine hydrochloride 1%"
+ ],
+ "do_not_use": [
+  "Do not use on nails or scalp in or near the mouth or eyes for vaginal yeast infections"
+ ],
+ "dosage_and_administration": [
+  "Directions adults and children 12 years and over: use the tip of the cap to break the seal and open the tube wash the affected skin with soap and water and dry completely before applying for athlete's foot wear well-fitting, ventilated shoes. Change shoes and socks at least once daily. between the toes only: apply twice a day (morning and night) for 1 week or as directed by a doctor on the bottom or sides of the foot: apply twice a day (morning and night) for 2 weeks or as directed by a doctor for jock itch and ringworm: apply once a day (morning or night) for 1 week or as directed by a doctor wash hands after each use children under 12 years: ask a doctor 1 week between the toes 2 weeks on the bottom or sides of the foot Image Image"
+ ],
+ "dosage_and_administration_table": [
+  "<table width=\"70%\" styleCode=\"Noautorules\"><col align=\"left\" valign=\"middle\" width=\"80%\"/><col align=\"center\" valign=\"middle\" width=\"20%\"/><tbody><tr><td><list listType=\"unordered\" styleCode=\"Disc\"><item>adults and children 12 years and over: <list listType=\"unordered\" styleCode=\"Disc\"><item>use the tip of the cap to break the seal and open the tube</item><item>wash the affected skin with soap and water and dry completely before applying</item><item><content styleCode=\"bold\">for athlete&apos;s foot</content>wear well-fitting, ventilated shoes.   Change shoes and socks at least once daily. <list listType=\"unordered\" styleCode=\"Disc\"><item><content styleCode=\"bold\">between the toes only:</content>apply twice a day (morning and night) for <content styleCode=\"bold\">1 week</content>or as directed by a doctor </item><item><content styleCode=\"bold\">on the bottom or sides of the foot:</content>apply twice a day (morning and night) for <content styleCode=\"bold\">2 weeks</content>or as directed by a doctor </item></list></item><item><content styleCode=\"bold\">for jock itch and ringworm:</content>apply once a day (morning <content styleCode=\"bold\">or</content>night) for <content styleCode=\"bold\">1 week</content>or as directed by a doctor </item><item>wash hands after each use</item></list></item><item>children under 12 years: ask a doctor</item></list></td><td><renderMultiMedia referencedObject=\"MM1\"/>1 week between the toes <renderMultiMedia referencedObject=\"MM2\"/>2 weeks on the bottom or sides of the foot </td></tr></tbody></table>"
+ ],
+ "effective_time": "20260403",
+ "id": "4e91f275-e628-27c4-e063-6294a90ad0c4",
+ "inactive_ingredient": [
+  "Inactive ingredients benzyl alcohol, cetyl alcohol, cetyl palmitate, isopropyl myristate, polysorbate 60, purified water, sodium hydroxide, sorbitan monostearate, stearyl alcohol"
+ ],
+ "indications_and_usage": [
+  "Uses cures most athlete's foot (tinea pedis) cures most jock itch (tinea cruris) and ringworm (tinea corporis) relieves itching, burning, cracking and scaling which accompany these conditions"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA077511"
+  ],
+  "brand_name": [
+   "Terbinafine Hydrochloride"
+  ],
+  "generic_name": [
+   "TERBINAFINE HYDROCHLORIDE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Scholl's Wellness Company LLC"
+  ],
+  "package_ndc": [
+   "73469-7215-2"
+  ],
+  "product_ndc": [
+   "73469-7215"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "rxcui": [
+   "992528"
+  ],
+  "spl_id": [
+   "4e91f275-e628-27c4-e063-6294a90ad0c4"
+  ],
+  "spl_set_id": [
+   "31f59302-eaee-211b-e063-6294a90a08b0"
+  ],
+  "substance_name": [
+   "TERBINAFINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "012C11ZU6G"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL - 30 g Tube Carton Carton"
+ ],
+ "purpose": [
+  "Purpose Antifungal"
+ ],
+ "questions": [
+  "Questions? call 1-866-360-3226"
+ ],
+ "set_id": "31f59302-eaee-211b-e063-6294a90a08b0",
+ "spl_product_data_elements": [
+  "Terbinafine Hydrochloride Terbinafine Hydrochloride CETYL ALCOHOL CETYL PALMITATE ISOPROPYL MYRISTATE POLYSORBATE 60 WATER SODIUM HYDROXIDE SORBITAN MONOSTEARATE STEARYL ALCOHOL TERBINAFINE HYDROCHLORIDE TERBINAFINE BENZYL ALCOHOL"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "Dist. by: Scholl’s Wellness Company LLC Parsippany, NJ 07054 Made in Canada."
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if too much irritation occurs or gets worse"
+ ],
+ "storage_and_handling": [
+  "Other information TAMPER EVIDENT: DO NOT USE IF THE SEAL ON THE TUBE IS PUNCTURED OR NOT VISIBLE. store at controlled room temperature 20° to 25°C (68° to 77°F) see carton or tube crimp for lot number and expiration date"
+ ],
+ "version": "4",
+ "warnings": [
+  "Warnings For external use only Do not use on nails or scalp in or near the mouth or eyes for vaginal yeast infections When using this product do not get into eyes. If eye contact occurs, rinse thoroughly with water. Stop use and ask a doctor if too much irritation occurs or gets worse Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product do not get into eyes. If eye contact occurs, rinse thoroughly with water."
+ ]
+}

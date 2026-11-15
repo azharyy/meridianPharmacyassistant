@@ -1,0 +1,122 @@
+{
+ "active_ingredient": [
+  "ACTIVE INGREDIENT (in each tablet/caplet) Ibuprofen 200 mg (NSAID) * nonsteroidal anti-inflammatory drug"
+ ],
+ "ask_doctor": [
+  "ASK A DOCTOR BEFORE USE IF the stomach bleeding warning applies to you you have problems or serious side effects from taking pain relievers or fever reducers you have a history of stomach problems, such as heartburn you have high blood pressure, heart disease, liver cirrhosis, kidney disease or asthma you are taking a diuretic"
+ ],
+ "ask_doctor_or_pharmacist": [
+  "ASK A DOCTOR OR PHARMACIST BEFORE USE IF YOU ARE under a doctor’s care for any serious condition taking aspirin for heart attack or stroke, because ibuprofen may decrease this benefit of aspirin taking any other drug"
+ ],
+ "do_not_use": [
+  "DO NOT USE if you have ever had an allergic reaction to any other pain reliever/fever reducer right before or after heart surgery"
+ ],
+ "dosage_and_administration": [
+  "DIRECTIONS do not take more than directed the smallest effective dose should be used adults and children 12 years and older take 1 caplet every 4 to 6 hours while symptoms persist if pain or fever does not respond to 1 caplet, 2 caplets may be used do not exceed 6 caplets in 24 hours, unless directed by a doctor children under 12 years ask a doctor"
+ ],
+ "dosage_and_administration_table": [
+  "<table border=\"1\" frame=\"void\" width=\"589\"> <tbody> <tr> <td styleCode=\"Botrule Lrule Rrule Toprule\" valign=\"top\">adults and children 12 years and older</td> <td styleCode=\"Botrule Lrule Rrule Toprule\" valign=\"top\"> <list listType=\"unordered\" styleCode=\"Disc\"> <item>take 1 caplet every 4 to 6 hours while symptoms persist</item> <item>if pain or fever does not respond to 1 caplet, 2 caplets may be used</item> <item>do not exceed 6 caplets in 24 hours, unless directed by a doctor</item> </list> </td> </tr> <tr> <td styleCode=\"Botrule Lrule Rrule Toprule\" valign=\"top\">children under 12 years</td> <td styleCode=\"Botrule Lrule Rrule Toprule\" valign=\"top\"> <list listType=\"unordered\" styleCode=\"Disc\"> <item>ask a doctor</item> </list> </td> </tr> </tbody> </table>"
+ ],
+ "effective_time": "20261008",
+ "id": "5d5bbcd8-11aa-a465-e063-6394a90afb47",
+ "inactive_ingredient": [
+  "INACTIVE INGREDIENTS colloidal silicon dioxide, corn starch, hypromellose, iron oxide red, lactose monohydrate, povidone k-30, sodium starch glycolate, stearic acid, titanium dioxide, triacetin"
+ ],
+ "indications_and_usage": [
+  "USES temporarily relieves minor aches and pains due to: headache toothache backache menstrual cramps the common cold muscular aches minor pain of arthritis temporarily reduces fever"
+ ],
+ "keep_out_of_reach_of_children": [
+  "KEEP OUT OF REACH OF CHILDREN In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA079174"
+  ],
+  "brand_name": [
+   "Ibuwin Forte"
+  ],
+  "generic_name": [
+   "IBUPROFEN"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "OPMX LLC"
+  ],
+  "nui": [
+   "N0000000160",
+   "M0001335",
+   "N0000175722"
+  ],
+  "package_ndc": [
+   "69729-157-10"
+  ],
+  "pharm_class_cs": [
+   "Anti-Inflammatory Agents, Non-Steroidal [CS]"
+  ],
+  "pharm_class_epc": [
+   "Nonsteroidal Anti-inflammatory Drug [EPC]"
+  ],
+  "pharm_class_moa": [
+   "Cyclooxygenase Inhibitors [MoA]"
+  ],
+  "product_ndc": [
+   "69729-157"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "310965"
+  ],
+  "spl_id": [
+   "5d5bbcd8-11aa-a465-e063-6394a90afb47"
+  ],
+  "spl_set_id": [
+   "0daf1be9-ea38-461e-e063-6394a90a7954"
+  ],
+  "substance_name": [
+   "IBUPROFEN"
+  ],
+  "unii": [
+   "WK2XYI10QM"
+  ],
+  "upc": [
+   "0810053181416"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PACKAGE LABEL.PRINCIPAL DISPLAY PANEL NDC 69729-157-10 Ibuwin Forte Ibuprofen 200 mg Pain Reliever/Fever Reducer (NSAID) Analgésico/Antipirético (AINE) 10 Tablets/Tabletas BOX ESP"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "IF PREGNANT OR BREAST FEEDING, ask a health professional before use. It is especially important not to use ibuprofen during the last 3 months of pregnancy unless definitely directed to do so by a doctor because it may cause problems in the unborn child or complications during delivery."
+ ],
+ "purpose": [
+  "PURPOSE Pain reliever/Fever reducer"
+ ],
+ "questions": [
+  "QUESTIONS OR COMMENTS? Call: (619) 600-5632 (Mon-Fri 9am-5pm EST) or https://www.opmx.us"
+ ],
+ "set_id": "0daf1be9-ea38-461e-e063-6394a90a7954",
+ "spl_product_data_elements": [
+  "Ibuwin Forte Ibuprofen IBUPROFEN IBUPROFEN STARCH, CORN POVIDONE K30 STEARIC ACID SILICON DIOXIDE SODIUM STARCH GLYCOLATE TYPE A POTATO TITANIUM DIOXIDE FERRIC OXIDE RED HYPROMELLOSE, UNSPECIFIED TRIACETIN LACTOSE MONOHYDRATE Reddish Brown G;2"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "OTHER INFORMATION store at 20-25°C (68-77°F) avoid high humidity and excessive heat above 40°C (104°F) read all product information before using TAMPER EVIDENT: DO NOT USE IF IMPRINTED SAFETY SEAL IS BROKEN OR MISSING"
+ ],
+ "stop_use": [
+  "STOP USE AND ASK A DOCTOR IF you experience any of the following signs of stomach bleeding: feel faint have bloody or black stools vomit blood have stomach pain that does not get better pain gets worse or lasts more than 10 days fever gets worse or lasts more than 3 days redness or swelling is present in the painful area any new symptoms appear"
+ ],
+ "version": "3",
+ "warnings": [
+  "WARNINGS Allergy alert: Ibuprofen may cause a severe allergic reaction, especially in people allergic to aspirin. Symptoms may include: hives facial swelling asthma (wheezing) shock skin reddening rash blisters If an allergic reaction occurs, stop use and seek medical help right away. Stomach bleeding warning This product contains an NSAID, which may cause severe stomach bleeding. The chance is higher if you: are age 60 or older have had stomach ulcers or bleeding problems take a blood thinning (anticoagulant) or steroid drug take other drugs containing prescription or nonprescription NSAIDs [aspirin, ibuprofen, naproxen, or others] have 3 or more alcoholic drinks every day while using this product take more or for a longer time than directed Heart attack and stroke warning NSAIDs, except aspirin, increase the risk of heart attack, heart failure, and stroke. These can be fatal. The risk is higher if you use more than directed or for longer than directed. DO NOT USE if you have ever had an allergic reaction to any other pain reliever/fever reducer right before or after heart surgery ASK A DOCTOR BEFORE USE IF the stomach bleeding warning applies to you you have problems or serious side effects from taking pain relievers or fever reducers you have a history of stomach problems, such as heartburn you have high blood pressure, heart disease, liver cirrhosis, kidney disease or asthma you are taking a diuretic ASK A DOCTOR OR PHARMACIST BEFORE USE IF YOU ARE under a doctor’s care for any serious condition taking aspirin for heart attack or stroke, because ibuprofen may decrease this benefit of aspirin taking any other drug WHEN USING THIS PRODUCT take with food or milk if stomach upset occurs the risk of heart attack may increase if you use more than directed or for longer than directed STOP USE AND ASK A DOCTOR IF you experience any of the following signs of stomach bleeding: feel faint have bloody or black stools vomit blood have stomach pain that does not get better pain gets worse or lasts more than 10 days fever gets worse or lasts more than 3 days redness or swelling is present in the painful area any new symptoms appear IF PREGNANT OR BREAST FEEDING, ask a health professional before use. It is especially important not to use ibuprofen during the last 3 months of pregnancy unless definitely directed to do so by a doctor because it may cause problems in the unborn child or complications during delivery. KEEP OUT OF REACH OF CHILDREN In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "WHEN USING THIS PRODUCT take with food or milk if stomach upset occurs the risk of heart attack may increase if you use more than directed or for longer than directed"
+ ]
+}

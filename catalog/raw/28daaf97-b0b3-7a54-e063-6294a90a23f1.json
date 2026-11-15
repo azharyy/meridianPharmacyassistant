@@ -1,0 +1,108 @@
+{
+ "active_ingredient": [
+  "Active ingredient Hydrocortisone 1%"
+ ],
+ "do_not_use": [
+  "Do not use for the treatment of diaper rash. Consult a doctor."
+ ],
+ "dosage_and_administration": [
+  "Directions adults and children 2 years of age and older: spray affected area not more than 3 to 4 times daily children under 2 years of age: do not use, consult a doctor"
+ ],
+ "effective_time": "20261105",
+ "id": "5f8f3827-227f-c869-e063-6294a90ad29c",
+ "inactive_ingredient": [
+  "Inactive ingredients SD ALCOHOL 40-B, WATER, GLYCERIN, PEG-8, ETHOXYDIGLYCOL, MENTHYL LACTATE, METHYL GLUCETH-20, AVENA SATIVA (OAT) KERNEL EXTRACT, PROPANEDIOL, SODIUM CITRATE, CITRIC ACID."
+ ],
+ "indications_and_usage": [
+  "Uses for the temporary relief of itching associated with minor skin irritations, inflammation, and rashes due to: eczema insect bites poison ivy poison oak poison sumac soaps detergents cosmetics jewelry seborrheic dermatitis psoriasis other uses of this product should be only under the advice and supervision of a doctor"
+ ],
+ "information_for_patients": [
+  "Other Information store at 20 o to 25 o C (68 o to 77 o F) shake well before use pump must be primed before use"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of the reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M017"
+  ],
+  "brand_name": [
+   "Hydrocortisone"
+  ],
+  "generic_name": [
+   "HYDROCORTISONE SPRAY"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Meijer Distribution Inc."
+  ],
+  "nui": [
+   "N0000175576",
+   "N0000175450"
+  ],
+  "package_ndc": [
+   "79481-9967-1"
+  ],
+  "pharm_class_epc": [
+   "Corticosteroid [EPC]"
+  ],
+  "pharm_class_moa": [
+   "Corticosteroid Hormone Receptor Agonists [MoA]"
+  ],
+  "product_ndc": [
+   "79481-9967"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "rxcui": [
+   "317564"
+  ],
+  "spl_id": [
+   "5f8f3827-227f-c869-e063-6294a90ad29c"
+  ],
+  "spl_set_id": [
+   "28daaf97-b0b3-7a54-e063-6294a90a23f1"
+  ],
+  "substance_name": [
+   "HYDROCORTISONE"
+  ],
+  "unii": [
+   "WI4X0X7BPJ"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal Display Panel MAXIMUM STRENGTH Hydrocortisone 1%/ Anti-Itch Spray COMPARE TO CORTIZONE-10 ACTIVE INGREDIENT RELIEVES ITCHING FROM MINOR SKIN IRRITATION & RASHES DUE TO INSECT BITES & POSION IVY, OAK & SUMAC Ozone-Friendly, Non-Aerosol Calms Irritated Skin No-Touch & No-Mess Shake Well 2.5 FL. 0Z. (74 mL) meijer label"
+ ],
+ "purpose": [
+  "Purpose Anti-itch"
+ ],
+ "questions": [
+  "Questions ? Call 1-866-964-0939"
+ ],
+ "recent_major_changes": [
+  ""
+ ],
+ "safe_handling_warning": [
+  "Flammable: Keep away from fire or flame."
+ ],
+ "set_id": "28daaf97-b0b3-7a54-e063-6294a90a23f1",
+ "spl_product_data_elements": [
+  "Hydrocortisone Hydrocortisone Spray HYDROCORTISONE HYDROCORTISONE ALCOHOL WATER GLYCERIN POLYETHYLENE GLYCOL 400 DIETHYLENE GLYCOL MONOETHYL ETHER MENTHYL LACTATE METHYL GLUCETH-20 OAT PROPANEDIOL SODIUM CITRATE CITRIC ACID"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if condition worsens symptoms persist for more than 7 days or clear up and occur again within a few days, and do not begin use of any other hydrocortisone product unless you have consulted a doctor"
+ ],
+ "version": "3",
+ "warnings": [
+  "Warnings For external use only. Flammable: Keep away from fire or flame. Do not use for the treatment of diaper rash. Consult a doctor. When using this product avoid contact with the eyes Stop use and ask a doctor if condition worsens symptoms persist for more than 7 days or clear up and occur again within a few days, and do not begin use of any other hydrocortisone product unless you have consulted a doctor Keep out of the reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product avoid contact with the eyes"
+ ]
+}

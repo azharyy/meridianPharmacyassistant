@@ -1,0 +1,102 @@
+{
+ "active_ingredient": [
+  "Active ingredient Oxymetazoline hydrochloride 0.05%"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have heart disease high blood pressure thyroid disease diabetes difficulty in urination due to enlargement of the prostate gland"
+ ],
+ "dosage_and_administration": [
+  "Directions adults and children 6 to under 12 years of age (with adult supervision): 2 or 3 sprays in each nostril, not more often than every 10 to 12 hours. Do not exceed 2 doses in any 24-hour period. children under 6 years of age: consult a doctor. Shake well before use. To open, hold by the white grips then squeeze, push down firmly and turn cap counterclockwise. Before using for the first time, remove the protective cap from the tip and prime metered pump by depressing firmly several times. To spray, hold bottle with thumb at the base and nozzle between first and second fingers. Without tilting head, insert nozzle into nostril. Fully depress pump all the way down with a firm even stroke and sniff deeply. Wipe nozzle clean after use. To close, turn cap clockwise. DO NOT DISCARD CAP."
+ ],
+ "effective_time": "20261014",
+ "id": "5dd09888-1471-ee84-e063-6294a90ac5fb",
+ "inactive_ingredient": [
+  "Inactive ingredients benzalkonium chloride, benzododecinium chloride, cetalkonium chloride, dibasic sodium phosphate anhydrous, edetate disodium, glycerin, monobasic sodium phosphate anhydrous, myristalkonium chloride, phosphorous pentoxide, propylene glycol, purified water, sodium oxide, sorbitol"
+ ],
+ "indications_and_usage": [
+  "Uses temporarily relieves nasal congestion due to: a cold hay fever or other upper respiratory allergies promotes nasal and sinus drainage temporarily relieves sinus congestion and pressure helps clear nasal passages; shrinks swollen membranes"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M012"
+  ],
+  "brand_name": [
+   "MUCINEX SINUS-MAX SEVERE CONGESTION RELIEF SINUS and ALLERGY"
+  ],
+  "generic_name": [
+   "OXYMETAZOLINE HYDROCHLORIDE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Reckitt Benckiser LLC"
+  ],
+  "package_ndc": [
+   "63824-120-11"
+  ],
+  "product_ndc": [
+   "63824-120"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "NASAL"
+  ],
+  "rxcui": [
+   "1000990"
+  ],
+  "spl_id": [
+   "5dd09888-1471-ee84-e063-6294a90ac5fb"
+  ],
+  "spl_set_id": [
+   "41b8cead-92a0-47d8-8079-4fb5d18bf249"
+  ],
+  "substance_name": [
+   "OXYMETAZOLINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "K89MJ0S5VY"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL - 22 mL Bottle Carton NDC 63824-120-11 63824-120 Carton"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Nasal decongestant"
+ ],
+ "questions": [
+  "Questions? 1-866-MUCINEX (1-866-682-4639) You may also report side effects to this number."
+ ],
+ "recent_major_changes": [
+  ""
+ ],
+ "set_id": "41b8cead-92a0-47d8-8079-4fb5d18bf249",
+ "spl_product_data_elements": [
+  "MUCINEX SINUS-MAX SEVERE CONGESTION RELIEF SINUS and ALLERGY Oxymetazoline Hydrochloride OXYMETAZOLINE HYDROCHLORIDE OXYMETAZOLINE BENZALKONIUM CHLORIDE SODIUM PHOSPHATE, DIBASIC, UNSPECIFIED FORM EDETATE DISODIUM GLYCERIN SODIUM PHOSPHATE, MONOBASIC, UNSPECIFIED FORM PROPYLENE GLYCOL WATER SORBITOL"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "Dist. by: RB Health (US) Parsippany, NJ 07054-0224"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if symptoms persist"
+ ],
+ "storage_and_handling": [
+  "Other information store at 20-25°C (68-77°F)"
+ ],
+ "version": "7",
+ "warnings": [
+  "Warnings Ask a doctor before use if you have heart disease high blood pressure thyroid disease diabetes difficulty in urination due to enlargement of the prostate gland When using this product do not exceed recommended dosage do not use this product for more than 3 days. Use only as directed. Frequent or prolonged use may cause nasal congestion to recur or worsen this product may cause temporary discomfort such as burning, stinging, sneezing, or an increase in nasal discharge the use of this container by more than one person may spread infection Stop use and ask a doctor if symptoms persist If pregnant or breast-feeding, ask a health professional before use. Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product do not exceed recommended dosage do not use this product for more than 3 days. Use only as directed. Frequent or prolonged use may cause nasal congestion to recur or worsen this product may cause temporary discomfort such as burning, stinging, sneezing, or an increase in nasal discharge the use of this container by more than one person may spread infection"
+ ]
+}

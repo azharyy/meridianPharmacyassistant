@@ -1,0 +1,102 @@
+{
+ "active_ingredient": [
+  "ACTIVE INGREDIENTS Active Ingredient (in each tablet) Cetirizine HCl USP 10 mg"
+ ],
+ "ask_doctor": [
+  "ASK DOCTOR Ask a doctor before use if you have liver or kidney disease. Your doctor should determine if you need a different dose."
+ ],
+ "ask_doctor_or_pharmacist": [
+  "ASK DOCTOR/PHARMACIST Ask a doctor or pharmacist before use if you are taking tranquilizers or sedatives."
+ ],
+ "dosage_and_administration": [
+  "DIRECTIONS Adults and children 6 years and over one 10 mg tablet once daily, do not take more than one 10 mg tablet in 24 hours. A 5 mg product may be appropriate for less severe symptoms. Adults 65 years and over Ask a doctor Children under 6 years of age Ask a doctor Consumers with liver or kidney disease Ask a doctor"
+ ],
+ "dosage_and_administration_table": [
+  "<table cellspacing=\"0\" cellpadding=\"0\" border=\"0\" ID=\"id8e05bd6-ac0c-4513-874b-bfc06c77e708\" width=\"600\"><tbody><tr styleCode=\"Botrule\"><td styleCode=\"Lrule Rrule\" valign=\"middle\">Adults and children 6   years and over </td><td styleCode=\"Rrule\" valign=\"middle\">one 10 mg tablet once daily, do not take more than one 10 mg tablet in 24 hours. A 5 mg product may be appropriate for less severe symptoms.</td></tr><tr styleCode=\"Botrule\"><td styleCode=\"Lrule Rrule\" valign=\"middle\">Adults 65 years and over</td><td styleCode=\"Rrule\" valign=\"middle\">Ask a doctor</td></tr><tr styleCode=\"Botrule\"><td styleCode=\"Lrule Rrule\" valign=\"middle\">Children under 6 years of age</td><td styleCode=\"Rrule\" valign=\"middle\">Ask a doctor</td></tr><tr><td styleCode=\"Lrule Rrule\" valign=\"middle\">Consumers with liver or kidney disease</td><td styleCode=\"Rrule\" valign=\"middle\">Ask a doctor</td></tr></tbody></table>"
+ ],
+ "effective_time": "20260629",
+ "id": "558e19d2-72b1-287d-e063-6394a90a0fa2",
+ "inactive_ingredient": [
+  "INACTIVE INGREDIENTS Hypromellose, lactose, magnesium stearate, maize starch, polyethylene glycol, povidone, titanium dioxide."
+ ],
+ "indications_and_usage": [
+  "USES Temporarily relieves these symptoms due to hay fever or other upper respiratory allergies runny nose sneezing itchy, watery eyes itching of the nose or throat"
+ ],
+ "keep_out_of_reach_of_children": [
+  "KEEP OUT OF REACH OF CHILDREN In case of overdose, get medical help or contact Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA077829"
+  ],
+  "brand_name": [
+   "Cetirizine Hydrochloride"
+  ],
+  "generic_name": [
+   "CETIRIZINE HYDROCHLORIDE"
+  ],
+  "manufacturer_name": [
+   "St. Mary's Medical Park Pharmacy"
+  ],
+  "original_packager_product_ndc": [
+   "16571-402"
+  ],
+  "package_ndc": [
+   "60760-886-30"
+  ],
+  "product_ndc": [
+   "60760-886"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "1014678"
+  ],
+  "spl_id": [
+   "558e19d2-72b1-287d-e063-6394a90a0fa2"
+  ],
+  "spl_set_id": [
+   "f2f42f36-6b09-4140-e053-2a95a90af813"
+  ],
+  "substance_name": [
+   "CETIRIZINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "64O047KTOA"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL-100'S COUNT 886-30"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "IF PREGNANT OR BREAST FEEDING: if breast-feeding: not recommended if pregnant: ask a health professional before use."
+ ],
+ "purpose": [
+  "PURPOSE Antihistamine"
+ ],
+ "questions": [
+  "QUESTIONS? Call 1-844-874-7464"
+ ],
+ "set_id": "f2f42f36-6b09-4140-e053-2a95a90af813",
+ "spl_product_data_elements": [
+  "Cetirizine Hydrochloride Cetirizine Hydrochloride HYPROMELLOSES LACTOSE MAGNESIUM STEARATE STARCH, CORN POLYETHYLENE GLYCOL POVIDONE TITANIUM DIOXIDE CETIRIZINE HYDROCHLORIDE CETIRIZINE White Barrel Shaped CTN;10"
+ ],
+ "spl_unclassified_section": [
+  "OTHER INFORMATION store at 20° to 25°C (68° to 77°F) [See USP Controlled Room Temperature]",
+  "Manufactured by: Unique Pharmaceutical Labs. (A Div. of J. B. Chemicals & Pharmaceuticals Ltd.), Mumbai 400 030, India Distributed by: Rising Pharma holdings, Inc. East Brunswick, NJ 08816"
+ ],
+ "stop_use": [
+  "STOP USE Stop use and ask a doctor if an allergic reaction tothis product occurs. Seek medical help right away."
+ ],
+ "version": "4",
+ "warnings": [
+  "WARNINGS Do Not Use if you have ever had an allergic reaction to this product or any of its ingredients or to an antihistamine containing hydroxyzine."
+ ],
+ "when_using": [
+  "WHEN USING THIS PRODUCT drowsines may occur avoid alcoholic drinks alcohol, sedatives, and tranquilizers may increase drowsiness be careful when driving a motor vehicle or operating machinary."
+ ]
+}

@@ -1,0 +1,95 @@
+{
+ "active_ingredient": [
+  "Active Ingredient Naphazoline HCL 0.05%."
+ ],
+ "ask_doctor": [
+  "Ask Doctor Stop use and ask a doctor if symptoms persist. If pregnant or breast-feeding ,ask a health professional before use. Ask a doctor before use if you have Heart disease, High blood pressure, Thyroiddisease, Diabetes, Trouble urinating due toenlarged prostate gland. Ask a doctor :children 6 to under 12 years."
+ ],
+ "do_not_use": [
+  "Do not use Do not use if you are allergic to the ingredients. Do not use without nasal congestion. Do not use:children under 6 years."
+ ],
+ "dosage_and_administration": [
+  "Directions Adults&children 12 years &older(with adult supervision ):2 or 3 sprays in each nostril,not more often than every 10 to 12 hours.Do not exceed 2 doses in 24 hours.Ask a doctor: children 6 to under 12 years.Do not use children under 6 years. Shake well before use. Before using the first time, remove the protective cap & safely clip from the tip and prime metered pump by depressing firmly several times. To spray,hold bottle with thumb at base and nozzle between first and second fingers. Without tilting head, insert nozzle into nostril. Fully depress pump all the way down with a firmeven stroke and sniff deeply. Wipe nozzle clean after use"
+ ],
+ "effective_time": "20260721",
+ "id": "572bb880-5d41-7d4b-e063-6394a90ac312",
+ "inactive_ingredient": [
+  "Inactive ingredients Borneol,Camphor,glycerin,propylene glycol"
+ ],
+ "indications_and_usage": [
+  "Use temporarily relieves .Nasal congestion due to a cold, hay fever, or other upper respiratory allergies .Sinus congestion and pressure"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep Oot Of Reach Of Children if swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M012"
+  ],
+  "brand_name": [
+   "DERMFREE ORIGINAL NASAL"
+  ],
+  "generic_name": [
+   "NAPHAZOLINE HCL 0.05%ORIGINAL NASAL"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Jiangxi Yudexi Pharmaceutical Co., LTD"
+  ],
+  "package_ndc": [
+   "85248-112-01"
+  ],
+  "product_ndc": [
+   "85248-112"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "NASAL"
+  ],
+  "rxcui": [
+   "1046610"
+  ],
+  "spl_id": [
+   "572bb880-5d41-7d4b-e063-6394a90ac312"
+  ],
+  "spl_set_id": [
+   "4a4d3a2b-a4ed-c736-e063-6394a90a96df"
+  ],
+  "substance_name": [
+   "NAPHAZOLINE HCL"
+  ],
+  "unii": [
+   "MZ1131787D"
+  ],
+  "upc": [
+   "6979843980326"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL 0.05"
+ ],
+ "purpose": [
+  "Purpose Nasal Decongestant"
+ ],
+ "set_id": "4a4d3a2b-a4ed-c736-e063-6394a90a96df",
+ "spl_product_data_elements": [
+  "DERMFREE ORIGINAL NASAL Naphazoline HCL 0.05%ORIGINAL NASAL NAPHAZOLINE HCL NAPHAZOLINE BORNEOL GLYCERIN PROPYLENE GLYCOL CAMPHOR (SYNTHETIC)"
+ ],
+ "stop_use": [
+  "Stop Use Stop use and ask a doctor if symptoms persist. If pregnant or breast-feeding ,ask a healthprofessional before use."
+ ],
+ "storage_and_handling": [
+  "Other information do not exceed 25°C.Retain the box for future reference on full labeling. Country of Origin: Made In China"
+ ],
+ "version": "2",
+ "warnings": [
+  "Warnings 1.Do not use if you are allergic to the ingredients. 2.Ask a doctor before use if you have Heart disease、High blood pressure、Thyroid disease、Diabetes、Trouble urinating due to enlarged prostate gland 3.When using this product Do not exceed recommended dosage"
+ ],
+ "when_using": [
+  "When Using ·Do not exceed recommended dosage. ·After continuous use for 3 days, please stopusing for 1 day, please use as instructed.Do not use without nasal congestion.Frequent or prolonged use may cause nasal congestion to recur or worsen. ·Temporary discomfort such as burning,stinging,sneezing,or increased nasal discharge may occur. ·Use of this container by more than one person may spread infection."
+ ]
+}

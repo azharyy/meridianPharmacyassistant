@@ -1,0 +1,101 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each caplet) Diphenhydramine HCl 25 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have a breathing problem such as emphysema or chronic bronchitis glaucoma difficulty in urination due to enlargement of the prostate gland"
+ ],
+ "ask_doctor_or_pharmacist": [
+  "Ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers."
+ ],
+ "do_not_use": [
+  "Do not use for children under 12 years of age with any other product containing diphenhydramine, even one used on skin"
+ ],
+ "dosage_and_administration": [
+  "Directions do not take more than directed adults and children 12 years and over: take 2 caplets (50 mg) at bedtime if needed, or as directed by a doctor children under 12 years: do not use"
+ ],
+ "effective_time": "20261028",
+ "id": "7fbf9d0a-cc10-49a9-8a37-abf86b7b4cd5",
+ "inactive_ingredient": [
+  "Inactive ingredients corn starch, D&C red #27 aluminum lake, dibasic calcium phosphate dihydrate, FD&C blue #2 aluminum lake, magnesium stearate, microcrystalline cellulose, polyethylene glycol, polyvinyl alcohol, silicon dioxide, talc, titanium dioxide"
+ ],
+ "indications_and_usage": [
+  "Uses for relief of occasional sleeplessness reduces time to fall asleep if you have difficulty falling asleep"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M010"
+  ],
+  "brand_name": [
+   "Sleep-Aid Nighttime"
+  ],
+  "generic_name": [
+   "DIPHENHYDRAMINE HCL"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "CVS PHARMACY"
+  ],
+  "package_ndc": [
+   "69842-672-51"
+  ],
+  "product_ndc": [
+   "69842-672"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "1049630"
+  ],
+  "spl_id": [
+   "7fbf9d0a-cc10-49a9-8a37-abf86b7b4cd5"
+  ],
+  "spl_set_id": [
+   "6bd1ad2e-8f47-412d-8620-b149ad90c292"
+  ],
+  "substance_name": [
+   "DIPHENHYDRAMINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "TC2D6JAD40"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal display panel ♥CVS™ NDC 69842-672-51 actual size SLEEP-AID Diphenhydramine HCl, 25 mg Nighttime Sleep-Aid Compare to Vicks® ZzzQuil™ Nighttime Sleep-Aid active ingredient* Non-Habit Forming 365 COATED CAPLETS Not for colds or pain. CVS 44-672 CVS 44-672"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Nighttime sleep-aid"
+ ],
+ "questions": [
+  "Questions or comments? 1-800-426-9391"
+ ],
+ "set_id": "6bd1ad2e-8f47-412d-8620-b149ad90c292",
+ "spl_product_data_elements": [
+  "Sleep-Aid Nighttime diphenhydramine HCl DIPHENHYDRAMINE HYDROCHLORIDE DIPHENHYDRAMINE STARCH, CORN D&C RED NO. 27 ALUMINUM LAKE DIBASIC CALCIUM PHOSPHATE DIHYDRATE FD&C BLUE NO. 2 ALUMINUM LAKE MAGNESIUM STEARATE MICROCRYSTALLINE CELLULOSE POLYETHYLENE GLYCOL, UNSPECIFIED POLYVINYL ALCOHOL, UNSPECIFIED SILICON DIOXIDE TALC TITANIUM DIOXIDE 44;672"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if sleeplessness persists continuously for more than 2 weeks. Insomnia may be a symptom of a serious underlying medical illness."
+ ],
+ "storage_and_handling": [
+  "Other information each caplet contains: calcium 65 mg avoid excessive heat (greater than 100°F) or humidity store at 25°C (77°F); excursions permitted between 15°-30°C (59°-86°F) use by expiration date on package"
+ ],
+ "version": "16",
+ "warnings": [
+  "Warnings Do not use for children under 12 years of age with any other product containing diphenhydramine, even one used on skin Ask a doctor before use if you have a breathing problem such as emphysema or chronic bronchitis glaucoma difficulty in urination due to enlargement of the prostate gland Ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers. When using this product avoid alcoholic beverages. Stop use and ask a doctor if sleeplessness persists continuously for more than 2 weeks. Insomnia may be a symptom of a serious underlying medical illness. If pregnant or breast-feeding, ask a health professional before use. Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product avoid alcoholic beverages."
+ ]
+}

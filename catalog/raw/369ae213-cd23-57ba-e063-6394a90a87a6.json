@@ -1,0 +1,104 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each tablet) Famotidine 20mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have ■ had heartburn over 3 months. This may be a sign of a more serious condition. ■ heartburn with lightheadedness, sweating, or dizziness ■ chest pain or shoulder pain with shortness of breath; sweating; pain spreading to arms, neck or shoulders; or lightheadedness ■ frequent chest pain ■ frequent wheezing, particularly with heartburn ■ unexplained weight loss ■ nausea or vomiting ■ stomach pain ■ your heartburn continues or worsens ■ you need to take this product for more than 14 days"
+ ],
+ "do_not_use": [
+  "Do not use ■ if you have trouble or pain swallowing food, vomiting with blood, or bloody or black stools. These may be signs of a serious condition. See your doctor. ■ if you have kidney disease, except under the advice and supervision of a doctor ■ with other acid reducers"
+ ],
+ "dosage_and_administration": [
+  "Directions ■ adults and children 12 years and over: ■ to relieve symptoms, swallow 1 tablet with a glass of water. Do not chew. ■ to prevent symptoms, swallow 1 tablet with a glass of water at any time from 10 to 60 minutes before eating food or drinking beverages that cause heartburn ■ do not use more than 2 tablets in 24 hours ■ children under 12 years: ask a doctor"
+ ],
+ "effective_time": "20250602",
+ "id": "369ae213-cd24-57ba-e063-6394a90a87a6",
+ "inactive_ingredient": [
+  "Inactive Ingredients carnauba wax, colloidal silicon dioxide, croscarmellose sodium, lactose (monohydrate), magnesium stearate, microcrystalline cellulose, polyethylene glycol, polyvinyl alcohol, talc, and titanium dioxide"
+ ],
+ "indications_and_usage": [
+  "Uses ■ Relieves heartburn associated with acid indigestion and sour stomach ■ Prevents heartburn associated with acid indigestion and sour stomach brought on by eating or drinking certain food and beverages"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M001"
+  ],
+  "brand_name": [
+   "Calmicid AC Acid Reducer"
+  ],
+  "generic_name": [
+   "FAMOTIDINE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Melaleuca, Inc."
+  ],
+  "nui": [
+   "N0000000151",
+   "N0000175784"
+  ],
+  "package_ndc": [
+   "54473-411-50",
+   "54473-411-01"
+  ],
+  "pharm_class_epc": [
+   "Histamine-2 Receptor Antagonist [EPC]"
+  ],
+  "pharm_class_moa": [
+   "Histamine H2 Receptor Antagonists [MoA]"
+  ],
+  "product_ndc": [
+   "54473-411"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "310273",
+   "1091399"
+  ],
+  "spl_id": [
+   "369ae213-cd24-57ba-e063-6394a90a87a6"
+  ],
+  "spl_set_id": [
+   "369ae213-cd23-57ba-e063-6394a90a87a6"
+  ],
+  "substance_name": [
+   "FAMOTIDINE"
+  ],
+  "unii": [
+   "5QZO15J2Z8"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Calmicid Bottle.jpg Calmicid Box.jpg"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding , ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Acid Reducer"
+ ],
+ "questions": [
+  "Questions or comments? 1-800-282-3000"
+ ],
+ "set_id": "369ae213-cd23-57ba-e063-6394a90a87a6",
+ "spl_product_data_elements": [
+  "Calmicid AC Acid Reducer Famotidine SILICON DIOXIDE CELLULOSE, MICROCRYSTALLINE CROSCARMELLOSE SODIUM LACTOSE MONOHYDRATE MAGNESIUM STEARATE POLYETHYLENE GLYCOL, UNSPECIFIED TITANIUM DIOXIDE TALC FAMOTIDINE FAMOTIDINE POLYVINYL ALCOHOL CARNAUBA WAX White"
+ ],
+ "storage_and_handling": [
+  "Other Information ■ read the directions and warnings before use ■ keep the carton. It contains important information. ■ store at 20°-25°C (68°-77°F) ■ protect from moisture and light"
+ ],
+ "version": "1",
+ "warnings": [
+  "Warnings Allergy Alert: Do not use if you are allergic to famotidine or other acid reducers"
+ ]
+}

@@ -1,0 +1,93 @@
+{
+ "active_ingredient": [
+  "Active ingredient (In each unit dose) sodium carboxymethylcellulose 1%"
+ ],
+ "do_not_use": [
+  "Do not use If solution changes color or becomes cloudy."
+ ],
+ "dosage_and_administration": [
+  "Directions To open, twist tab completely off. Instill 1 or 2 drops in the affected eye(s) as needed."
+ ],
+ "effective_time": "20260909",
+ "id": "5b0f0fc3-3f46-4acb-e063-6294a90a72af",
+ "inactive_ingredient": [
+  "Inactive ingredients b oric acid, calcium chloride, magnesium chloride, potassium chloride, sodium bicarbonate, sodium borate, sodium chloride, sodium phosphate , water Questions or comments? 1-800-579-8327"
+ ],
+ "indications_and_usage": [
+  "Uses As a lubricant to relieve dryness of the eye. As a protectant against further irritation of the eye. For temporary relief of burning, irritation, and discomfort including exposure to wind or sun."
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center immediately."
+ ],
+ "openfda": {
+  "application_number": [
+   "M018"
+  ],
+  "brand_name": [
+   "TheraTears"
+  ],
+  "generic_name": [
+   "CARBOXYMETHYLCELLULOSE SODIUM"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "MEDTECH PRODUCTS INC"
+  ],
+  "package_ndc": [
+   "58790-002-28",
+   "58790-003-30"
+  ],
+  "product_ndc": [
+   "58790-003",
+   "58790-002"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "OPHTHALMIC"
+  ],
+  "rxcui": [
+   "579907",
+   "998666"
+  ],
+  "spl_id": [
+   "5b0f0fc3-3f46-4acb-e063-6294a90a72af"
+  ],
+  "spl_set_id": [
+   "17a01236-130f-495b-9f8d-92b6a23b2dc5"
+  ],
+  "substance_name": [
+   "CARBOXYMETHYLCELLULOSE SODIUM, UNSPECIFIED FORM"
+  ],
+  "unii": [
+   "K679OBS311"
+  ]
+ },
+ "other_safety_information": [
+  "Other information Store between 15C-25C (59F-77F) Do not touch unit-dose tip to eye."
+ ],
+ "package_label_principal_display_panel": [
+  "Principal Display Panel Text for Carton Label: PRESERVATIVE FREE RECOMMENDED DOCTOR CREATED thera tears® THERAPY FOR YOUR EYES® Liquid Gel nighttime dry eye therapy LUBRICANT EYE GEL SOOTHING OVERNIGHT RELIEF 30 STERILE Single-Use Vials* 0.60 FL OZ (18.0 mL) TOTAL Principal Display Panel Text for Carton Label: PRESERVATIVE FREE RECOMMENDED DOCTOR CREATED thera tears® THERAPY FOR YOUR EYES® Liquid Gel nighttime dry eye therapy LUBRICANT EYE GEL SOOTHING OVERNI",
+  "Principal Display Panel Text for Carton Label: PRESERVATIVE FREE RECOMMENDED DOCTOR CREATED thera tears® THERAPY FOR YOUR EYES® Liquid Gel nighttime dry eye therapy LUBRICANT EYE GEL SOOTHING OVERNIGHT RELIEF 4 Single-Use Vials 0.08 FL OZ (2.4 mL) TOTAL Principal Display Panel Text for Carton Label: PRESERVATIVE FREE RECOMMENDED DOCTOR CREATED thera tears® THERAPY FOR YOUR EYES® Liquid Gel nighttime dry eye therapy LUBRICANT EYE GEL SOOTHING OVERNI"
+ ],
+ "purpose": [
+  "Purpose Eye lubricant"
+ ],
+ "set_id": "17a01236-130f-495b-9f8d-92b6a23b2dc5",
+ "spl_product_data_elements": [
+  "TheraTears carboxymethylcellulose sodium CARBOXYMETHYLCELLULOSE SODIUM, UNSPECIFIED FORM CARBOXYMETHYLCELLULOSE BORIC ACID SODIUM BORATE CALCIUM CHLORIDE MAGNESIUM CHLORIDE POTASSIUM CHLORIDE WATER SODIUM BICARBONATE SODIUM CHLORIDE SODIUM PHOSPHATE TheraTears carboxymethylcellulose sodium CARBOXYMETHYLCELLULOSE SODIUM, UNSPECIFIED FORM CARBOXYMETHYLCELLULOSE BORIC ACID SODIUM BORATE CALCIUM CHLORIDE MAGNESIUM CHLORIDE POTASSIUM CHLORIDE WATER SODIUM BICARBONATE SODIUM CHLORIDE SODIUM PHOSPHATE"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if You experience eye pain, changes in vision, continued redness or irritation. Condition worsens or persists for more than 72 hours."
+ ],
+ "version": "12",
+ "warnings": [
+  "Warnings For external use only To avoid contamination do not touch tip of opened container to any surface. Do not reuse. Once opened discard. Use individual vials within 90 days of opening foil pouch. This product contains no preservatives. Any solution not used immediately after opening should be discarded. Re-use of this single-use product may lead to inflammation of the eye and/or discomfort, based on potential contamination during handling. Do not use If solution changes color or becomes cloudy. Stop use and ask a doctor if You experience eye pain, changes in vision, continued redness or irritation. Condition worsens or persists for more than 72 hours. Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center immediately."
+ ]
+}

@@ -1,0 +1,101 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each caplet) Guaifenesin 400 mg"
+ ],
+ "dosage_and_administration": [
+  "Directions take with full glass of water adults and children 12 years of age and over • take 1 caplet, every 4 hours, while symptoms persist • do not exceed 6 doses in 24 hours children under 12 years of age do not use"
+ ],
+ "dosage_and_administration_table": [
+  "<table width=\"427\" border=\"1\" ID=\"i4e408ad0-e3e0-4a85-853e-fba41174e06c\"> <tbody> <tr> <td>adults and children 12 years   of age and over </td> <td>&#x2022; take 1 caplet, every 4 hours,   while symptoms persist &#x2022; do   not exceed 6 doses in 24 hours </td> </tr> <tr> <td>children under 12 years of age</td> <td>do not use</td> </tr> </tbody> </table>"
+ ],
+ "effective_time": "20260923",
+ "id": "5c28efd3-a29a-fa58-e063-6394a90a286d",
+ "inactive_ingredient": [
+  "Inactive ingredients croscarmellose sodium, dicalcium phosphate dihydrate, maltodextrin, microcrystalline cellulose, povidone, silicon dioxide, stearic acid"
+ ],
+ "indications_and_usage": [
+  "Uses helps loosen phlegm (mucus) and thin bronchial secretions to make coughs more productive to rid the bronchial passageways of bothersome mucus"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M012"
+  ],
+  "brand_name": [
+   "MUCUS RELIEF"
+  ],
+  "generic_name": [
+   "GUAIFENESIN"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Geri-Care Pharmaceuticals, Corp"
+  ],
+  "nui": [
+   "N0000193956",
+   "N0000008867",
+   "N0000009560"
+  ],
+  "package_ndc": [
+   "57896-718-01"
+  ],
+  "pharm_class_epc": [
+   "Expectorant [EPC]"
+  ],
+  "pharm_class_pe": [
+   "Decreased Respiratory Secretion Viscosity [PE]",
+   "Increased Respiratory Secretions [PE]"
+  ],
+  "product_ndc": [
+   "57896-718"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "359601"
+  ],
+  "spl_id": [
+   "5c28efd3-a29a-fa58-e063-6394a90a286d"
+  ],
+  "spl_set_id": [
+   "5afb242f-fac9-dc81-e063-6394a90a8448"
+  ],
+  "substance_name": [
+   "GUAIFENESIN"
+  ],
+  "unii": [
+   "495W7451VQ"
+  ],
+  "upc": [
+   "0357896714017"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "package Label MUCUS RELIEF 1"
+ ],
+ "purpose": [
+  "Purpose Expectorant"
+ ],
+ "questions": [
+  "Questions or comments? 1-800-540-3765"
+ ],
+ "set_id": "5afb242f-fac9-dc81-e063-6394a90a8448",
+ "spl_product_data_elements": [
+  "MUCUS RELIEF Guaifenesin GUAIFENESIN GUAIFENESIN POVIDONE CELLULOSE, MICROCRYSTALLINE CROSCARMELLOSE SODIUM MALTODEXTRIN DICALCIUM PHOSPHATE DIHYDRATE SILICON DIOXIDE STEARIC ACID GC718"
+ ],
+ "storage_and_handling": [
+  "Other information • store in a dry place at 20°C-25°C (68°F-77°F); excursions between 15°-30°C (59°-86°F) • do not expose to heat"
+ ],
+ "version": "2",
+ "warnings": [
+  "Warnings Ask a doctor before use if you have persistent or chronic cough such as occurs with smoking, asthma, chronic bronchitis, or emphysema cough accompanied by excessive phlegm (mucus) Stop use and ask a doctor if cough lasts more than 7 days or comes back cough occurs with fever, rash or persistent headache these could be signs of a serious illness. If pregnant or breast feeding, ask a health professional before use. Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ]
+}

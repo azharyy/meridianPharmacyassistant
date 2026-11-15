@@ -1,0 +1,105 @@
+{
+ "active_ingredient": [
+  "Active ingredient Hydrocortisone 1%"
+ ],
+ "do_not_use": [
+  "Do not use for external genital, vaginal or anal itching with other hydrocortisone product unless directed by a doctor in or near the eyes for diaper rash"
+ ],
+ "dosage_and_administration": [
+  "Directions twist cap counterclockwise to unlock actuator adults and children 2 years of age and older: spray affected area not more than 3 to 4 times daily children under 2 years of age: do not use, consult a doctor to apply to face, spray into palm of hand and gently apply"
+ ],
+ "effective_time": "20261105",
+ "id": "5f8f323a-45f5-bfac-e063-6294a90a1038",
+ "inactive_ingredient": [
+  "Inactive ingredients aloe barbadensis leaf juice, avena sativa (oat) kernel extract, citric acid, disodium EDTA, ethoxydiglycol, glycerin, maltodextrin, menthyl lactate, methyl gluceth-20, PEG-8, SD alcohol 40-B, sodium citrate, water"
+ ],
+ "indications_and_usage": [
+  "Uses for the temporary relief of itching associated with minor skin irritations, inflammation, and rashes due to: eczema insect bites poison ivy poison oak poison sumac soaps jewelry detergents cosmetics seborrheic dermatitis psoriasis other uses of this product should be only under the advice and supervision of a doctor"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of the reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M017"
+  ],
+  "brand_name": [
+   "Hydrocortisone"
+  ],
+  "generic_name": [
+   "HYDROCORTISONE CONTINUOUS SPRAY"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Premier Brands of America, Inc."
+  ],
+  "nui": [
+   "N0000175576",
+   "N0000175450"
+  ],
+  "package_ndc": [
+   "56104-250-00"
+  ],
+  "pharm_class_epc": [
+   "Corticosteroid [EPC]"
+  ],
+  "pharm_class_moa": [
+   "Corticosteroid Hormone Receptor Agonists [MoA]"
+  ],
+  "product_ndc": [
+   "56104-250"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "rxcui": [
+   "317564"
+  ],
+  "spl_id": [
+   "5f8f323a-45f5-bfac-e063-6294a90a1038"
+  ],
+  "spl_set_id": [
+   "d344f68b-9b62-3029-e053-2995a90a1665"
+  ],
+  "substance_name": [
+   "HYDROCORTISONE"
+  ],
+  "unii": [
+   "WI4X0X7BPJ"
+  ],
+  "upc": [
+   "0850037540013"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal Display Panel Cutter Poison Ivy Itch Relief For Poison Ivy, Oak, & Sumac Maximum Strength Relieves Itching Calms irritated skin No touch, no mess HYDROCORTISONE 1% / ANTI-ITCH NET WT 4.0 0Z (113 g) Artwork"
+ ],
+ "purpose": [
+  "Purpose Anti-itch"
+ ],
+ "questions": [
+  "Questions ? Call 1-866-964-0939"
+ ],
+ "safe_handling_warning": [
+  "Flammable: Keep away from heat, sparks and open flame. Contents under pressure. Do not puncture or incinerate. Do not store at temperatures above 120 ºF. Intentional misuse by deliberately concentrating and inhaling contents can be harmful or fatal."
+ ],
+ "set_id": "d344f68b-9b62-3029-e053-2995a90a1665",
+ "spl_product_data_elements": [
+  "Hydrocortisone Hydrocortisone Continuous Spray HYDROCORTISONE HYDROCORTISONE EDETATE DISODIUM MENTHYL LACTATE, (-)- GLYCERIN POLYETHYLENE GLYCOL 400 SODIUM CITRATE CITRIC ACID MONOHYDRATE ALOE VERA LEAF METHYL GLUCETH-20 OAT WATER DIETHYLENE GLYCOL MONOETHYL ETHER ALCOHOL MALTODEXTRIN"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if condition worsens symptoms persist for more than 7 days or clear up and occur again within a few days and do not begin use of any other hydrocortisone product unless you have consulted a doctor"
+ ],
+ "version": "5",
+ "warnings": [
+  "Warnings For external use only. Flammable: Keep away from heat, sparks and open flame. Contents under pressure. Do not puncture or incinerate. Do not store at temperatures above 120 ºF. Intentional misuse by deliberately concentrating and inhaling contents can be harmful or fatal. Do not use for external genital, vaginal or anal itching with other hydrocortisone product unless directed by a doctor in or near the eyes for diaper rash When using this product avoid contact with the eyes if product gets into the eye, flush with water for 15 minutes Stop use and ask a doctor if condition worsens symptoms persist for more than 7 days or clear up and occur again within a few days and do not begin use of any other hydrocortisone product unless you have consulted a doctor Keep out of the reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product avoid contact with the eyes if product gets into the eye, flush with water for 15 minutes"
+ ]
+}

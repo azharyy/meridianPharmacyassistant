@@ -1,0 +1,91 @@
+{
+ "active_ingredient": [
+  "Active ingredient: Benzoyl Peroxide 5%"
+ ],
+ "do_not_use": [
+  "Do not use if you have very sensitive skin are sensitive to benzoyl peroxide"
+ ],
+ "dosage_and_administration": [
+  "Directions clean the skin thoroughly before applying this product cover the entire affected area with a thin layer one to three times daily because excessive drying of the skin may occur, start with one application daily, then gradually increase to two or three times daily if needed or as directed by a doctor if bothersome dryness or peeling occurs, reduce application to once a day or every other day if going outside, apply sunscreen after using this product. If irritation or sensitivity develops, stop use of both products and ask a doctor."
+ ],
+ "effective_time": "20261005",
+ "id": "5d1ae085-93cf-6664-e063-6394a90a60c6",
+ "inactive_ingredient": [
+  "Inactive ingredients aesculus hippocastanum (horse chestnut) seed extract, butylene glycol, carbomer, cucumis sativus (cucumber) fruit extract, diethylhexyl sodium sulfosuccinate, disodium EDTA, echinacea purpurea extract, glycerin, poloxamer 182, propylene glycol, silica, sodium hydroxide, water"
+ ],
+ "indications_and_usage": [
+  "Uses for the management of acne dries up acne pimples helps prevent new acne pimples"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M006"
+  ],
+  "brand_name": [
+   "Clear Proof Acne Treatment Acne Medication"
+  ],
+  "generic_name": [
+   "BENZOYL PEROXIDE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Mary Kay Inc."
+  ],
+  "package_ndc": [
+   "51531-9071-1",
+   "51531-9071-0"
+  ],
+  "product_ndc": [
+   "51531-9071"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "rxcui": [
+   "308694",
+   "1489132"
+  ],
+  "spl_id": [
+   "5d1ae085-93cf-6664-e063-6394a90a60c6"
+  ],
+  "spl_set_id": [
+   "e01859b1-057e-4b01-8b37-2df378aae212"
+  ],
+  "substance_name": [
+   "BENZOYL PEROXIDE"
+  ],
+  "unii": [
+   "W9WZN9A0GM"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal Display Panel - 28 g carton clearproof acne treatment gel acne medication 5% benzoyl peroxide 1 OZ. NET WT./28 g Mary Kay image of carton"
+ ],
+ "purpose": [
+  "Purpose Acne Medication"
+ ],
+ "set_id": "e01859b1-057e-4b01-8b37-2df378aae212",
+ "spl_product_data_elements": [
+  "Clear Proof Acne Treatment Acne Medication Benzoyl Peroxide BENZOYL PEROXIDE BENZOYL PEROXIDE WATER PROPYLENE GLYCOL POLOXAMER 182 SILICON DIOXIDE CARBOMER HOMOPOLYMER TYPE C (ALLYL PENTAERYTHRITOL CROSSLINKED) SODIUM HYDROXIDE DOCUSATE SODIUM EDETATE DISODIUM GLYCERIN BUTYLENE GLYCOL ECHINACEA PURPUREA CUCUMBER HORSE CHESTNUT"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if irritation becomes severe"
+ ],
+ "storage_and_handling": [
+  "Other information store at 59° to 86° F expiration date on tube crimp"
+ ],
+ "version": "8",
+ "warnings": [
+  "Warnings For external use only. Do not use if you have very sensitive skin are sensitive to benzoyl peroxide When using this product skin irritation and dryness is more likely to occur if you use another topical acne medication at the same time. If irritation occurs, only use one topical acne medication at a time. avoid unnecessary sun exposure and use a sunscreen avoid contact with the eyes, lips and mouth avoid contact with hair and dyed fabrics, which may be bleached by this product skin irritation may occur, characterized by redness, burning, itching, peeling or possibly swelling. Irritation may be reduced by using the product less frequently or in a lower concentration. Stop use and ask a doctor if irritation becomes severe Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product skin irritation and dryness is more likely to occur if you use another topical acne medication at the same time. If irritation occurs, only use one topical acne medication at a time. avoid unnecessary sun exposure and use a sunscreen avoid contact with the eyes, lips and mouth avoid contact with hair and dyed fabrics, which may be bleached by this product skin irritation may occur, characterized by redness, burning, itching, peeling or possibly swelling. Irritation may be reduced by using the product less frequently or in a lower concentration."
+ ]
+}

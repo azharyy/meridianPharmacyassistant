@@ -1,0 +1,87 @@
+{
+ "active_ingredient": [
+  "Active ingredient Carboxymethylcellulose sodium 1%"
+ ],
+ "dosage_and_administration": [
+  "Directions To open, TWIST AND PULL TAB TO REMOVE . Instill 1 or 2 drops in the affected eye(s) as needed and discard container."
+ ],
+ "effective_time": "20260605",
+ "id": "e87d62ad-c97a-4f4a-bc20-52f49c5448be",
+ "inactive_ingredient": [
+  "Inactive ingredients Calcium chloride dihydrate; potassium chloride; purified water; sodium chloride; and sodium lactate."
+ ],
+ "indications_and_usage": [
+  "Uses For the temporary relief of burning, irritation, and discomfort due to dryness of the eye or exposure to wind or sun. May be used as a protectant against further irritation."
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M018"
+  ],
+  "brand_name": [
+   "REFRESH CELLUVISC"
+  ],
+  "generic_name": [
+   "CARBOXYMETHYLCELLULOSE SODIUM"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Allergan, Inc."
+  ],
+  "package_ndc": [
+   "0023-4554-05",
+   "0023-4554-30"
+  ],
+  "product_ndc": [
+   "0023-4554"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "OPHTHALMIC"
+  ],
+  "rxcui": [
+   "579907"
+  ],
+  "spl_id": [
+   "e87d62ad-c97a-4f4a-bc20-52f49c5448be"
+  ],
+  "spl_set_id": [
+   "b32ed9e8-d091-4f16-b416-5a62cdfee49a"
+  ],
+  "substance_name": [
+   "CARBOXYMETHYLCELLULOSE SODIUM"
+  ],
+  "unii": [
+   "K679OBS311"
+  ]
+ },
+ "other_safety_information": [
+  "Other information Use only if single-use container is intact. REFRESH ® CELLUVISC ® may cause temporary blurring due to its viscosity. Store at 59°-77°F (15°-25°C). Use before expiration date marked on container. RETAIN THIS CARTON FOR FUTURE REFERENCE."
+ ],
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL NDC 0023-4554-30 PRESERVATIVE-FREE Refresh ® CELLUVISC ® Lubricant Eye Gel Soothes & Comforts Dry, Irritated Eyes 30 Vials 0.01 fl oz (0.4 mL) each Sterile PRINCIPAL DISPLAY PANEL NDC 0023-4554-30 PRESERVATIVE-FREE Refresh ® CELLUVISC ® Lubricant Eye Gel Soothes & Comforts Dry, Irritated Eyes 30 Vials 0.01 fl oz (0.4 mL) each Sterile"
+ ],
+ "purpose": [
+  "Purpose Eye lubricant"
+ ],
+ "questions": [
+  "Questions or comments? 1.800. 678 .1 605 refresh eyedrops .com v2.0DFL4554"
+ ],
+ "set_id": "b32ed9e8-d091-4f16-b416-5a62cdfee49a",
+ "spl_product_data_elements": [
+  "REFRESH CELLUVISC carboxymethylcellulose sodium CARBOXYMETHYLCELLULOSE SODIUM CARBOXYMETHYLCELLULOSE CALCIUM CHLORIDE POTASSIUM CHLORIDE WATER SODIUM CHLORIDE SODIUM LACTATE"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if you experience eye pain, changes in vision, continued redness or irritation of the eye, or if the condition worsens or persists for more than 72 hours."
+ ],
+ "version": "11",
+ "warnings": [
+  "Warnings For external use only. To avoid contamination, do not touch tip of container to any surface. Do not reuse. Once opened, discard . Do not touch unit-dose tip to eye. If solution changes color or becomes cloudy , do not use. Stop use and ask a doctor if you experience eye pain, changes in vision, continued redness or irritation of the eye, or if the condition worsens or persists for more than 72 hours. Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ]
+}
