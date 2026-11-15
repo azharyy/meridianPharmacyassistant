@@ -1,0 +1,104 @@
+{
+  "reply_type": "comparison",
+  "blocks": [
+    {
+      "type": "comparison",
+      "products": [
+        {
+          "sku": "MRD-ALG-012",
+          "name": "Meridian All Day Allergy"
+        },
+        {
+          "sku": "MRD-ALG-014",
+          "name": "Meridian 24-Hour Allergy"
+        }
+      ],
+      "rows": [
+        {
+          "section": "active_ingredients",
+          "title": "Active ingredients",
+          "texts": [
+            "(in each tablet) Cetirizine HCl 10 mg",
+            "(in each tablet) Fexofenadine HCl USP, 180 mg"
+          ]
+        },
+        {
+          "section": "uses",
+          "title": "Uses",
+          "texts": [
+            "temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: • runny nose • sneezing • itchy, watery eyes • itching of the nose or throat",
+            "temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: runny nose itchy, watery eyes sneezing itching of the nose or throat"
+          ]
+        },
+        {
+          "section": "warnings",
+          "title": "Warnings",
+          "texts": [
+            "Do not use if you have ever had an allergic reaction to this product or any of its ingredients or to an antihistamine containing hydroxyzine. Ask a doctor before use if you have liver or kidney disease. Your doctor should determine if you need a different dose. Ask a doctor or pharmacist before use if you are taking tranquilizers or sedatives. When using this product • drowsiness may occur • avoid alcoholic drinks • alcohol, sedatives, and tranquilizers may increase drowsiness • be careful when driving a motor vehicle or operating machinery Stop use and ask a doctor if an allergic reaction to this product occurs. Seek medical help right away. If pregnant or breast-feeding: • if breast-feeding: not recommended • if pregnant: ask a health professional before use. Keep out of reach of children.",
+            "Do not use if you have ever had an allergic reaction to this product or any of its ingredients Ask a doctor before use if you have kidney disease. Your doctor should determine if you need a different dose. When using this product do not take more than directed do not take at the same time as aluminum or magnesium antacids do not take with fruit juices (see Directions) Stop use and ask a doctor if an allergic reaction to this product occurs. Seek medical help right away. If pregnant or breast-feeding: ask a health professional before use Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+          ]
+        },
+        {
+          "section": "directions",
+          "title": "Directions",
+          "texts": [
+            "adults and children 6 years and over one 10 mg tablet once daily; do not take more than one 10 mg tablet in 24 hours. A 5 mg product may be appropriate for less severe symptoms. adults 65 years and over ask a doctor children under 6 years of age ask a doctor consumers with liver or kidney disease ask a doctor",
+            "adults and children 12 years of age and over take one 180 mg tablet with water once a day; do not take more than 1 tablet in 24 hours children under 6 years of age do not use adults 65 years of age and older ask a doctor consumers with kidney disease ask a doctor"
+          ]
+        }
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "MRD-ALG-012#active_ingredients",
+      "title": "Meridian All Day Allergy: Active ingredients",
+      "text": "(in each tablet) Cetirizine HCl 10 mg",
+      "retrieved_at": null
+    },
+    {
+      "id": "MRD-ALG-012#uses",
+      "title": "Meridian All Day Allergy: Uses",
+      "text": "temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: • runny nose • sneezing • itchy, watery eyes • itching of the nose or throat",
+      "retrieved_at": null
+    },
+    {
+      "id": "MRD-ALG-012#warnings",
+      "title": "Meridian All Day Allergy: Warnings",
+      "text": "Do not use if you have ever had an allergic reaction to this product or any of its ingredients or to an antihistamine containing hydroxyzine. Ask a doctor before use if you have liver or kidney disease. Your doctor should determine if you need a different dose. Ask a doctor or pharmacist before use if you are taking tranquilizers or sedatives. When using this product • drowsiness may occur • avoid alcoholic drinks • alcohol, sedatives, and tranquilizers may increase drowsiness • be careful when driving a motor vehicle or operating machinery Stop use and ask a doctor if an allergic reaction to this product occurs. Seek medical help right away. If pregnant or breast-feeding: • if breast-feeding: not recommended • if pregnant: ask a health professional before use. Keep out of reach of children.",
+      "retrieved_at": null
+    },
+    {
+      "id": "MRD-ALG-012#directions",
+      "title": "Meridian All Day Allergy: Directions",
+      "text": "adults and children 6 years and over one 10 mg tablet once daily; do not take more than one 10 mg tablet in 24 hours. A 5 mg product may be appropriate for less severe symptoms. adults 65 years and over ask a doctor children under 6 years of age ask a doctor consumers with liver or kidney disease ask a doctor",
+      "retrieved_at": null
+    },
+    {
+      "id": "MRD-ALG-014#active_ingredients",
+      "title": "Meridian 24-Hour Allergy: Active ingredients",
+      "text": "(in each tablet) Fexofenadine HCl USP, 180 mg",
+      "retrieved_at": null
+    },
+    {
+      "id": "MRD-ALG-014#uses",
+      "title": "Meridian 24-Hour Allergy: Uses",
+      "text": "temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: runny nose itchy, watery eyes sneezing itching of the nose or throat",
+      "retrieved_at": null
+    },
+    {
+      "id": "MRD-ALG-014#warnings",
+      "title": "Meridian 24-Hour Allergy: Warnings",
+      "text": "Do not use if you have ever had an allergic reaction to this product or any of its ingredients Ask a doctor before use if you have kidney disease. Your doctor should determine if you need a different dose. When using this product do not take more than directed do not take at the same time as aluminum or magnesium antacids do not take with fruit juices (see Directions) Stop use and ask a doctor if an allergic reaction to this product occurs. Seek medical help right away. If pregnant or breast-feeding: ask a health professional before use Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away.",
+      "retrieved_at": null
+    },
+    {
+      "id": "MRD-ALG-014#directions",
+      "title": "Meridian 24-Hour Allergy: Directions",
+      "text": "adults and children 12 years of age and over take one 180 mg tablet with water once a day; do not take more than 1 tablet in 24 hours children under 6 years of age do not use adults 65 years of age and older ask a doctor consumers with kidney disease ask a doctor",
+      "retrieved_at": null
+    }
+  ],
+  "handoff_offered": false,
+  "emergency": false
+}

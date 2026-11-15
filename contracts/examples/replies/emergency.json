@@ -1,0 +1,12 @@
+{
+  "reply_type": "emergency",
+  "blocks": [
+    {
+      "type": "text",
+      "text": "If you or someone with you may be having a medical emergency, call 911 now. For a possible poisoning or overdose, you can also call Poison Help at 1-800-222-1222. If you or someone you know is thinking about self-harm, call or text 988."
+    }
+  ],
+  "sources": [],
+  "handoff_offered": true,
+  "emergency": true
+}

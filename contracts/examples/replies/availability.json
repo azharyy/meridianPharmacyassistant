@@ -1,0 +1,35 @@
+{
+  "reply_type": "availability",
+  "blocks": [
+    {
+      "type": "availability",
+      "sku": "MRD-ALG-012",
+      "name": "Meridian All Day Allergy",
+      "stores": [
+        {
+          "store_id": "store-001",
+          "store_name": "Meridian Downtown",
+          "quantity": 12,
+          "text": "In stock (12)"
+        },
+        {
+          "store_id": "store-002",
+          "store_name": "Meridian Riverside",
+          "quantity": 0,
+          "text": "Out of stock"
+        }
+      ],
+      "source_id": "api:availability/MRD-ALG-012"
+    }
+  ],
+  "sources": [
+    {
+      "id": "api:availability/MRD-ALG-012",
+      "title": "Stock check",
+      "text": null,
+      "retrieved_at": "2026-11-15T10:42:00Z"
+    }
+  ],
+  "handoff_offered": false,
+  "emergency": false
+}

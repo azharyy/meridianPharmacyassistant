@@ -15,7 +15,7 @@ include .env
 export
 endif
 
-.PHONY: check fmt
+.PHONY: check fmt contracts
 
 .venv:
 	uv sync --frozen
@@ -28,3 +28,6 @@ check: | .venv  ## Lint, format check and offline tests. No key, no network.
 fmt: | .venv  ## Format the code and apply safe lint fixes.
 	$(PY) -m ruff format .
 	$(PY) -m ruff check --fix .
+
+contracts: | .venv  ## Regenerate the contract snapshots. Commit them in a PR of their own.
+	$(PY) -m tests.contracts.snapshots

@@ -1,0 +1,12 @@
+{
+  "reply_type": "lookup_failed",
+  "blocks": [
+    {
+      "type": "text",
+      "text": "Sorry, I couldn't check that right now. Please try again in a moment."
+    }
+  ],
+  "sources": [],
+  "handoff_offered": false,
+  "emergency": false
+}

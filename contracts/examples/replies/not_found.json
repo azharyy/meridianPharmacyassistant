@@ -1,0 +1,12 @@
+{
+  "reply_type": "not_found",
+  "blocks": [
+    {
+      "type": "text",
+      "text": "I couldn't find that in the Meridian catalog."
+    }
+  ],
+  "sources": [],
+  "handoff_offered": false,
+  "emergency": false
+}
