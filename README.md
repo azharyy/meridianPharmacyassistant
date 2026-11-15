@@ -39,7 +39,7 @@ OPENCODE_API_KEY=your_opencode_key_here
 | Variable | Needed for | What it is |
 | --- | --- | --- |
 | `OPENCODE_API_KEY` | `make run` and all eval targets | An API key from [opencode.ai/auth](https://opencode.ai/auth), used with an OpenCode Go subscription. It serves the assistant and the judge |
-| `MERIDIAN_RUNTIME_MODEL` | Optional | `glm-5.3-flash` (default) or `deepseek-v4.1-flash` |
+| `MERIDIAN_RUNTIME_MODEL` | Optional | `glm-5.3-flash` (default) or `glm-5.3` |
 | `MERIDIAN_RUNTIME_PROVIDER` | Optional | `opencode` (default) or `groq`, for `make run` only; the eval targets always use OpenCode Go |
 | `GROQ_API_KEY` | Only with `MERIDIAN_RUNTIME_PROVIDER=groq` | A Groq API key, starting with `gsk_`. With `groq` the runtime is GPT-OSS 120B (or `openai/gpt-oss-20b`) |
 | `MERIDIAN_STAFF_KEY` | Optional | The header value for reading a ticket back in the demo. Default: `dev-staff-key` |
@@ -47,10 +47,11 @@ OPENCODE_API_KEY=your_opencode_key_here
 Format: one `NAME=value` per line, with no quotes, no spaces around `=` and no `export`.
 
 Every model call goes to OpenCode Go and uses only models included in the Go plan: the
-assistant runs on GLM-5.3-Flash, the development comparison on DeepSeek V4.1 Flash, and
-the eval judge is Kimi K3.1 Pro, from a different model family than both. They are the
-Go models OpenCode lists with structured output on its chat-completions API; every call
-uses strict structured outputs. OpenCode describes Go as built for coding agents and
+assistant runs on GLM-5.3-Flash, the development comparison on its larger sibling GLM-5.3,
+and the eval judge is Kimi K3.1 Pro, from a different model family than both. They are Go
+models OpenCode lists with structured output on its chat-completions API; every call uses
+strict structured outputs. DeepSeek V4.1 Flash is listed the same way but rejected every
+such request with HTTP 400, so it is not offered. OpenCode describes Go as built for coding agents and
 monitors its traffic. An OpenAI API key is unused.
 
 The held-out results in [`eval/REPORT.md`](eval/REPORT.md) were measured before this

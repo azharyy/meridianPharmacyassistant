@@ -21,8 +21,9 @@ on Groq, so the measured results and the calibration are unchanged.
 
 User amendment 3 (2026-11-15), superseding the defaults of amendments 1 and 2: OpenCode Go
 becomes the default for every role. The runtime is `glm-5.3-flash`; `make eval-compare` runs
-the development set on `deepseek-v4.1-flash` and writes `eval/results/dev-compare.md` beside
-the GLM run; the judge is `kimi-k3.1-pro` (another model family), recalibrated on the same 20
+the development set on `glm-5.3` and writes `eval/results/dev-compare.md` beside the
+GLM-5.3-Flash run (`deepseek-v4.1-flash`, first chosen, answered every strict request with
+HTTP 400, so it is not offered); the judge is `kimi-k3.1-pro` (another model family), recalibrated on the same 20
 pairs with the prompt unchanged. All use `OPENCODE_API_KEY`; Groq stays selectable for the
 runtime only. The held-out test results stay as measured on Groq GPT-OSS 120B with the Groq
 Qwen judge and are not run again; the README says so, and the Qwen calibration is kept as

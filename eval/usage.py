@@ -16,13 +16,12 @@ PRICES = {
         "output": 0.50,
         "source": "https://opencode.ai/docs/go/",
     },
-    ("opencode", "deepseek-v4.1-flash"): {
-        "input": 0.30,
-        "cached_input": 0.006,
+    ("opencode", "glm-5.3"): {
+        "input": 1.40,
+        "cached_input": 0.26,
         "cache_write": None,
-        "output": 1.20,
+        "output": 4.40,
         "source": "https://opencode.ai/docs/go/",
-        "note": "peak rate, so an upper bound; off-peak is half",
     },
     ("groq", "openai/gpt-oss-120b"): {
         "input": 0.15,

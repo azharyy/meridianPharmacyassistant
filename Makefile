@@ -72,7 +72,7 @@ judge-calibrate: | .venv  ## Check the OpenCode Go Kimi judge against the 20 lab
 
 eval-compare: export MERIDIAN_LLM := live
 eval-compare: export MERIDIAN_RUNTIME_PROVIDER := opencode
-eval-compare: export MERIDIAN_RUNTIME_MODEL := deepseek-v4.1-flash
+eval-compare: export MERIDIAN_RUNTIME_MODEL := glm-5.3
 eval-compare: export MERIDIAN_EXACT_MATCH := 1
-eval-compare: | .venv  ## Compare DeepSeek V4.1 Flash with the saved GLM-5.3-Flash development run.
+eval-compare: | .venv  ## Compare GLM-5.3 with the saved GLM-5.3-Flash development run.
 	$(PY) -m eval.cli dev-compare

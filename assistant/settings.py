@@ -14,11 +14,12 @@ OPENCODE_GO_URL = "https://opencode.ai/inference/go/openai/v1"
 DEFAULT_API_URL = "http://127.0.0.1:8001"
 DEFAULT_PROVIDER = "opencode"
 DEFAULT_RUNTIME_MODEL = "glm-5.3-flash"
-COMPARISON_RUNTIME_MODEL = "deepseek-v4.1-flash"
+COMPARISON_RUNTIME_MODEL = "glm-5.3"
 # provider: (base URL, key variable, runtime models it may use; the first is the default)
 PROVIDERS = {
     # Go-plan models that OpenCode lists with structured output on chat completions and "low"
     # effort; its free models answer other clients with 403, and Contributor ones train on data.
+    # deepseek-v4.1-flash is listed too, but answered every strict request here with HTTP 400.
     "opencode": (
         OPENCODE_GO_URL,
         "OPENCODE_API_KEY",

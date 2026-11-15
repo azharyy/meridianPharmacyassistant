@@ -119,7 +119,7 @@ def test_missing_live_keys_stop_before_models_or_api_start():
     [
         SETTINGS,
         load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_EXACT_MATCH": "0"}),
-        load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_MODEL": "deepseek-v4.1-flash"}),
+        load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_MODEL": "glm-5.3"}),
         load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_PROVIDER": "groq"}),
     ],
 )
