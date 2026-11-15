@@ -13,3 +13,19 @@ SECTION_TITLES = {
 }
 # The title of a label section's source chip, such as "Meridian All Day Allergy: Directions".
 LABEL_SOURCE_TITLE = "{name}: {section}"
+IN_STOCK = "In stock ({quantity})"
+OUT_OF_STOCK = "Out of stock"
+AVAILABILITY_SOURCE_TITLE = "Stock check"
+STORE_SOURCE_TITLE = "Store details"
+ORDER_SOURCE_TITLE = "Order status"
+ORDER_STATUS = (
+    "Your order is {status}. Estimated delivery: {delivery_estimate}. Items: {item_count}."
+)
+NO_DELIVERY_ESTIMATE = "not available"
+ORDER_STATUSES = {
+    "processing": "processing",
+    "ready_for_pickup": "ready for pickup",
+    "shipped": "shipped",
+    "delivered": "delivered",
+    "cancelled": "cancelled",
+}
