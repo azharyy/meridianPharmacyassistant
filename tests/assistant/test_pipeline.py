@@ -8,7 +8,7 @@ import httpx
 import pytest
 
 from assistant import pipeline
-from assistant.llm import FakeSender, ModelClient, TransportError
+from assistant.llm import CONVERSATION, FakeSender, ModelClient, TransportError
 from assistant.render import render_fallback, render_risk
 from assistant.safety.emergency import is_emergency
 from assistant.safety.injection import looks_like_injection
@@ -47,6 +47,19 @@ def turn(message: str, fake: FakeSender, steps=None, session=None) -> pipeline.T
 
 def routed(risk: RiskLabel, *mentions: str):
     return ROUTED.model_copy(update={"risk_label": risk, "product_mentions": list(mentions)})
+
+
+def test_every_model_call_of_a_turn_carries_the_sessions_conversation_id():
+    seen = []
+
+    class Recording(FakeSender):
+        def __call__(self, messages, output):
+            seen.append(CONVERSATION.get())
+            return super().__call__(messages, output)
+
+    turn(QUESTION, Recording([ROUTED, PLAN]))
+    assert seen == [pipeline.log_reference(SESSION_ID)] * 2  # the router and the catalog agent
+    assert CONVERSATION.get() is None
 
 
 def test_a_turn_runs_its_steps_top_to_bottom():

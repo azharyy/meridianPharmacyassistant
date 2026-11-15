@@ -308,11 +308,13 @@ def entrypoint() -> None:
         raise SystemExit(str(error)) from None
     except (EvaluationInputError, QuotaExhausted) as error:
         raise SystemExit(str(error)) from None
+    except ModelUnavailable as error:  # its message names the provider error class and status only
+        raise SystemExit(f"Evaluation stopped: {error}") from None
     except FileNotFoundError:
         raise SystemExit(
             "Evaluation input file is missing; finish drafting and labeling the cases."
         ) from None
-    except (ValueError, RuntimeError, OSError, httpx.HTTPError, ModelUnavailable) as error:
+    except (ValueError, RuntimeError, OSError, httpx.HTTPError) as error:
         print(
             f"Evaluation stopped ({type(error).__name__}); check case labels and run settings.",
             file=sys.stderr,
