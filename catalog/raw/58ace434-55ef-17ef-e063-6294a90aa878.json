@@ -1,0 +1,94 @@
+{
+ "active_ingredient": [
+  "Active Ingredients Tetrahydrozoline HCl 0.05% Hypromellose 0.3%"
+ ],
+ "ask_doctor": [
+  "Ask Doctor Temporary mild stinging may appear after use and usually fades quickly on its own.If stinging lasts long, eye discharge increases abnormally or you have obvious discomfort, stop use right away and consult a healthcare provider promptly."
+ ],
+ "do_not_use": [
+  "Do not use if solution changes color or becomes cloudy"
+ ],
+ "dosage_and_administration": [
+  "Directions Use 8 to 10 times per day. Made from pure plant extracts, suitable for long-term use. Finish within 10 days after opening. Not intended for inflammatory eye conditions."
+ ],
+ "effective_time": "20260810",
+ "id": "58ace434-55f0-17ef-e063-6294a90aa878",
+ "inactive_ingredient": [
+  "Inactive ingredients Angelica Sinensis Root Extract,Cassia Obtusifolia Seed Extract,Clematis Chinensis Root Extract,Alpinia Officinarum Rhizome, Magnolia Liliflora Flower Extract."
+ ],
+ "indications_and_usage": [
+  "Uses For daily eye care of people with eye discomfort caused by excessive eye use, eye fatigue,dryness, itching, soreness,distending pain, and mild eye irritation-induced redness."
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep Out Of Reach Of Children Keep this product out of reach of children and pets."
+ ],
+ "openfda": {
+  "application_number": [
+   "M018"
+  ],
+  "brand_name": [
+   "Dr. Shitong Photon Energy Eye Care Liquid"
+  ],
+  "generic_name": [
+   "TETRAHYDROZOLINE HCL 0.05% HYPROMELLOSE 0.3% DR. SHITONG PHOTON ENERGY EYE CARE LIQUID"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Wenzhou Yuyuan Pharmaceutical Co., Ltd."
+  ],
+  "package_ndc": [
+   "87786-036-01"
+  ],
+  "product_ndc": [
+   "87786-036"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "spl_id": [
+   "58ace434-55f0-17ef-e063-6294a90aa878"
+  ],
+  "spl_set_id": [
+   "58ace434-55ef-17ef-e063-6294a90aa878"
+  ],
+  "substance_name": [
+   "TETRAHYDROZOLINE HYDROCHLORIDE",
+   "HYPROMELLOSES"
+  ],
+  "unii": [
+   "0YZT43HS7D",
+   "3NXW29V3WO"
+  ],
+  "upc": [
+   "6978887450673"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL 0.05 0.3"
+ ],
+ "purpose": [
+  "Purpose Redness reliever Ophthalmic Lubricant"
+ ],
+ "set_id": "58ace434-55ef-17ef-e063-6294a90aa878",
+ "spl_product_data_elements": [
+  "Dr. Shitong Photon Energy Eye Care Liquid Tetrahydrozoline HCl 0.05% Hypromellose 0.3% Dr. Shitong Photon Energy Eye Care Liquid TETRAHYDROZOLINE HYDROCHLORIDE TETRAHYDROZOLINE HYPROMELLOSES HYPROMELLOSES ANGELICA SINENSIS ROOT SENNA OBTUSIFOLIA SEED CLEMATIS CHINENSIS ROOT LESSER GALANGAL ROOT MAGNOLIA LILIIFLORA FLOWER"
+ ],
+ "stop_use": [
+  "Stop Use Temporary mild stinging may appear after use and usually fades quickly on its own.If stinging lasts long, eye discharge increases abnormally or you have obvious discomfort, stop use right away and consult a healthcare provider promptly."
+ ],
+ "storage_and_handling": [
+  "Other information Do not freeze.Do not use if bottle is damaged.Store cool and dry, avoid direct sunlight."
+ ],
+ "version": "1",
+ "warnings": [
+  "Warnings For external use only."
+ ],
+ "when_using": [
+  "When Using If pregnant or breast-feeding,aska health professionl before use."
+ ]
+}

@@ -1,0 +1,93 @@
+{
+ "active_ingredient": [
+  "Active Ingredient (in each tablet) Cetirizine HCl 10 mg"
+ ],
+ "dosage_and_administration": [
+  "​Directions adults & children 6 years and over one 10 mg tablet once daily; do not take more than one 10 mg tablet in 24 hours. A 5 mg product may be appropriate for less severe symptoms adults 65 years and over ask a doctor children under 6 years of age ask a doctor consumers with liver or kidney disease ask a doctor"
+ ],
+ "dosage_and_administration_table": [
+  "<table width=\"50%\"><tbody><tr><td styleCode=\"Botrule Rrule\">adults &amp; children  6 years and over</td><td styleCode=\"Botrule Lrule Toprule\"><paragraph> one 10 mg tablet once daily; </paragraph><paragraph> do not take more than one 10 mg   tablet in 24 hours.   A 5 mg product may be appropriate for less severe symptoms</paragraph></td></tr><tr><td styleCode=\"Botrule Rrule\">adults 65 years and over</td><td styleCode=\"Botrule Lrule Toprule\"> ask a doctor</td></tr><tr><td styleCode=\"Botrule Rrule\">children under 6 years of age</td><td styleCode=\"Botrule Lrule Toprule\"> ask a doctor</td></tr><tr><td styleCode=\"Rrule\">consumers with liver or kidney disease</td><td styleCode=\"Botrule Lrule Toprule\"> ask a doctor</td></tr></tbody></table>"
+ ],
+ "effective_time": "20260824",
+ "id": "c7dddeef-7505-4753-af2c-2d22c6099879",
+ "inactive_ingredient": [
+  "Inactive ingredients hypromellose, lactose, magnesium stearate, maize starch, polyethylene glycol 400, povidone, purified water, titanium dioxide"
+ ],
+ "indications_and_usage": [
+  "Uses temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: • runny nose • sneezing • itchy, watery eyes • itching of the nose and throat"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. Overdose warning: In case of overdose, get medical help or contact a Poison Control Center right away. Prompt medical attention is critical for adults as well as children even if you do not notice any signs or symptoms."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA077829"
+  ],
+  "brand_name": [
+   "GOOD REMEDIES All Day Allergy Relief"
+  ],
+  "generic_name": [
+   "CETIRIZINE HYDROCHLORIDE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Strive Pharmaceuticals Inc."
+  ],
+  "package_ndc": [
+   "70692-801-43"
+  ],
+  "product_ndc": [
+   "70692-801"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "1014678"
+  ],
+  "spl_id": [
+   "c7dddeef-7505-4753-af2c-2d22c6099879"
+  ],
+  "spl_set_id": [
+   "44410d76-5940-4611-be45-579e2db8a65d"
+  ],
+  "substance_name": [
+   "CETIRIZINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "64O047KTOA"
+  ],
+  "upc": [
+   "0370692001419"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Packaging GOODREMEDIESAll DayAllergyRelief"
+ ],
+ "purpose": [
+  "Purpose Antihistamine"
+ ],
+ "questions": [
+  "Questions or comments? 1-888-577-8033 Monday - Friday 8am - 4pm EST"
+ ],
+ "set_id": "44410d76-5940-4611-be45-579e2db8a65d",
+ "spl_product_data_elements": [
+  "GOOD REMEDIES All Day Allergy Relief Cetirizine Hydrochloride CETIRIZINE HYDROCHLORIDE CETIRIZINE HYPROMELLOSE, UNSPECIFIED LACTOSE, UNSPECIFIED FORM MAGNESIUM STEARATE STARCH, CORN POLYETHYLENE GLYCOL 400 POVIDONE, UNSPECIFIED WATER TITANIUM DIOXIDE Barrel CTN;10"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "Compare to the active ingredient in original prescription strength ZYRTEC ® * Indoor & outdoor allergies 24 hr relief of: Sneezing; runny nose; itchy, watery eyes; itchy throat or nose Distributed by: Strive Pharmaceuticals, Inc. East Brunswick, NJ 08816 PRODUCT OF INDIA *This product is not manufactured or distributed by Kenvue, Inc., owner of the registered trademark Zyrtec ® . TAMPER EVIDENT: DO NOT USE IF PACKAGE IS OPENED OR IF BLISTER UNIT IS TORN, BROKEN OR SHOWS ANY SIGNS OF TAMPERING . READ AND KEEP OUTER CARTON FOR COMPLETE PRODUCT WARNINGS AND INFORMATION"
+ ],
+ "storage_and_handling": [
+  "Other information • store at 20–25°C (68–77°F) • protect from light, heat and moisture"
+ ],
+ "version": "1",
+ "warnings": [
+  "Warnings Do not use if you have ever had an allergic reaction to this product or any of its ingredients or to an antihistamine containing hydroxyzine. Ask a doctor before use if you have liver or kidney disease. Your doctor should determine if you need a different dose. Ask a doctor or pharmacist before use if you are taking tranquilizers or sedatives. When using this product • drowsiness may occur • avoid alcoholic drinks • alcohol, sedatives, and tranquilizers may increase drowsiness • be careful when driving a motor vehicle or operating machinery Stop use and ask a doctor if an allergic reaction to this product occurs. Seek medical help right away. If pregnant or breast-feeding: • if breast-feeding: not recommended • if pregnant: ask a health professional before use. Keep out of reach of children. Overdose warning: In case of overdose, get medical help or contact a Poison Control Center right away. Prompt medical attention is critical for adults as well as children even if you do not notice any signs or symptoms."
+ ]
+}

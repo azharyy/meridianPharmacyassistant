@@ -1,0 +1,102 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each 5ml tsp.) Guaifenesin USP 100 mg Purpose Expectorant"
+ ],
+ "dosage_and_administration": [
+  "Directions Do not take more than 6 doses in any 24 hours period Adults and children 12 years and over Take 2-4 teaspoonful (5mL) every 4 hours Children under 12 years Consult a physician"
+ ],
+ "dosage_and_administration_table": [
+  "<table width=\"100%\"> <caption/> <tbody> <tr> <td>Adults and children 12 years and over</td> <td>Take 2-4 teaspoonful (5mL) every 4 hours</td> </tr> <tr> <td>Children under 12 years</td> <td>Consult a physician</td> </tr> </tbody> </table>"
+ ],
+ "effective_time": "20261026",
+ "id": "5ec14661-fc50-75c8-e063-6394a90a2e1b",
+ "inactive_ingredient": [
+  "Inactive ingredients Citric acid, FD&C yellow #5, glycerin, methylparaben, potassium sorbate, propylene glycol, propylparaben, purified water, sodium citrate, strawberry-banana flavor, sucralose."
+ ],
+ "indications_and_usage": [
+  "Uses • helps loosen phlegm (mucus) and thin bronchial secretions to make coughs more productive"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M012"
+  ],
+  "brand_name": [
+   "Akin Expectorant Formula Strawberry Banana"
+  ],
+  "generic_name": [
+   "GUAIFENESIN"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Southern Sales & Service, Inc."
+  ],
+  "nui": [
+   "N0000193956",
+   "N0000008867",
+   "N0000009560"
+  ],
+  "package_ndc": [
+   "69822-212-04"
+  ],
+  "pharm_class_epc": [
+   "Expectorant [EPC]"
+  ],
+  "pharm_class_pe": [
+   "Decreased Respiratory Secretion Viscosity [PE]",
+   "Increased Respiratory Secretions [PE]"
+  ],
+  "product_ndc": [
+   "69822-212"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "spl_id": [
+   "5ec14661-fc50-75c8-e063-6394a90a2e1b"
+  ],
+  "spl_set_id": [
+   "b63b0133-d2da-432b-a154-9e77535bbef9"
+  ],
+  "substance_name": [
+   "GUAIFENESIN"
+  ],
+  "unii": [
+   "495W7451VQ"
+  ],
+  "upc": [
+   "0850011557914"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Package Labeling: Label2"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or beast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Expectorant"
+ ],
+ "set_id": "b63b0133-d2da-432b-a154-9e77535bbef9",
+ "spl_product_data_elements": [
+  "Akin Expectorant Formula Strawberry Banana GUAIFENESIN GUAIFENESIN GUAIFENESIN CITRIC ACID MONOHYDRATE FD&C YELLOW NO. 5 GLYCERIN METHYLPARABEN POTASSIUM SORBATE PROPYLENE GLYCOL PROPYLPARABEN WATER SODIUM CITRATE SUCRALOSE"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "Other information • store at room temperature • 15°-30°C (59°-86°F) Do not use if seal under cap is torn, broken or missing. TAMPER-EVIDENT:"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if • cough persists for more than a week, tends to recur, or is accompanied by a fever, rash or persistant headache, consult a doctor. A persistent cough may be a sign of a serious condition."
+ ],
+ "version": "3",
+ "warnings": [
+  "Warnings Do not take this product for persistent or chronic cough such as occurs with smoking, asthma, chronic bronchitis, or emphysema, or where cough is accompanied by excessive phlegm(mucus) unless direct by a doctor.\" Stop use and ask a doctor if • cough persists for more than a week, tends to recur, or is accompanied by a fever, rash or persistant headache, consult a doctor. A persistent cough may be a sign of a serious condition. If pregnant or beast-feeding, ask a health professional before use. Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ]
+}

@@ -1,0 +1,90 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each softgel) Simethicone 125 mg"
+ ],
+ "dosage_and_administration": [
+  "Directions ▪ adults : swallow with water 1 or 2 softgels as needed after meals and at bedtime ▪ do not exceed 4 softgels in 24 hours except under the advice and supervision of a physician"
+ ],
+ "effective_time": "20261104",
+ "id": "a77fb230-3047-4b2f-9cd5-ed264c192979",
+ "inactive_ingredient": [
+  "Inactive ingredients D&C Yellow No. 10, edible printing ink, FD&C Blue No.1, FD&C Red No. 40, gelatin, glycerin, peppermint oil, purified water, titanium dioxide"
+ ],
+ "indications_and_usage": [
+  "Uses for the relief ▪ pressure, bloating, and fullness commonly referred to as gas"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children."
+ ],
+ "openfda": {
+  "application_number": [
+   "M002"
+  ],
+  "brand_name": [
+   "Gas Relief Extra Strength"
+  ],
+  "generic_name": [
+   "SIMETHICONE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Target Corporation"
+  ],
+  "package_ndc": [
+   "11673-550-50",
+   "11673-550-72"
+  ],
+  "product_ndc": [
+   "11673-550"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "198852"
+  ],
+  "spl_id": [
+   "a77fb230-3047-4b2f-9cd5-ed264c192979"
+  ],
+  "spl_set_id": [
+   "7acc8f43-622a-499f-a374-1079d25b1768"
+  ],
+  "substance_name": [
+   "DIMETHICONE, UNSPECIFIED"
+  ],
+  "unii": [
+   "92RU3N3Y1O"
+  ],
+  "upc": [
+   "0368163913507"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal Display Panel Compare to active ingredient in Extra Strength Gas-X® Softgels* Extra Strength Gas Relief Simethicone softgels 125 mg/ antigas fast relief of gas pressure, bloating and discomfort easy to swallow up & up DO NOT USE IF ANY INDIVIDUAL BLISTER IS BROKEN OR OPEN. IMPORTANT: Keep this carton for future reference on full labeling **This product is not manufactured or distributed by GSK Consumer Healthcare, Inc. the distributor of Gas-X ® Extra Strength Softgels. Distributed by Target Corporation Minneapolis, MN 55403 TM & © 2021 Target Brands, Inc. Shop Target.com This product offers fast, effective relief of pressure and bloating that antacids can’t provide. They are specially formulated with simethicone, the antigas medicine doctors recommends most for pressure, bloating or discomfort referred to as gas. Package Label for 72 Softgels Extra Strength Gas Relief 72 Softgels Extra Strength Gas Relief 50 Sogtgels"
+ ],
+ "package_label_principal_display_panel_table": [
+  "<table styleCode=\"Noautorules\" width=\"100%\"> <col width=\"100%\"/> <tbody> <tr> <td styleCode=\"Rrule Botrule Lrule Toprule \" valign=\"top\"> <paragraph> <content styleCode=\"bold\">IMPORTANT:</content> Keep this carton for future reference on full labeling</paragraph> </td> </tr> </tbody> </table>"
+ ],
+ "purpose": [
+  "Purpose Antigas"
+ ],
+ "questions": [
+  "Questions or comments? 1-866-467-2748"
+ ],
+ "set_id": "7acc8f43-622a-499f-a374-1079d25b1768",
+ "spl_product_data_elements": [
+  "Gas Relief Extra Strength SIMETHICONE DIMETHICONE, UNSPECIFIED DIMETHICONE D&C YELLOW NO. 10 FD&C BLUE NO. 1 FD&C RED NO. 40 GELATIN, UNSPECIFIED GLYCERIN PEPPERMINT OIL WATER TITANIUM DIOXIDE PO;S1;SCU"
+ ],
+ "storage_and_handling": [
+  "Other information ▪ store at room temperature ▪ protect from light, heat, and moisture"
+ ],
+ "version": "12",
+ "warnings": [
+  "Warnings Keep out of reach of children."
+ ]
+}

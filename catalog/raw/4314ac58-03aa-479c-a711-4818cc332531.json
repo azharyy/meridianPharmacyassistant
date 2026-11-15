@@ -1,0 +1,86 @@
+{
+ "active_ingredient": [
+  "Active ingredient (per tablet) Calcium Carbonate USP 750mg"
+ ],
+ "dosage_and_administration": [
+  "Directions • adults and children 12 years of age and over: chew 2-4 tablets completely as symptoms occur, or as directed by a doctor. Do not swallow the tablets whole. • do not take for symptoms that persist for more than 2 weeks unless advised by a doctor"
+ ],
+ "effective_time": "20261103",
+ "id": "5667014f-9643-4c66-b3f6-34649b616069",
+ "inactive_ingredient": [
+  "Inactive ingredients adipic acid, dextrose, FD&C Blue No. 1 Lake, FD&C Red No. 40 Lake, flavors, magnesium stearate, maltodextrin, starch, sucralose. Questions? 1-866-467-2748 Safety sealed: Do not use if printed seal under cap is torn or missing"
+ ],
+ "indications_and_usage": [
+  "Uses relieves • heartburn • acid indigestion • sour stomach • upset stomach associated with these symptoms"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children."
+ ],
+ "openfda": {
+  "application_number": [
+   "M001"
+  ],
+  "brand_name": [
+   "Extra Strength Smooth"
+  ],
+  "generic_name": [
+   "CALCIUM CARBONATE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "SAFEWAY"
+  ],
+  "package_ndc": [
+   "21130-515-60"
+  ],
+  "product_ndc": [
+   "21130-515"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "308915"
+  ],
+  "spl_id": [
+   "5667014f-9643-4c66-b3f6-34649b616069"
+  ],
+  "spl_set_id": [
+   "4314ac58-03aa-479c-a711-4818cc332531"
+  ],
+  "substance_name": [
+   "CALCIUM CARBONATE"
+  ],
+  "unii": [
+   "H0G9379FGK"
+  ],
+  "upc": [
+   "0321130798088"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Package/Label Principal Display Panel NDC# 21130-515-60 *Compare to the active ingredient in Extra Strength Tums® Smoothies ™ EXTRA STRENGTH Smooth Antacid Tablets Calcium Carbonate USP 750 mg Fas Relief of Upset Stomach, Heartburn and Acid Indigestion Assorted Berries Naturally and Artificially Flavored 60 Chewable Tablets K PAREVE GLUTEN- FREE Distributed by: *This product is not manufactured or distributed by GlaxoSmithKline, the distributor of Extra Strength Tums® Smoothies™. Extras Strength Smooth Antacid Calcium Carbonate assorted berry"
+ ],
+ "purpose": [
+  "Purpose Antacid"
+ ],
+ "questions": [
+  "Questions? 1-866-467-2748 Safety sealed: Do not use if printed seal under cap is torn or missing"
+ ],
+ "set_id": "4314ac58-03aa-479c-a711-4818cc332531",
+ "spl_product_data_elements": [
+  "Extra Strength Smooth Calcium Carbonate CALCIUM CARBONATE CALCIUM CATION CARBONATE ION ADIPIC ACID DEXTROSE, UNSPECIFIED FORM FD&C BLUE NO. 1 FD&C RED NO. 40 MAGNESIUM STEARATE MALTODEXTRIN STARCH, CORN SUCRALOSE RP115 assorted"
+ ],
+ "spl_unclassified_section": [
+  "Other information • each tablet contains: calcium 300mg • store at room temperature. Keep the container tightly closed"
+ ],
+ "version": "7",
+ "warnings": [
+  "Warnings Ask a doctor or pharmacist before use if you are presently taking a prescription drug. Antacids may interact with certain prescription drugs. When using this product • do not take more than 10 tablets in 24 hours • if pregnant do not take more than 6 tablets in 24 hours • do not use the maximum dosage for more than 2 weeks except under the advice and supervision of a doctor"
+ ]
+}

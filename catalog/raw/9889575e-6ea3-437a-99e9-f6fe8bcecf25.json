@@ -1,0 +1,92 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each softgel) Simethicone 125 mg"
+ ],
+ "dosage_and_administration": [
+  "Directions adults and children 12 years and over: swallow with water 1 or 2 softgels as needed after meals and at bedtime do not exceed 4 softgels in 24 hours except under the advice and supervision of a physician"
+ ],
+ "effective_time": "20261103",
+ "id": "5f5bc81b-2fe3-800c-e063-6294a90a67db",
+ "inactive_ingredient": [
+  "Inactive ingredients D&C yellow # 10, FD&C blue # 1, gelatin, glycerin, peppermint oil, sorbitol sorbitan, titanium dioxide"
+ ],
+ "indications_and_usage": [
+  "Use for the relief of pressure, bloating, and fullness, commonly referred to as gas."
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children."
+ ],
+ "openfda": {
+  "application_number": [
+   "M002"
+  ],
+  "brand_name": [
+   "Extra Strength Simethicone"
+  ],
+  "generic_name": [
+   "SIMETHICONE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Bi-Mart"
+  ],
+  "nui": [
+   "N0000010282"
+  ],
+  "package_ndc": [
+   "37835-231-72"
+  ],
+  "pharm_class_pe": [
+   "Skin Barrier Activity [PE]"
+  ],
+  "product_ndc": [
+   "37835-231"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "198852"
+  ],
+  "spl_id": [
+   "5f5bc81b-2fe3-800c-e063-6294a90a67db"
+  ],
+  "spl_set_id": [
+   "9889575e-6ea3-437a-99e9-f6fe8bcecf25"
+  ],
+  "substance_name": [
+   "DIMETHICONE"
+  ],
+  "unii": [
+   "92RU3N3Y1O"
+  ],
+  "upc": [
+   "0071357910724"
+  ]
+ },
+ "other_safety_information": [
+  "Other information store between 20° to 25°C (68° to 776°F) protect from light, heat and moisture DO NOT USE IF PRINTED SEAL UNDER CAP IS MISSING OR DAMAGED"
+ ],
+ "package_label_principal_display_panel": [
+  "Principal Display Panel 1"
+ ],
+ "purpose": [
+  "Purpose Antigas"
+ ],
+ "questions": [
+  "Questions? call toll-free 1-844-912-4012"
+ ],
+ "set_id": "9889575e-6ea3-437a-99e9-f6fe8bcecf25",
+ "spl_product_data_elements": [
+  "Extra Strength Simethicone Simethicone DIMETHICONE DIMETHICONE PEPPERMINT OIL GELATIN SORBITOL GLYCERIN FD&C BLUE NO. 1 TITANIUM DIOXIDE D&C YELLOW NO. 10 911"
+ ],
+ "version": "2",
+ "warnings": [
+  "Warnings If pregnant or breast-feeding, ask a health professional before use."
+ ]
+}

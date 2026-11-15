@@ -1,0 +1,99 @@
+{
+ "active_ingredient": [
+  "ACTIVE INGREDIENT Loratadine 10 mg"
+ ],
+ "ask_doctor": [
+  "ASK A DOCTOR BEFORE USE IF you have liver or kidney disease. Your doctor should determine if you need a different dose."
+ ],
+ "dosage_and_administration": [
+  "DIRECTIONS adults and children 6 years and over 1 tablet daily; not more than 1 tablet in 24 hours children under 6 years of age ask a doctor consumers with liver or kidney disease ask a doctor"
+ ],
+ "dosage_and_administration_table": [
+  "<table border=\"0\" width=\"100%\"> <tbody> <tr> <td>adults and children 6 years and over</td> <td>1 tablet daily; not more than 1 tablet in 24 hours</td> </tr> <tr> <td>children under 6 years of age</td> <td>ask a doctor</td> </tr> <tr> <td>consumers with liver or kidney disease</td> <td>ask a doctor</td> </tr> </tbody> </table>"
+ ],
+ "effective_time": "20261007",
+ "id": "5d3f8f5b-e2b7-dfd5-e063-6294a90aa23c",
+ "inactive_ingredient": [
+  "INACTIVE INGREDIENTS Lactose monohydrate, magnesium stearate, sodium starch glycolate and starch maize pregelatinized"
+ ],
+ "indications_and_usage": [
+  "USES temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: runny nose itchy, watery eyes sneezing itching of the nose or throat"
+ ],
+ "keep_out_of_reach_of_children": [
+  "KEEP OUT OF REACH OF CHILDREN In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA210722"
+  ],
+  "brand_name": [
+   "Loratadine"
+  ],
+  "generic_name": [
+   "LORATADINE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Granules India Limited"
+  ],
+  "package_ndc": [
+   "62207-787-49",
+   "62207-787-88"
+  ],
+  "product_ndc": [
+   "62207-787"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "311372"
+  ],
+  "spl_id": [
+   "5d3f8f5b-e2b7-dfd5-e063-6294a90aa23c"
+  ],
+  "spl_set_id": [
+   "9bae1ba3-c0da-23a2-e053-2a95a90a58ed"
+  ],
+  "substance_name": [
+   "LORATADINE"
+  ],
+  "unii": [
+   "7AJO3BO7QN"
+  ]
+ },
+ "other_safety_information": [
+  "OTHER INFORMATION Tamper-evident: do not use if foil seal under cap, printed with \"SEALED for YOUR PROTECTION\" is missing, open or broken store between 20° to 25°C (68° to 77°F)"
+ ],
+ "package_label_principal_display_panel": [
+  "62207-787-49 62207-787-88"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "IF PREGNANT OR BREAST-FEEDING ask a health professional before use."
+ ],
+ "purpose": [
+  "PURPOSE Antihistamine"
+ ],
+ "questions": [
+  "QUESTIONS OR COMMENTS Contact 1-877-770-3183 Mon-Fri 9:00 AM to 4:30 PM EST"
+ ],
+ "set_id": "9bae1ba3-c0da-23a2-e053-2a95a90a58ed",
+ "spl_product_data_elements": [
+  "Loratadine Loratadine LORATADINE LORATADINE MAGNESIUM STEARATE SODIUM STARCH GLYCOLATE TYPE A POTATO LACTOSE MONOHYDRATE ANHYDROUS LACTOSE STARCH, CORN White to off white G;10"
+ ],
+ "stop_use": [
+  "STOP USE AND ASK DOCTOR IF an allergic reaction to this product occurs. Seek medical help right away."
+ ],
+ "version": "6",
+ "warnings": [
+  "WARNINGS Do not use if you have ever had an allergic reaction to this product or any of its ingredients"
+ ],
+ "when_using": [
+  "WHEN USING THIS PRODUCT do not take more than directed. Taking more than directed may cause drowsiness."
+ ]
+}

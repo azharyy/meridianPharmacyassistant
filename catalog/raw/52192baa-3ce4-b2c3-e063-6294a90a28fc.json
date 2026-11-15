@@ -1,0 +1,107 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each capsule) Cetirizine HCl 10 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have liver or kidney disease. Your doctor should determine if you need a different dose."
+ ],
+ "ask_doctor_or_pharmacist": [
+  "Ask a doctor or pharmacist before use if you are taking tranquilizers or sedatives."
+ ],
+ "do_not_use": [
+  "Do not use if you have ever had an allergic reaction to this product or any of its ingredients or to an antihistamine containing hydroxyzine."
+ ],
+ "dosage_and_administration": [
+  "Directions adults and children 6 years and over one 10 mg capsule once daily; do not take more than one 10 mg capsule in 24 hours. A 5 mg product may be appropriate for less severe symptoms. adults 65 years and over ask a doctor children under 6 years of age ask a doctor consumers with liver or kidney disease ask a doctor"
+ ],
+ "dosage_and_administration_table": [
+  "<table width=\"341px\"><col width=\"1px\"/><col width=\"1px\"/><tbody><tr><td styleCode=\"Botrule Rrule Toprule\">adults and children 6 years and over</td><td styleCode=\"Botrule Toprule\">one 10 mg capsule once daily; do not take more than one 10 mg capsule in 24 hours. A 5 mg product may be appropriate for less severe symptoms.</td></tr><tr><td styleCode=\"Botrule Rrule\">adults 65 years and over</td><td styleCode=\"Botrule\">ask a doctor</td></tr><tr><td styleCode=\"Botrule Rrule\">children under 6 years of age</td><td styleCode=\"Botrule\">ask a doctor</td></tr><tr><td styleCode=\"Botrule Rrule\">consumers with liver or kidney disease</td><td styleCode=\"Botrule\">ask a doctor</td></tr></tbody></table>"
+ ],
+ "effective_time": "20260824",
+ "id": "59ceea82-1e90-6897-e063-6294a90a10ee",
+ "inactive_ingredient": [
+  "Inactive ingredients gelatin, glycerin, mannitol, pharmaceutical ink, polyethylene glycol, purified water, sodium hydroxide, sorbitan, sorbitol"
+ ],
+ "indications_and_usage": [
+  "Uses temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: ■ runny nose ■ sneezing ■ itchy, watery eyes ■ itching of the nose or throat"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "NDA022429"
+  ],
+  "brand_name": [
+   "Cetirizine HCl"
+  ],
+  "generic_name": [
+   "CETIRIZINE HCL"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "CVS Pharmacy"
+  ],
+  "package_ndc": [
+   "51316-900-19"
+  ],
+  "product_ndc": [
+   "51316-900"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "1014675"
+  ],
+  "spl_id": [
+   "59ceea82-1e90-6897-e063-6294a90a10ee"
+  ],
+  "spl_set_id": [
+   "52192baa-3ce4-b2c3-e063-6294a90a28fc"
+  ],
+  "substance_name": [
+   "CETIRIZINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "64O047KTOA"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal Display Panel-90s count NDC 51316-900-19 CVS 24 HR RELIEF ALLERGY RELIEF Cetirizine Hydrochloride Softgels, 10 mg Compare to Zyrtec® active ingredient* 24-Hour Relief of: Itchy, watery eyes, Runny nose, Itchy throat or nose, Sneezing 90 SOFTGELS † † Liquid-Filled Capsules Indoor & Outdoor Allergies DYE FREE image001"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding: if breast-feeding: not recommended if pregnant: ask a health professional before use"
+ ],
+ "purpose": [
+  "Purpose Antihistamine"
+ ],
+ "questions": [
+  "Questions or comments? call toll free 1-888-235-2466 (Mon - Fri 9AM - 5PM EST)"
+ ],
+ "set_id": "52192baa-3ce4-b2c3-e063-6294a90a28fc",
+ "spl_product_data_elements": [
+  "Cetirizine HCl Cetirizine HCl CETIRIZINE HYDROCHLORIDE CETIRIZINE GELATIN GLYCERIN MANNITOL POLYETHYLENE GLYCOL, UNSPECIFIED WATER SODIUM HYDROXIDE SORBITAN SORBITOL clear CE2"
+ ],
+ "spl_unclassified_section": [
+  "†This product is not manufactured or distributed by the owners of Zyrtec® TAMPER EVIDENT: DO NOT USE IF IMPRINTED SAFETY SEAL UNDER CAP IS BROKEN OR MISSING KEEP THIS CARTON FOR COMPLETE WARNINGS AND PRODUCT INFORMATION Distributed by: CVS Pharmacy, Inc. One CVS Drive, Woonsocket, RI 02895 2026 CVS/pharmacy CVS.com 1-800-SHOP CVS V-41750 100% money back guaranteed. cvs.com/returnpolicy R0626 L0001302"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if an allergic reaction to this product occurs. Seek medical help right away."
+ ],
+ "storage_and_handling": [
+  "Other information store at 20º-25ºC (68º-77ºF) avoid high humidity and excessive heat above 40ºC (104ºF) protect from light"
+ ],
+ "version": "2",
+ "warnings": [
+  "Warnings Do not use if you have ever had an allergic reaction to this product or any of its ingredients or to an antihistamine containing hydroxyzine. Ask a doctor before use if you have liver or kidney disease. Your doctor should determine if you need a different dose. Ask a doctor or pharmacist before use if you are taking tranquilizers or sedatives. When using this product drowsiness may occur alcohol, sedatives, and tranquilizers may increase drowsiness avoid alcoholic drinks be careful when driving a motor vehicle or operating machinery in rare cases, you may experience itching after stopping cetirizine. Consult your healthcare provider if this happens. Stop use and ask a doctor if an allergic reaction to this product occurs. Seek medical help right away. If pregnant or breast-feeding: if breast-feeding: not recommended if pregnant: ask a health professional before use Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product drowsiness may occur alcohol, sedatives, and tranquilizers may increase drowsiness avoid alcoholic drinks be careful when driving a motor vehicle or operating machinery in rare cases, you may experience itching after stopping cetirizine. Consult your healthcare provider if this happens."
+ ]
+}

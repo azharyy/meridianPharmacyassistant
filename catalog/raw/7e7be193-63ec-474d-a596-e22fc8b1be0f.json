@@ -1,0 +1,87 @@
+{
+ "active_ingredient": [
+  "Active ingredient Ketotifen (0.025%) (equivalent to Ketotifen Fumarate 0.035%)"
+ ],
+ "dosage_and_administration": [
+  "Directions Adults and children 3 years of age and older: Put 1 drop in the affected eye(s) twice daily, every 8-12 hours, no more than twice per day. Children under 3 years of age: Consult a doctor."
+ ],
+ "effective_time": "20260415",
+ "id": "4f82e49c-1cfa-a62b-e063-6394a90a9a6c",
+ "inactive_ingredient": [
+  "Inactive ingredients Benzalkonium Chloride 0.01%; Glycerin and Water for Injection. May contain Hydrochloric Acid and/or Sodium Hydroxide (to adjust pH)."
+ ],
+ "indications_and_usage": [
+  "Use Temporarily relieves itchy eyes due to pollen, ragweed, grass, animal hair and dander."
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA077958"
+  ],
+  "brand_name": [
+   "Ketotifen Fumarate Ophthalmic Solution"
+  ],
+  "generic_name": [
+   "KETOTIFEN FUMARATE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Sentiss Pharmaceuticals LLC"
+  ],
+  "package_ndc": [
+   "70244-041-01"
+  ],
+  "product_ndc": [
+   "70244-041"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "OPHTHALMIC"
+  ],
+  "rxcui": [
+   "311237"
+  ],
+  "spl_id": [
+   "4f82e49c-1cfa-a62b-e063-6394a90a9a6c"
+  ],
+  "spl_set_id": [
+   "7e7be193-63ec-474d-a596-e22fc8b1be0f"
+  ],
+  "substance_name": [
+   "KETOTIFEN FUMARATE"
+  ],
+  "unii": [
+   "HBD503WORO"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Packaging Ketolbl3"
+ ],
+ "purpose": [
+  "Purpose Antihistamine"
+ ],
+ "questions": [
+  "Questions? call toll-free 1-855-473-6847, weekdays, 7:00 AM - 5:30 PM CT"
+ ],
+ "set_id": "7e7be193-63ec-474d-a596-e22fc8b1be0f",
+ "spl_product_data_elements": [
+  "Ketotifen Fumarate Ophthalmic Solution Ketotifen Fumarate BENZALKONIUM CHLORIDE GLYCERIN WATER HYDROCHLORIC ACID SODIUM HYDROXIDE KETOTIFEN FUMARATE KETOTIFEN"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "Now OTC! ANTIHISTAMINE EYE DROPS UPTO 12 HOURS EYE ITCH RELIEF • Works in Minutes • Original Prescription Strength FOR AGES 3 YEARS AND OLDER 30 DAY SUPPLY Sterile Original Prescription Strength Do not use if seal on bottle is missing or broken. FOR TOPICAL OPHTHALMIC USE ONLY. PRECAUTION: Do not touch dropper tip to any surface, as this may contaminate the solution. Distributed by: Sentiss Pharmaceuticals, LLC San Clemente, CA 92672 (USA) Manufactured by: Ophtapharm AG, Riethofstrasse 1, Hettlingen, 8442, Switzerland (CHE) Made in Switzerland"
+ ],
+ "storage_and_handling": [
+  "Other information Only for use in the eye. Store at 20° to 25°C (68° TO 77°F) [see USP Controlled Room Temperature]."
+ ],
+ "version": "1",
+ "warnings": [
+  "Warnings Do not use if solution changes color or becomes cloudy if you are sensitive to any ingredient in this product to treat contact lens related irritation When using this product do not touch tip of container to any surface to avoid contamination remove contact lenses before use wait at least 10 minutes before reinserting contact lenses after use replace cap after each use Stop use and ask a doctor if you experience any of the following: eye pain changes in vision redness of the eye itching worsens or lasts for more than 72 hours Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ]
+}

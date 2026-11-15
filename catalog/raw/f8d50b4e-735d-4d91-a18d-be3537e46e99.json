@@ -1,0 +1,106 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each 30 mL) Diphenhydramine HCl 50 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have a breathing problem such as emphysema or chronic bronchitis glaucoma difficulty in urination due to enlargement of the prostate gland"
+ ],
+ "ask_doctor_or_pharmacist": [
+  "Ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers."
+ ],
+ "do_not_use": [
+  "Do not use for children under 12 years of age with any other product containing diphenhydramine, even one used on skin"
+ ],
+ "dosage_and_administration": [
+  "Directions do not take more than directed mL = milliliter only use the dose cup provided take only one dose per day (24 hours) adults and children 12 years and over: take 30 mL at bedtime if needed or as directed by a doctor children under 12 years: do not use"
+ ],
+ "effective_time": "20261028",
+ "id": "97dd7153-2467-4e5b-9b36-8f444b4323e1",
+ "inactive_ingredient": [
+  "Inactive ingredients anhydrous citric acid, FD&C blue #1, FD&C red #40, flavor, glycerin, high fructose corn syrup, propylene glycol, purified water, sodium benzoate, sodium chloride, sodium citrate dihydrate, sucralose, sucrose, xanthan gum"
+ ],
+ "indications_and_usage": [
+  "Uses for relief of occasional sleeplessness reduces time to fall asleep if you have difficulty falling asleep"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M010"
+  ],
+  "brand_name": [
+   "Nighttime Sleep-Aid"
+  ],
+  "generic_name": [
+   "DIPHENHYDRAMINE HCL"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Rite Aid Corporation"
+  ],
+  "package_ndc": [
+   "11822-8002-1",
+   "11822-8002-2",
+   "11822-8002-9"
+  ],
+  "product_ndc": [
+   "11822-8002"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "1248354"
+  ],
+  "spl_id": [
+   "97dd7153-2467-4e5b-9b36-8f444b4323e1"
+  ],
+  "spl_set_id": [
+   "f8d50b4e-735d-4d91-a18d-be3537e46e99"
+  ],
+  "substance_name": [
+   "DIPHENHYDRAMINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "TC2D6JAD40"
+  ],
+  "upc": [
+   "0011822231176"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal display panel Compare to the active ingredient in VICKS® ZzzQuil® NIGHTTIME SLEEP-AID* NDC 11822-8002-1 NIGHTTIME SLEEP-AID DIPHENHYDRAMINE HCl 50 mg per 30 mL NIGHTTIME SLEEP-AID not for colds or for pain non-habit forming for ages 12 years and over BERRY FLAVOR 6 FL OZ (177 mL) Rite Aid 44-002A Rite Aid 44-002A"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Nighttime sleep-aid"
+ ],
+ "questions": [
+  "Questions or comments? 1-800-426-9391"
+ ],
+ "set_id": "f8d50b4e-735d-4d91-a18d-be3537e46e99",
+ "spl_product_data_elements": [
+  "Nighttime Sleep-Aid Diphenhydramine HCl DIPHENHYDRAMINE HYDROCHLORIDE DIPHENHYDRAMINE ANHYDROUS CITRIC ACID FD&C BLUE NO. 1 FD&C RED NO. 40 GLYCERIN HIGH FRUCTOSE CORN SYRUP PROPYLENE GLYCOL WATER SODIUM BENZOATE SODIUM CHLORIDE TRISODIUM CITRATE DIHYDRATE SUCRALOSE SUCROSE XANTHAN GUM"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if sleeplessness persists continuously for more than 2 weeks. Insomnia may be a symptom of a serious underlying medical illness."
+ ],
+ "storage_and_handling": [
+  "Other information each 30 mL contains: sodium 17 mg store at 25°C (77°F); excursions permitted between 15°-30°C (59°-86°F) use by expiration date on package"
+ ],
+ "version": "7",
+ "warnings": [
+  "Warnings Do not use for children under 12 years of age with any other product containing diphenhydramine, even one used on skin Ask a doctor before use if you have a breathing problem such as emphysema or chronic bronchitis glaucoma difficulty in urination due to enlargement of the prostate gland Ask a doctor or pharmacist before use if you are taking sedatives or tranquilizers. When using this product avoid alcoholic beverages. Stop use and ask a doctor if sleeplessness persists continuously for more than 2 weeks. Insomnia may be a symptom of a serious underlying medical illness. If pregnant or breast-feeding, ask a health professional before use. Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product avoid alcoholic beverages."
+ ]
+}

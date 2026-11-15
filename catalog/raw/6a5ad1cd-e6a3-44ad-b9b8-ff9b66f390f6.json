@@ -1,0 +1,118 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each white tablet) Ibuprofen USP, 200 mg (NSAID)* *nonsteroidal anti-inflammatory drug"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if stomach bleeding warning applies to you you have a history of stomach problems, such as heartburn you have high blood pressure, heart disease, liver cirrhosis, kidney disease, asthma, or had a stroke you are taking a diuretic you have problems or serious side effects from taking pain relievers or fever reducers"
+ ],
+ "ask_doctor_or_pharmacist": [
+  "Ask a doctor or pharmacist before use if you are under a doctor's care for any serious condition taking aspirin for heart attack or stroke, because ibuprofen may decrease this benefit of aspirin taking any other drug"
+ ],
+ "do_not_use": [
+  "Do not use if you have ever had an allergic reaction to any other pain reliever/fever reducer right before or after heart surgery"
+ ],
+ "dosage_and_administration": [
+  "Directions do not take more than directed the smallest effective dose should be used adults and children 12 years and over: take 1 tablet every 4 to 6 hours while symptoms persist if pain or fever does not respond to 1 tablet, 2 tablets may be used do not exceed 6 tablets in 24 hours, unless directed by a doctor children under 12 years: ask a doctor"
+ ],
+ "effective_time": "20261002",
+ "id": "d8bfc8c2-2727-4dcc-a0f7-091eecba45aa",
+ "inactive_ingredient": [
+  "Inactive ingredients colloidal silicon dioxide, corn starch, hypromellose, lactose anhydrous, magnesium stearate, microcrystalline cellulose, polydextrose, polyethylene glycol, povidone, sodium starch glycolate, stearic acid, triacetin"
+ ],
+ "indications_and_usage": [
+  "Uses temporarily relieves minor aches and pains due to: backache menstrual cramps toothache muscular aches headache the common cold minor pain of arthritis temporarily reduces fever"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA075139"
+  ],
+  "brand_name": [
+   "Ibuprofen"
+  ],
+  "generic_name": [
+   "IBUPROFEN"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Major Pharmaceuticals"
+  ],
+  "nui": [
+   "N0000000160",
+   "M0001335",
+   "N0000175722"
+  ],
+  "package_ndc": [
+   "0904-7914-61",
+   "0904-7914-59",
+   "0904-7914-80",
+   "0904-7914-51"
+  ],
+  "pharm_class_cs": [
+   "Anti-Inflammatory Agents, Non-Steroidal [CS]"
+  ],
+  "pharm_class_epc": [
+   "Nonsteroidal Anti-inflammatory Drug [EPC]"
+  ],
+  "pharm_class_moa": [
+   "Cyclooxygenase Inhibitors [MoA]"
+  ],
+  "product_ndc": [
+   "0904-7914"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "310965"
+  ],
+  "spl_id": [
+   "d8bfc8c2-2727-4dcc-a0f7-091eecba45aa"
+  ],
+  "spl_set_id": [
+   "6a5ad1cd-e6a3-44ad-b9b8-ff9b66f390f6"
+  ],
+  "substance_name": [
+   "IBUPROFEN"
+  ],
+  "unii": [
+   "WK2XYI10QM"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal Display Panel NDC 0904-7914-61 MAJOR ® compare to the active ingredient in Motrin ® IB Tablets † ibuprofen tablets, USP ibuprofen tablets USP, 200 mg (NSAID) pain reliever/fever reducer color free & dye free 100 tablets (10 x 10) unit dose actual size Major 44-438 Major 44-438"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use. It is especially important not to use ibuprofen at 20 weeks or later in pregnancy unless definitely directed to do so by a doctor because it may cause problems in the unborn child or complications during delivery."
+ ],
+ "purpose": [
+  "Purpose Pain reliever/fever reducer"
+ ],
+ "questions": [
+  "Questions or comments? Call 1-800-426-9391 8:30 AM-4:00 PM ET, Monday-Friday"
+ ],
+ "set_id": "6a5ad1cd-e6a3-44ad-b9b8-ff9b66f390f6",
+ "spl_product_data_elements": [
+  "Ibuprofen ibuprofen IBUPROFEN IBUPROFEN SILICON DIOXIDE STARCH, CORN HYPROMELLOSE, UNSPECIFIED ANHYDROUS LACTOSE MAGNESIUM STEARATE MICROCRYSTALLINE CELLULOSE POLYDEXTROSE POLYETHYLENE GLYCOL, UNSPECIFIED POVIDONE, UNSPECIFIED SODIUM STARCH GLYCOLATE TYPE A POTATO STEARIC ACID TRIACETIN 44;438"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if you experience any of the following signs of stomach bleeding: feel faint have bloody or black stools vomit blood have stomach pain that does not get better you have symptoms of heart problems or stroke: chest pain slurred speech leg swelling trouble breathing weakness in one part or side of body pain gets worse or lasts more than 10 days fever gets worse or lasts more than 3 days redness or swelling is present in the painful area any new symptoms appear"
+ ],
+ "storage_and_handling": [
+  "Other information store between 20°-25°C (68°-77°F) TAMPER EVIDENT: DO NOT USE IF OUTER PACKAGE IS OPENED OR BLISTER IS TORN OR BROKEN avoid excessive heat 40°C (104°F) use by expiration date on package"
+ ],
+ "version": "28",
+ "warnings": [
+  "Warnings Allergy alert: Ibuprofen may cause a severe allergic reaction, especially in people allergic to aspirin. Symptoms may include: rash facial swelling shock blisters skin reddening hives asthma (wheezing) If an allergic reaction occurs, stop use and seek medical help right away. Stomach bleeding warning: This product contains an NSAID, which may cause severe stomach bleeding. The chance is higher if you take more or for a longer time than directed take a blood thinning (anticoagulant) or steroid drug are age 60 or older have 3 or more alcoholic drinks every day while using this product take other drugs containing prescription or nonprescription NSAIDs [aspirin, ibuprofen, naproxen, or others] have had stomach ulcers or bleeding problems Heart attack and stroke warning: NSAIDs, except aspirin, increase the risk of heart attack, heart failure, and stroke. These can be fatal. The risk is higher if you use more than directed or for longer than directed. Do not use if you have ever had an allergic reaction to any other pain reliever/fever reducer right before or after heart surgery Ask a doctor before use if stomach bleeding warning applies to you you have a history of stomach problems, such as heartburn you have high blood pressure, heart disease, liver cirrhosis, kidney disease, asthma, or had a stroke you are taking a diuretic you have problems or serious side effects from taking pain relievers or fever reducers Ask a doctor or pharmacist before use if you are under a doctor's care for any serious condition taking aspirin for heart attack or stroke, because ibuprofen may decrease this benefit of aspirin taking any other drug When using this product take with food or milk if stomach upset occurs Stop use and ask a doctor if you experience any of the following signs of stomach bleeding: feel faint have bloody or black stools vomit blood have stomach pain that does not get better you have symptoms of heart problems or stroke: chest pain slurred speech leg swelling trouble breathing weakness in one part or side of body pain gets worse or lasts more than 10 days fever gets worse or lasts more than 3 days redness or swelling is present in the painful area any new symptoms appear If pregnant or breast-feeding, ask a health professional before use. It is especially important not to use ibuprofen at 20 weeks or later in pregnancy unless definitely directed to do so by a doctor because it may cause problems in the unborn child or complications during delivery. Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product take with food or milk if stomach upset occurs"
+ ]
+}

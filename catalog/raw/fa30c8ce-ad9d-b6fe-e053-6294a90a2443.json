@@ -1,0 +1,93 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each tablet) Fexofenadine HCl USP, 180 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have kidney disease. Your doctor should determine if you need a different dose."
+ ],
+ "dosage_and_administration": [
+  "Directions adults and children 12 years of age and over take one 180mg tablet with water once a day; do not take more than 1 tablet in 24 hours. children under 12 years of age do not use adults 65 years of age and older ask a doctor consumers with kidney disease ask a doctor"
+ ],
+ "effective_time": "20261008",
+ "id": "5d4ee7be-1b77-5d17-e063-6294a90a2b0c",
+ "inactive_ingredient": [
+  "Inactive ingredients colloidal silicon dioxide, croscarmellose sodium, hypromellose, iron oxide black, iron oxide red, iron oxide yellow, lactose monohydrate, macrogol, magnesium stearate, microcrystalline cellulose, pregelatinized starch, titanium dioxide."
+ ],
+ "indications_and_usage": [
+  "Uses temporarily relieves these symptoms due to hay fever or other upper respiratory allergies: ■runny nose ■ itchy, watery eyes ■ sneezing ■ itching of the nose or throat"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA211075"
+  ],
+  "brand_name": [
+   "Fexofenadine HCL"
+  ],
+  "generic_name": [
+   "FEXOFENADINE HCL"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "GRANULES PHARMACEUTICALS INC."
+  ],
+  "package_ndc": [
+   "70010-183-03"
+  ],
+  "product_ndc": [
+   "70010-183"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "997420"
+  ],
+  "spl_id": [
+   "5d4ee7be-1b77-5d17-e063-6294a90a2b0c"
+  ],
+  "spl_set_id": [
+   "fa30c8ce-ad9d-b6fe-e053-6294a90a2443"
+  ],
+  "substance_name": [
+   "FEXOFENADINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "2S068B75ZU"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal Display Panel 30ct carton"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Antihistamine"
+ ],
+ "questions": [
+  "Questions or comments? call 1-877-770-3183 Mon-Fri 8:00 AM EST to 5:00 PM PST."
+ ],
+ "set_id": "fa30c8ce-ad9d-b6fe-e053-6294a90a2443",
+ "spl_product_data_elements": [
+  "Fexofenadine HCL Fexofenadine HCL FEXOFENADINE HYDROCHLORIDE FEXOFENADINE MICROCRYSTALLINE CELLULOSE STARCH, CORN HYPROMELLOSE 2910 (15 MPA.S) FERROSOFERRIC OXIDE LACTOSE MONOHYDRATE POLYETHYLENE GLYCOL 6000 MAGNESIUM STEARATE SILICON DIOXIDE CROSCARMELLOSE SODIUM FERRIC OXIDE RED FERRIC OXIDE YELLOW TITANIUM DIOXIDE peach G6"
+ ],
+ "storage_and_handling": [
+  "Other information ■safety sealed: do not use if imprinted foil under bottle cap is opened or torn. ■store between 20° and 25°C (68° and 77°F) ■protect from excessive moisture"
+ ],
+ "version": "3",
+ "warnings": [
+  "Do not use if you have ever had an allergic reaction to this product or any of its ingredients."
+ ],
+ "when_using": [
+  "When using this product ■do not take more than directed ■do not take at the same time as aluminum or magnesium antacids ■do not take with fruit juices (see Directions)",
+  "Stop use and ask a doctor if allergic reaction to this product occurs. Seek medical help right away."
+ ]
+}

@@ -1,0 +1,92 @@
+{
+ "active_ingredient": [
+  "Active ingredient Tetrahydrozoline HCl.....0.05%"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have narrow angle glaucoma"
+ ],
+ "dosage_and_administration": [
+  "Directions Instill 1 or 2 drops in the affected eye(s) up to four times daily."
+ ],
+ "effective_time": "20251230",
+ "id": "474a06ff-a21e-2ca2-e063-6394a90a7910",
+ "inactive_ingredient": [
+  "Inactive ingredients benzalkonium chloride, boric acid, edetate disodium, purified water, sodium borate, and sodium chloride"
+ ],
+ "indications_and_usage": [
+  "Uses relieves redness of the eye due to minor eye irritations"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M018"
+  ],
+  "brand_name": [
+   "Preferred Plus Pharmacy Redness Relief Eye Drops"
+  ],
+  "generic_name": [
+   "TETRAHYDROZOLINE HCL"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Kinray"
+  ],
+  "package_ndc": [
+   "61715-212-01"
+  ],
+  "product_ndc": [
+   "61715-212"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "OPHTHALMIC"
+  ],
+  "rxcui": [
+   "1052943"
+  ],
+  "spl_id": [
+   "474a06ff-a21e-2ca2-e063-6394a90a7910"
+  ],
+  "spl_set_id": [
+   "9ffd67c4-b5c1-d587-e053-2a95a90ae3d0"
+  ],
+  "substance_name": [
+   "TETRAHYDROZOLINE HYDROCHLORIDE"
+  ],
+  "unii": [
+   "0YZT43HS7D"
+  ]
+ },
+ "other_safety_information": [
+  "Other information Store at 15º-30ºC (59º-86ºF)"
+ ],
+ "package_label_principal_display_panel": [
+  "carton"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Tetrahydrozoline HCL.....Redness reliever"
+ ],
+ "set_id": "9ffd67c4-b5c1-d587-e053-2a95a90ae3d0",
+ "spl_product_data_elements": [
+  "Preferred Plus Pharmacy Redness Relief Eye Drops tetrahydrozoline HCl TETRAHYDROZOLINE HYDROCHLORIDE TETRAHYDROZOLINE BENZALKONIUM CHLORIDE BORIC ACID EDETATE DISODIUM WATER SODIUM BORATE SODIUM CHLORIDE"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if you experience eye pain changes in vision continued redness or irritation of the eye, or if the condition worsens or persists for more than 72 hours"
+ ],
+ "version": "6",
+ "warnings": [
+  "Warnings For external use only Ask a doctor before use if you have narrow angle glaucoma When using this product pupils may become enlarged temporarily to avoid contamination, do not touch tip of container to any surface. Replace cap after using. if solution changes color or becomes cloudy, do not use overuse may produce increased redness of the eye remove contact lens before using Stop use and ask a doctor if you experience eye pain changes in vision continued redness or irritation of the eye, or if the condition worsens or persists for more than 72 hours If pregnant or breast-feeding, ask a health professional before use. Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product pupils may become enlarged temporarily to avoid contamination, do not touch tip of container to any surface. Replace cap after using. if solution changes color or becomes cloudy, do not use overuse may produce increased redness of the eye remove contact lens before using"
+ ]
+}

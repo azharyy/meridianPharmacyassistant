@@ -1,0 +1,93 @@
+{
+ "active_ingredient": [
+  "Active Ingredient Naphazoline HCL 0.05%."
+ ],
+ "do_not_use": [
+  "Do not use ·do not exceed recommended dosage ·do not use this product for more than 3 days. Use only as directed. Frequent or prolonged use may cause nasal congestion to recur or worsen ·temporary discomfort such as burning, stinging,sneezing, or increased nasaldischarge may occur ·use of this container by more than one person may spread infection chidren under 2 years."
+ ],
+ "dosage_and_administration": [
+  "Directions adults&children 6 years &older(with adult supervision ): 2 or 3 sprays in each nostril, not more often than every 10 to 12 hours.Do not exceed 2 doses in 24 hours"
+ ],
+ "effective_time": "20260721",
+ "id": "572991c4-c664-d0b7-e063-6394a90ae600",
+ "inactive_ingredient": [
+  "Inactive ingredients borneol,Camphor,glycerin,menthol，propylene glycol,etc."
+ ],
+ "indications_and_usage": [
+  "Use temporarily relieves ·nasal congestion due to a cold, hay fever, or other upper respiratory allergies ·sinus congestion and pressure"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep Oot Of Reach Of Children If swallowed,get medical help or contact a Poison Control Center right away"
+ ],
+ "openfda": {
+  "application_number": [
+   "M012"
+  ],
+  "brand_name": [
+   "SERYNTH FAST RELIEF NASAL"
+  ],
+  "generic_name": [
+   "NAPHAZOLINE HCL 0.05% FAST RELIEF NASAL"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Jiangxi Yudexi Pharmaceutical Co., LTD"
+  ],
+  "package_ndc": [
+   "85248-099-01"
+  ],
+  "product_ndc": [
+   "85248-099"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "NASAL"
+  ],
+  "rxcui": [
+   "1046610"
+  ],
+  "spl_id": [
+   "572991c4-c664-d0b7-e063-6394a90ae600"
+  ],
+  "spl_set_id": [
+   "4a4abdc0-aded-1b8a-e063-6394a90a9b56"
+  ],
+  "substance_name": [
+   "NAPHAZOLINE HCL"
+  ],
+  "unii": [
+   "MZ1131787D"
+  ],
+  "upc": [
+   "6979843980913"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL 0.05"
+ ],
+ "purpose": [
+  "Purpose Nasal Decongestant"
+ ],
+ "set_id": "4a4abdc0-aded-1b8a-e063-6394a90a9b56",
+ "spl_product_data_elements": [
+  "SERYNTH FAST RELIEF NASAL Naphazoline HCL 0.05% FAST RELIEF NASAL NAPHAZOLINE HCL NAPHAZOLINE MENTHOL BORNEOL PROPYLENE GLYCOL GLYCERIN CAMPHOR (SYNTHETIC)"
+ ],
+ "stop_use": [
+  "Stop Use Stop use and ask a doctor if symptoms persist.",
+  "Ask Doctor If pregnant or breast-feeding, ask a health professional before use. children 2 to under 6 years."
+ ],
+ "storage_and_handling": [
+  "Other information do not exceed 25°C."
+ ],
+ "version": "2",
+ "warnings": [
+  "Warnings Ask a doctor before use if you have ·heart disease ·high blood pressure .thyroid disease ·diabetes ·trouble urinating due to enlarged prostate gland"
+ ],
+ "when_using": [
+  "When Using ·do not exceed recommended dosage ·do not use this product for more than 3 days. Use only as directed. Frequent or prolonged use may cause nasal congestion to recur or worsen ·temporary discomfort such as burning, stinging,sneezing, or increased nasaldischarge may occur ·use of this container by more than one person may spread infection"
+ ]
+}

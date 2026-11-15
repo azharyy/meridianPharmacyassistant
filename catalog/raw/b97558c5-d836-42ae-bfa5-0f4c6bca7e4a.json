@@ -1,0 +1,88 @@
+{
+ "active_ingredient": [
+  "Active ingredient (per tablet) Calcium Carbonate USP 750mg"
+ ],
+ "dosage_and_administration": [
+  "Directions • adults and children 12 years of age and over: chew 2-4 tablets as symptoms occur, or as directed by a doctor • do not take for symptoms that persist for more than 2 weeks unless advised by a doctor"
+ ],
+ "effective_time": "20261104",
+ "id": "744475b3-83d2-4874-9ed4-4b508563c3d6",
+ "inactive_ingredient": [
+  "Inactive ingredients adipic acid, blue 1, dextrose, flavors, magnesium stearate, maltodextrin, red 40, starch, sucralose, yellow 6, yellow 10. Safety sealed: Do not use if printed seal under cap is torn or missing Questions 1-866-467-2748"
+ ],
+ "indications_and_usage": [
+  "Uses relieves • heartburn • acid indigestion • sour stomach • upset stomach associated with these symptoms"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children."
+ ],
+ "openfda": {
+  "application_number": [
+   "M001"
+  ],
+  "brand_name": [
+   "up and up extra strength smooth dissolving antacid Assorted Fruit"
+  ],
+  "generic_name": [
+   "CALCIUM CARBONATE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Target corporation"
+  ],
+  "package_ndc": [
+   "11673-715-60",
+   "11673-715-40"
+  ],
+  "product_ndc": [
+   "11673-715"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "308915"
+  ],
+  "spl_id": [
+   "744475b3-83d2-4874-9ed4-4b508563c3d6"
+  ],
+  "spl_set_id": [
+   "b97558c5-d836-42ae-bfa5-0f4c6bca7e4a"
+  ],
+  "substance_name": [
+   "CALCIUM CARBONATE"
+  ],
+  "unii": [
+   "H0G9379FGK"
+  ],
+  "upc": [
+   "0368163115628",
+   "0829576021116"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Package/Label Principal Display Panel Compare to active ingredient in TUMS ® Smoothies* extra strength smooth dissolving antacid calcium carbonate, 750 mg fast relief of heartburn, acid indigestion and upset stomach ASSORTED FRUIT FLAVOR GLUTEN-FREE 245 05 0385 R00 IDC-000450-01-057 245 05 0613 R00 C-000974-01-012 Dist.by Target Corp. Mpls., MN 55403 Made in U.S.A ©2017 Target Brands, Inc. *This product is not manufactured or distributed by GlaxoSmithKline LLC, distributor of TUMS® Smoothies. Package Label for 60 Chewable Tablets Package Label for 140 Chewable Tablets Up and Up extra strength antacid 140 chewable tablets up and up extra strength amooth dissolving 60 chewable tablets"
+ ],
+ "purpose": [
+  "Purpose Antacid"
+ ],
+ "questions": [
+  "Questions 1-866-467-2748"
+ ],
+ "set_id": "b97558c5-d836-42ae-bfa5-0f4c6bca7e4a",
+ "spl_product_data_elements": [
+  "up and up extra strength smooth dissolving antacid Assorted Fruit Calcium Carbonate CALCIUM CARBONATE CALCIUM CATION CARBONATE ION ADIPIC ACID D&C YELLOW NO. 10 DEXTROSE, UNSPECIFIED FORM FD&C BLUE NO. 1 FD&C RED NO. 40 FD&C YELLOW NO. 6 MAGNESIUM STEARATE MALTODEXTRIN STARCH, CORN SUCRALOSE RP115 assorted"
+ ],
+ "spl_unclassified_section": [
+  "Other information • each tablet contains: elemental calcium 300mg • store at room temperature. Keep the container tightly closed"
+ ],
+ "version": "9",
+ "warnings": [
+  "Warnings Ask a doctor or pharmacist before use if you are presently taking a prescription drug. Antacids may interact with certain prescription drugs. When using this product • do not take more than 10 tablets in 24 hours • if pregnant do not take more than 6 tablets in 24 hours • do not use the maximum dosage for more than 2 weeks except under the advice and supervision of a doctor."
+ ]
+}

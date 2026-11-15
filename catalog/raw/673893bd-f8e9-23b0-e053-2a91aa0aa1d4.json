@@ -1,0 +1,122 @@
+{
+ "active_ingredient": [
+  "Active ingredient (in each 15 mL dose) Bismuth subsalicylate 525 mg"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use if you have fever mucus in the stool"
+ ],
+ "ask_doctor_or_pharmacist": [
+  "Ask a doctor or pharmacist before use if you are taking any drug for anticoagulation (thinning the blood) diabetes gout arthritis"
+ ],
+ "do_not_use": [
+  "Do not use if you have an ulcer a bleeding problem bloody or black stool"
+ ],
+ "dosage_and_administration": [
+  "Directions shake well before use only use dose cup provided adults and children 12 years and over: 15 mL (1 dose) every ½ hour or 30 mL (2 doses) every hour as needed for diarrhea/traveler's diarrhea 15 mL (1 dose) every ½ hour as needed for overindulgence (upset stomach, heartburn, indigestion, nausea) do not exceed 8 doses (120 mL) in 24 hours use until diarrhea stops but not more than 2 days children under 12 years: ask a doctor drink plenty of clear fluids to help prevent dehydration caused by diarrhea"
+ ],
+ "effective_time": "20261006",
+ "id": "5d2c8e09-7e59-7b09-e063-6294a90a53f4",
+ "inactive_ingredient": [
+  "Inactive ingredients benzoic acid, D&C Red No. 22, D&C Red No. 28, flavor, gellan gum, magnesium aluminum silicate, methylcellulose, salicylic acid, sodium salicylate, sorbic acid, sucralose, water"
+ ],
+ "indications_and_usage": [
+  "Uses relieves travelers' diarrhea diarrhea upset stomach due to overindulgence in food and drink, including: heartburn indigestion nausea gas belching fullness"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M008"
+  ],
+  "brand_name": [
+   "Pepto-Bismol Ultra"
+  ],
+  "generic_name": [
+   "BISMUTH SUBSALICYLATE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "The Procter & Gamble Manufacturing Company"
+  ],
+  "nui": [
+   "M0002611",
+   "N0000180183"
+  ],
+  "package_ndc": [
+   "37000-440-04",
+   "37000-440-08",
+   "37000-440-12",
+   "37000-440-36"
+  ],
+  "pharm_class_cs": [
+   "Bismuth [CS]"
+  ],
+  "pharm_class_epc": [
+   "Bismuth [EPC]"
+  ],
+  "product_ndc": [
+   "37000-440"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "ORAL"
+  ],
+  "rxcui": [
+   "211915",
+   "308763"
+  ],
+  "spl_id": [
+   "5d2c8e09-7e59-7b09-e063-6294a90a53f4"
+  ],
+  "spl_set_id": [
+   "673893bd-f8e9-23b0-e053-2a91aa0aa1d4"
+  ],
+  "substance_name": [
+   "BISMUTH SUBSALICYLATE"
+  ],
+  "unii": [
+   "62TEY51RR1"
+  ],
+  "upc": [
+   "0301490039281"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL - 354 mL Bottle Label Pepto Bismol ® ULTRA Bismuth Subsalicylate Upset Stomach Reliever/ Antidiarrheal 2x CONCENTRATED FORMULA* 5 SYMPTOM RELIEF NAUSEA HEARTBURN INDIGESTION UPSET STOMACH DIARRHEA 12 FL OZ (354 mL) 440"
+ ],
+ "pregnancy_or_breast_feeding": [
+  "If pregnant or breast-feeding, ask a health professional before use."
+ ],
+ "purpose": [
+  "Purpose Upset stomach reliever and antidiarrheal"
+ ],
+ "questions": [
+  "Questions? 1-800-717-3786"
+ ],
+ "set_id": "673893bd-f8e9-23b0-e053-2a91aa0aa1d4",
+ "spl_product_data_elements": [
+  "Pepto-Bismol Ultra Bismuth subsalicylate BISMUTH SUBSALICYLATE SALICYLIC ACID METHYLCELLULOSE, UNSPECIFIED GELLAN GUM (HIGH ACYL) BENZOIC ACID MAGNESIUM ALUMINUM SILICATE D&C RED NO. 22 D&C RED NO. 28 WATER SUCRALOSE SALICYLIC ACID SODIUM SALICYLATE SORBIC ACID"
+ ],
+ "spl_unclassified_section": [
+  "Drug Facts",
+  "DIST. BY PROCTER & GAMBLE, CINCINNATI OH 45202"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if symptoms get worse or last more than 2 days ringing in the ears or loss of hearing occurs diarrhea lasts more than 2 days"
+ ],
+ "storage_and_handling": [
+  "Other information each 15 mL dose cup contains: magnesium 3 mg, sodium 2 mg salicylate 230 mg low sodium protect from freezing avoid excessive heat (over 104°F or 40°C) TAMPER EVIDENT: Do not use if printed shrinkband is missing or broken."
+ ],
+ "version": "14",
+ "warnings": [
+  "Warnings Reye's syndrome: Children and teenagers who have or are recovering from chicken pox or flu-like symptoms should not use this product. When using this product, if changes in behavior with nausea and vomiting occur, consult a doctor because these symptoms could be an early sign of Reye's syndrome, a rare but serious illness. Allergy alert: Contains salicylate. Do not take if you are allergic to salicylates (including aspirin) taking other salicylate products Do not use if you have an ulcer a bleeding problem bloody or black stool Ask a doctor before use if you have fever mucus in the stool Ask a doctor or pharmacist before use if you are taking any drug for anticoagulation (thinning the blood) diabetes gout arthritis When using this product a temporary, but harmless, darkening of the stool and/or tongue may occur Stop use and ask a doctor if symptoms get worse or last more than 2 days ringing in the ears or loss of hearing occurs diarrhea lasts more than 2 days If pregnant or breast-feeding, ask a health professional before use. Keep out of reach of children. In case of overdose, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product a temporary, but harmless, darkening of the stool and/or tongue may occur"
+ ]
+}

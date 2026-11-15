@@ -1,0 +1,104 @@
+{
+ "active_ingredient": [
+  "Active ingredient Clotrimazole USP, 1%"
+ ],
+ "ask_doctor": [
+  "Ask a doctor before use on children under 2 years of age"
+ ],
+ "dosage_and_administration": [
+  "Directions This product is not effective on the scalp or nails For best results, follow directions and continue treatment for length of time indicated. For athlete's foot and ringworm: use daily for 4 weeks. For jock itch: use daily for 2 weeks. clean the affected area and dry thoroughly apply a thin layer of the product over affected area twice daily (morning and night) or as directed by a doctor supervise children in the use of this product For athlete's foot: pay special attention to spaces between the toes; wear well-fitting, ventilated shoes; change shoes and socks at least once daily"
+ ],
+ "effective_time": "20261027",
+ "id": "5ed6bdc3-1a0d-21a8-e063-6394a90abac9",
+ "inactive_ingredient": [
+  "Inactive ingredient polyethylene glycol"
+ ],
+ "indications_and_usage": [
+  "Uses Cures most Athlete's foot (tinea pedis) Jock Itch (tinea cruris) Ringworm (tinea corporis) Effectively relieves Itching Cracking Burning Discomfort which can accompany these conditions"
+ ],
+ "information_for_owners_or_caregivers": [
+  "keep this carton for important information. Manufactured for and Distributed by: Marlex Pharmaceuticals, Inc. New Castle, DE 19720 ϯ All trademarks are property of their respective owners. This product is not affiliated with the makers/owners of Lotrimin®AF. Rev. 11/18 IT"
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "M005"
+  ],
+  "brand_name": [
+   "Clotrimazole"
+  ],
+  "generic_name": [
+   "CLOTRIMAZOLE"
+  ],
+  "is_original_packager": [
+   true
+  ],
+  "manufacturer_name": [
+   "Marlex Pharmaceuticals Inc"
+  ],
+  "nui": [
+   "N0000175487",
+   "M0002083"
+  ],
+  "package_ndc": [
+   "10135-671-81",
+   "10135-671-91"
+  ],
+  "pharm_class_cs": [
+   "Azoles [CS]"
+  ],
+  "pharm_class_epc": [
+   "Azole Antifungal [EPC]"
+  ],
+  "product_ndc": [
+   "10135-671"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "TOPICAL"
+  ],
+  "spl_id": [
+   "5ed6bdc3-1a0d-21a8-e063-6394a90abac9"
+  ],
+  "spl_set_id": [
+   "d6e95c99-e055-436a-8ee6-40d6e199eaca"
+  ],
+  "substance_name": [
+   "CLOTRIMAZOLE"
+  ],
+  "unii": [
+   "G07GZ97H65"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "PRINCIPAL DISPLAY PANEL - 10 mL Bottle Carton Rev. 11/18 IT NDC 10135-0671-81 Clotrimazole Topical Solution USP, 1 % 10 mL 671-81",
+  "PRINCIPAL DISPLAY PANEL Rev. 01/20 IT NDC 10135-0671-91 Clotrimazole Topical Solution USP, 1 % 30 mL PRINCIPAL DISPLAY PANEL NDC 10135-0671-91 Clotrimazole Topical Solution USP, 1 % 30 mL Rx Only"
+ ],
+ "purpose": [
+  "Purpose Antifungal"
+ ],
+ "safe_handling_warning": [
+  "Other information Store at 15° to 30°C (59° to 86°F)"
+ ],
+ "set_id": "d6e95c99-e055-436a-8ee6-40d6e199eaca",
+ "spl_product_data_elements": [
+  "Clotrimazole Clotrimazole CLOTRIMAZOLE CLOTRIMAZOLE POLYETHYLENE GLYCOL 400"
+ ],
+ "spl_unclassified_section": [
+  "CLOTRIMAZOLE - clotrimazole solution Marlex Pharmaceuticals, Inc. Disclaimer: Most OTC drugs are not reviewed and approved by FDA, however they may be marketed if they comply with applicable regulations and policies. FDA has not evaluated whether this product complies. ---------- Clotrimazole Topical Solution USP,1% Drug Facts"
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if irritation occurs there is no improvement within 4 weeks (for athlete's foot and ringworm) or 2 weeks (for jock itch)"
+ ],
+ "version": "9",
+ "warnings": [
+  "Warnings For external use only Ask a doctor before use on children under 2 years of age When using this product avoid contact with eyes Stop use and ask a doctor if irritation occurs there is no improvement within 4 weeks (for athlete's foot and ringworm) or 2 weeks (for jock itch) Keep out of reach of children If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product avoid contact with eyes"
+ ]
+}

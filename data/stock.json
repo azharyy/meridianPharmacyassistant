@@ -1,0 +1,522 @@
+[
+  {
+    "sku": "MRD-ALG-012",
+    "store_id": "store-001",
+    "quantity": 27
+  },
+  {
+    "sku": "MRD-ALG-012",
+    "store_id": "store-002",
+    "quantity": 11
+  },
+  {
+    "sku": "MRD-ALG-013",
+    "store_id": "store-001",
+    "quantity": 18
+  },
+  {
+    "sku": "MRD-ALG-013",
+    "store_id": "store-002",
+    "quantity": 3
+  },
+  {
+    "sku": "MRD-ALG-014",
+    "store_id": "store-001",
+    "quantity": 0
+  },
+  {
+    "sku": "MRD-ALG-014",
+    "store_id": "store-002",
+    "quantity": 39
+  },
+  {
+    "sku": "MRD-ALG-015",
+    "store_id": "store-001",
+    "quantity": 38
+  },
+  {
+    "sku": "MRD-ALG-015",
+    "store_id": "store-002",
+    "quantity": 27
+  },
+  {
+    "sku": "MRD-ALG-016",
+    "store_id": "store-001",
+    "quantity": 23
+  },
+  {
+    "sku": "MRD-ALG-016",
+    "store_id": "store-002",
+    "quantity": 38
+  },
+  {
+    "sku": "MRD-ALG-017",
+    "store_id": "store-001",
+    "quantity": 21
+  },
+  {
+    "sku": "MRD-ALG-017",
+    "store_id": "store-002",
+    "quantity": 0
+  },
+  {
+    "sku": "MRD-ALG-018",
+    "store_id": "store-001",
+    "quantity": 19
+  },
+  {
+    "sku": "MRD-ALG-018",
+    "store_id": "store-002",
+    "quantity": 16
+  },
+  {
+    "sku": "MRD-ALG-019",
+    "store_id": "store-001",
+    "quantity": 31
+  },
+  {
+    "sku": "MRD-ALG-019",
+    "store_id": "store-002",
+    "quantity": 0
+  },
+  {
+    "sku": "MRD-PAN-001",
+    "store_id": "store-001",
+    "quantity": 0
+  },
+  {
+    "sku": "MRD-PAN-001",
+    "store_id": "store-002",
+    "quantity": 28
+  },
+  {
+    "sku": "MRD-PAN-002",
+    "store_id": "store-001",
+    "quantity": 21
+  },
+  {
+    "sku": "MRD-PAN-002",
+    "store_id": "store-002",
+    "quantity": 28
+  },
+  {
+    "sku": "MRD-PAN-003",
+    "store_id": "store-001",
+    "quantity": 2
+  },
+  {
+    "sku": "MRD-PAN-003",
+    "store_id": "store-002",
+    "quantity": 31
+  },
+  {
+    "sku": "MRD-PAN-004",
+    "store_id": "store-001",
+    "quantity": 38
+  },
+  {
+    "sku": "MRD-PAN-004",
+    "store_id": "store-002",
+    "quantity": 17
+  },
+  {
+    "sku": "MRD-PAN-005",
+    "store_id": "store-001",
+    "quantity": 9
+  },
+  {
+    "sku": "MRD-PAN-005",
+    "store_id": "store-002",
+    "quantity": 18
+  },
+  {
+    "sku": "MRD-PAN-006",
+    "store_id": "store-001",
+    "quantity": 25
+  },
+  {
+    "sku": "MRD-PAN-006",
+    "store_id": "store-002",
+    "quantity": 23
+  },
+  {
+    "sku": "MRD-PAN-007",
+    "store_id": "store-001",
+    "quantity": 10
+  },
+  {
+    "sku": "MRD-PAN-007",
+    "store_id": "store-002",
+    "quantity": 29
+  },
+  {
+    "sku": "MRD-PAN-008",
+    "store_id": "store-001",
+    "quantity": 0
+  },
+  {
+    "sku": "MRD-PAN-008",
+    "store_id": "store-002",
+    "quantity": 25
+  },
+  {
+    "sku": "MRD-CLD-001",
+    "store_id": "store-001",
+    "quantity": 35
+  },
+  {
+    "sku": "MRD-CLD-001",
+    "store_id": "store-002",
+    "quantity": 33
+  },
+  {
+    "sku": "MRD-CLD-002",
+    "store_id": "store-001",
+    "quantity": 10
+  },
+  {
+    "sku": "MRD-CLD-002",
+    "store_id": "store-002",
+    "quantity": 11
+  },
+  {
+    "sku": "MRD-CLD-003",
+    "store_id": "store-001",
+    "quantity": 5
+  },
+  {
+    "sku": "MRD-CLD-003",
+    "store_id": "store-002",
+    "quantity": 14
+  },
+  {
+    "sku": "MRD-CLD-004",
+    "store_id": "store-001",
+    "quantity": 12
+  },
+  {
+    "sku": "MRD-CLD-004",
+    "store_id": "store-002",
+    "quantity": 30
+  },
+  {
+    "sku": "MRD-CLD-005",
+    "store_id": "store-001",
+    "quantity": 12
+  },
+  {
+    "sku": "MRD-CLD-005",
+    "store_id": "store-002",
+    "quantity": 36
+  },
+  {
+    "sku": "MRD-CLD-006",
+    "store_id": "store-001",
+    "quantity": 23
+  },
+  {
+    "sku": "MRD-CLD-006",
+    "store_id": "store-002",
+    "quantity": 31
+  },
+  {
+    "sku": "MRD-DIG-001",
+    "store_id": "store-001",
+    "quantity": 34
+  },
+  {
+    "sku": "MRD-DIG-001",
+    "store_id": "store-002",
+    "quantity": 13
+  },
+  {
+    "sku": "MRD-DIG-002",
+    "store_id": "store-001",
+    "quantity": 24
+  },
+  {
+    "sku": "MRD-DIG-002",
+    "store_id": "store-002",
+    "quantity": 15
+  },
+  {
+    "sku": "MRD-DIG-003",
+    "store_id": "store-001",
+    "quantity": 18
+  },
+  {
+    "sku": "MRD-DIG-003",
+    "store_id": "store-002",
+    "quantity": 12
+  },
+  {
+    "sku": "MRD-DIG-004",
+    "store_id": "store-001",
+    "quantity": 12
+  },
+  {
+    "sku": "MRD-DIG-004",
+    "store_id": "store-002",
+    "quantity": 34
+  },
+  {
+    "sku": "MRD-DIG-005",
+    "store_id": "store-001",
+    "quantity": 10
+  },
+  {
+    "sku": "MRD-DIG-005",
+    "store_id": "store-002",
+    "quantity": 8
+  },
+  {
+    "sku": "MRD-DIG-006",
+    "store_id": "store-001",
+    "quantity": 23
+  },
+  {
+    "sku": "MRD-DIG-006",
+    "store_id": "store-002",
+    "quantity": 13
+  },
+  {
+    "sku": "MRD-DIG-007",
+    "store_id": "store-001",
+    "quantity": 9
+  },
+  {
+    "sku": "MRD-DIG-007",
+    "store_id": "store-002",
+    "quantity": 7
+  },
+  {
+    "sku": "MRD-DIG-008",
+    "store_id": "store-001",
+    "quantity": 5
+  },
+  {
+    "sku": "MRD-DIG-008",
+    "store_id": "store-002",
+    "quantity": 28
+  },
+  {
+    "sku": "MRD-DIG-009",
+    "store_id": "store-001",
+    "quantity": 29
+  },
+  {
+    "sku": "MRD-DIG-009",
+    "store_id": "store-002",
+    "quantity": 0
+  },
+  {
+    "sku": "MRD-DIG-010",
+    "store_id": "store-001",
+    "quantity": 37
+  },
+  {
+    "sku": "MRD-DIG-010",
+    "store_id": "store-002",
+    "quantity": 27
+  },
+  {
+    "sku": "MRD-DIG-011",
+    "store_id": "store-001",
+    "quantity": 12
+  },
+  {
+    "sku": "MRD-DIG-011",
+    "store_id": "store-002",
+    "quantity": 1
+  },
+  {
+    "sku": "MRD-DIG-012",
+    "store_id": "store-001",
+    "quantity": 23
+  },
+  {
+    "sku": "MRD-DIG-012",
+    "store_id": "store-002",
+    "quantity": 37
+  },
+  {
+    "sku": "MRD-SKN-001",
+    "store_id": "store-001",
+    "quantity": 4
+  },
+  {
+    "sku": "MRD-SKN-001",
+    "store_id": "store-002",
+    "quantity": 4
+  },
+  {
+    "sku": "MRD-SKN-002",
+    "store_id": "store-001",
+    "quantity": 38
+  },
+  {
+    "sku": "MRD-SKN-002",
+    "store_id": "store-002",
+    "quantity": 35
+  },
+  {
+    "sku": "MRD-SKN-003",
+    "store_id": "store-001",
+    "quantity": 40
+  },
+  {
+    "sku": "MRD-SKN-003",
+    "store_id": "store-002",
+    "quantity": 34
+  },
+  {
+    "sku": "MRD-SKN-004",
+    "store_id": "store-001",
+    "quantity": 40
+  },
+  {
+    "sku": "MRD-SKN-004",
+    "store_id": "store-002",
+    "quantity": 23
+  },
+  {
+    "sku": "MRD-SKN-005",
+    "store_id": "store-001",
+    "quantity": 17
+  },
+  {
+    "sku": "MRD-SKN-005",
+    "store_id": "store-002",
+    "quantity": 40
+  },
+  {
+    "sku": "MRD-SKN-006",
+    "store_id": "store-001",
+    "quantity": 0
+  },
+  {
+    "sku": "MRD-SKN-006",
+    "store_id": "store-002",
+    "quantity": 1
+  },
+  {
+    "sku": "MRD-SKN-007",
+    "store_id": "store-001",
+    "quantity": 22
+  },
+  {
+    "sku": "MRD-SKN-007",
+    "store_id": "store-002",
+    "quantity": 3
+  },
+  {
+    "sku": "MRD-SKN-008",
+    "store_id": "store-001",
+    "quantity": 19
+  },
+  {
+    "sku": "MRD-SKN-008",
+    "store_id": "store-002",
+    "quantity": 1
+  },
+  {
+    "sku": "MRD-SLP-001",
+    "store_id": "store-001",
+    "quantity": 30
+  },
+  {
+    "sku": "MRD-SLP-001",
+    "store_id": "store-002",
+    "quantity": 28
+  },
+  {
+    "sku": "MRD-SLP-002",
+    "store_id": "store-001",
+    "quantity": 10
+  },
+  {
+    "sku": "MRD-SLP-002",
+    "store_id": "store-002",
+    "quantity": 0
+  },
+  {
+    "sku": "MRD-SLP-003",
+    "store_id": "store-001",
+    "quantity": 16
+  },
+  {
+    "sku": "MRD-SLP-003",
+    "store_id": "store-002",
+    "quantity": 27
+  },
+  {
+    "sku": "MRD-SLP-004",
+    "store_id": "store-001",
+    "quantity": 40
+  },
+  {
+    "sku": "MRD-SLP-004",
+    "store_id": "store-002",
+    "quantity": 30
+  },
+  {
+    "sku": "MRD-EYE-001",
+    "store_id": "store-001",
+    "quantity": 24
+  },
+  {
+    "sku": "MRD-EYE-001",
+    "store_id": "store-002",
+    "quantity": 3
+  },
+  {
+    "sku": "MRD-EYE-002",
+    "store_id": "store-001",
+    "quantity": 23
+  },
+  {
+    "sku": "MRD-EYE-002",
+    "store_id": "store-002",
+    "quantity": 35
+  },
+  {
+    "sku": "MRD-EYE-003",
+    "store_id": "store-001",
+    "quantity": 5
+  },
+  {
+    "sku": "MRD-EYE-003",
+    "store_id": "store-002",
+    "quantity": 11
+  },
+  {
+    "sku": "MRD-EYE-004",
+    "store_id": "store-001",
+    "quantity": 9
+  },
+  {
+    "sku": "MRD-EYE-004",
+    "store_id": "store-002",
+    "quantity": 36
+  },
+  {
+    "sku": "MRD-EYE-005",
+    "store_id": "store-001",
+    "quantity": 21
+  },
+  {
+    "sku": "MRD-EYE-005",
+    "store_id": "store-002",
+    "quantity": 9
+  },
+  {
+    "sku": "MRD-EYE-006",
+    "store_id": "store-001",
+    "quantity": 0
+  },
+  {
+    "sku": "MRD-EYE-006",
+    "store_id": "store-002",
+    "quantity": 2
+  }
+]

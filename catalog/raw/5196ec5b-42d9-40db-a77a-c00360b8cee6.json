@@ -1,0 +1,92 @@
+{
+ "active_ingredient": [
+  "Active ingredient Ketotifen (0.025%) (equivalent to ketotifen fumarate 0.035%)"
+ ],
+ "do_not_use": [
+  "Do not use • if solution changes color or becomes cloudy • if you are sensitive to any ingredient in this product • to treat contact lens related irritation"
+ ],
+ "dosage_and_administration": [
+  "Directions • Adults and children 3 years of age and older: Put 1 drop in the affected eye(s) twice daily, every 8 to 12 hours, no more than twice per day. • Children under 3 years of age: Consult a doctor."
+ ],
+ "effective_time": "20260515",
+ "id": "45477f1c-fa33-4ecc-b608-67280f68385a",
+ "inactive_ingredient": [
+  "Inactive ingredients benzalkonium chloride 0.01%, glycerol, water for injection, sodium hydroxide and/or hydrochloric acid."
+ ],
+ "indications_and_usage": [
+  "Use Temporarily relieves itchy eyes due to pollen, ragweed, grass, animal hair and dander."
+ ],
+ "keep_out_of_reach_of_children": [
+  "Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "openfda": {
+  "application_number": [
+   "ANDA204059"
+  ],
+  "brand_name": [
+   "Ketotifen Fumarate"
+  ],
+  "generic_name": [
+   "KETOTIFEN FUMARATE"
+  ],
+  "manufacturer_name": [
+   "Preferred Pharmaceuticals Inc."
+  ],
+  "original_packager_product_ndc": [
+   "76385-106"
+  ],
+  "package_ndc": [
+   "68788-8715-5"
+  ],
+  "product_ndc": [
+   "68788-8715"
+  ],
+  "product_type": [
+   "HUMAN OTC DRUG"
+  ],
+  "route": [
+   "OPHTHALMIC"
+  ],
+  "rxcui": [
+   "311237"
+  ],
+  "spl_id": [
+   "45477f1c-fa33-4ecc-b608-67280f68385a"
+  ],
+  "spl_set_id": [
+   "5196ec5b-42d9-40db-a77a-c00360b8cee6"
+  ],
+  "substance_name": [
+   "KETOTIFEN FUMARATE"
+  ],
+  "unii": [
+   "HBD503WORO"
+  ]
+ },
+ "package_label_principal_display_panel": [
+  "Principal Display Panel - Bottle Carton NDC 68788-8715-5 Ketotifen Fumarate Opthalmic Solution 0.035% ANTIHISTAMINE EYE DROPS UP TO 12 HOURS Eye Itch Relief Works in Minutes Original Prescription Strength for ages 3 years and older 20 day supply 5 mL (0.17 FL OZ) Sterile Ketotifen Fumarate Ophthalmic Solution 0.035%"
+ ],
+ "purpose": [
+  "Purpose Antihistamine"
+ ],
+ "questions": [
+  "Questions? Call Product Information at 973-315-1818. Serious side effects associated with use of this product may be reported to this number. Code No.: GO/DRUGS/557 Manufactured For: Bayshore Pharmaceuticals LLC., Short Hills, NJ 07078 Made in India. Relabeled By: Preferred Pharmaceuticals Inc."
+ ],
+ "set_id": "5196ec5b-42d9-40db-a77a-c00360b8cee6",
+ "spl_product_data_elements": [
+  "Ketotifen Fumarate Ketotifen Fumarate KETOTIFEN FUMARATE Ketotifen GLYCERIN SODIUM HYDROXIDE HYDROCHLORIC ACID BENZALKONIUM CHLORIDE"
+ ],
+ "spl_unclassified_section": [
+  "Other information • Only for use in the eye. • Store at 20°C to 25°C (68°F to 77°F) [See USP Controlled Room Temperature]."
+ ],
+ "stop_use": [
+  "Stop use and ask a doctor if you experience any of the following: • eye pain • changes in vision • redness of the eye • itching worsens or lasts for more than 72 hours"
+ ],
+ "version": "3",
+ "warnings": [
+  "Warnings For external use only Do not use • if solution changes color or becomes cloudy • if you are sensitive to any ingredient in this product • to treat contact lens related irritation When using this product • do not touch tip of container to any surface to avoid contamination • remove contact lenses before use • wait at least 10 minutes before reinserting contact lenses after use • replace cap after each use Stop use and ask a doctor if you experience any of the following: • eye pain • changes in vision • redness of the eye • itching worsens or lasts for more than 72 hours Keep out of reach of children. If swallowed, get medical help or contact a Poison Control Center right away."
+ ],
+ "when_using": [
+  "When using this product • do not touch tip of container to any surface to avoid contamination • remove contact lenses before use • wait at least 10 minutes before reinserting contact lenses after use • replace cap after each use"
+ ]
+}
