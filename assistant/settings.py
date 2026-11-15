@@ -12,14 +12,20 @@ from typing import Literal
 GROQ_URL = "https://api.groq.com/openai/v1"
 OPENCODE_GO_URL = "https://opencode.ai/inference/go/openai/v1"
 DEFAULT_API_URL = "http://127.0.0.1:8001"
-DEFAULT_RUNTIME_MODEL = "openai/gpt-oss-120b"
-COMPARISON_RUNTIME_MODEL = "openai/gpt-oss-20b"
+DEFAULT_PROVIDER = "opencode"
+DEFAULT_RUNTIME_MODEL = "glm-5.3-flash"
+COMPARISON_RUNTIME_MODEL = "deepseek-v4.1-flash"
 # provider: (base URL, key variable, runtime models it may use; the first is the default)
 PROVIDERS = {
-    "groq": (GROQ_URL, "GROQ_API_KEY", (DEFAULT_RUNTIME_MODEL, COMPARISON_RUNTIME_MODEL)),
     # Go-plan models that OpenCode lists with structured output on chat completions and "low"
     # effort; its free models answer other clients with 403, and Contributor ones train on data.
-    "opencode": (OPENCODE_GO_URL, "OPENCODE_API_KEY", ("glm-5.3-flash", "deepseek-v4.1-flash")),
+    "opencode": (
+        OPENCODE_GO_URL,
+        "OPENCODE_API_KEY",
+        (DEFAULT_RUNTIME_MODEL, COMPARISON_RUNTIME_MODEL),
+    ),
+    # The runtime eval/REPORT.md measured on the held-out test set.
+    "groq": (GROQ_URL, "GROQ_API_KEY", ("openai/gpt-oss-120b", "openai/gpt-oss-20b")),
 }
 KEY_VARIABLES = tuple(key for _, key, _ in PROVIDERS.values())
 RUNTIME_TIMEOUT = 8.0
@@ -42,13 +48,14 @@ class Role:
     key_variable: str  # the environment variable that holds this provider's key
 
 
-def runtime_role(model: str = DEFAULT_RUNTIME_MODEL, provider: str = "groq") -> Role:
-    """The assistant's runtime: GPT-OSS on Groq by default, or an OpenCode Go model."""
+def runtime_role(model: str = DEFAULT_RUNTIME_MODEL, provider: str = DEFAULT_PROVIDER) -> Role:
+    """The assistant's runtime: an OpenCode Go model by default, or GPT-OSS on Groq."""
     url, key_variable, _ = PROVIDERS[provider]
     return Role(provider, url, model, "low", RUNTIME_TIMEOUT, key_variable)  # type: ignore[arg-type]
 
 
-JUDGE = Role("groq", GROQ_URL, "qwen/qwen3.8-27b", "none", JUDGE_TIMEOUT, "GROQ_API_KEY")
+# A Go model from another family than both runtimes, so it doesn't share their blind spots.
+JUDGE = Role("opencode", OPENCODE_GO_URL, "kimi-k3.1-pro", "low", JUDGE_TIMEOUT, "OPENCODE_API_KEY")
 
 
 @dataclass(frozen=True)
@@ -80,7 +87,7 @@ def choice(env: Mapping[str, str], name: str, default: str, allowed: tuple[str, 
 
 def load_settings(env: Mapping[str, str] = os.environ) -> Settings:
     """Settings from a mapping of variables: the real environment, or a dict in a test."""
-    provider = choice(env, "MERIDIAN_RUNTIME_PROVIDER", "groq", tuple(PROVIDERS))
+    provider = choice(env, "MERIDIAN_RUNTIME_PROVIDER", DEFAULT_PROVIDER, tuple(PROVIDERS))
     models = PROVIDERS[provider][2]
     keys = {name: env[name].strip() for name in KEY_VARIABLES if env.get(name, "").strip()}
     return Settings(

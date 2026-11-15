@@ -69,7 +69,7 @@ def test_the_default_app_starts_on_the_fake_model_without_a_key():
 
 
 def test_live_mode_without_the_key_stops_at_startup():
-    with pytest.raises(MissingKey, match="GROQ_API_KEY"):
+    with pytest.raises(MissingKey, match="OPENCODE_API_KEY"):
         create_app(load_settings({"MERIDIAN_LLM": "live"}))
 
 

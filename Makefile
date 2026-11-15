@@ -46,8 +46,8 @@ run: | .venv  ## Start the API on port 8001 and the assistant on port 8000. Need
 .PHONY: eval-dev eval-baseline eval
 
 eval-dev eval-baseline eval: export MERIDIAN_LLM := live
-eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_PROVIDER := groq
-eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_MODEL := openai/gpt-oss-120b
+eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_PROVIDER := opencode
+eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_MODEL := glm-5.3-flash
 eval-dev eval: export MERIDIAN_EXACT_MATCH := 1
 eval-baseline: export MERIDIAN_EXACT_MATCH := 0
 
@@ -63,16 +63,16 @@ eval: | .venv  ## Run the same labeled test set with exact matching enabled.
 .PHONY: judge-calibrate
 
 judge-calibrate: export MERIDIAN_LLM := live
-judge-calibrate: export MERIDIAN_RUNTIME_PROVIDER := groq
-judge-calibrate: export MERIDIAN_RUNTIME_MODEL := openai/gpt-oss-120b
-judge-calibrate: | .venv  ## Check the Groq Qwen judge against the 20 labeled pairs.
+judge-calibrate: export MERIDIAN_RUNTIME_PROVIDER := opencode
+judge-calibrate: export MERIDIAN_RUNTIME_MODEL := glm-5.3-flash
+judge-calibrate: | .venv  ## Check the OpenCode Go Kimi judge against the 20 labeled pairs.
 	$(PY) -m eval.cli calibrate
 
 .PHONY: eval-compare
 
 eval-compare: export MERIDIAN_LLM := live
-eval-compare: export MERIDIAN_RUNTIME_PROVIDER := groq
-eval-compare: export MERIDIAN_RUNTIME_MODEL := openai/gpt-oss-20b
+eval-compare: export MERIDIAN_RUNTIME_PROVIDER := opencode
+eval-compare: export MERIDIAN_RUNTIME_MODEL := deepseek-v4.1-flash
 eval-compare: export MERIDIAN_EXACT_MATCH := 1
-eval-compare: | .venv  ## Compare Groq 20B with the saved matching Groq 120B development run.
-	$(PY) -m eval.cli dev-groq20b
+eval-compare: | .venv  ## Compare DeepSeek V4.1 Flash with the saved GLM-5.3-Flash development run.
+	$(PY) -m eval.cli dev-compare

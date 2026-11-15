@@ -17,7 +17,7 @@ from assistant.pipeline import Steps
 from assistant.settings import (
     COMPARISON_RUNTIME_MODEL,
     DEFAULT_RUNTIME_MODEL,
-    GROQ_URL,
+    PROVIDERS,
     MissingKey,
     Settings,
     load_settings,
@@ -39,13 +39,19 @@ CASE_FILES = {
     "dev": "dev.jsonl",
     "baseline": "test.jsonl",
     "improved": "test.jsonl",
-    "dev-groq20b": "dev.jsonl",
+    "dev-compare": "dev.jsonl",
 }
-MATCH = {"dev": True, "baseline": False, "improved": True, "dev-groq20b": True}
+MATCH = {"dev": True, "baseline": False, "improved": True, "dev-compare": True}
 
 
 class EvaluationInputError(ValueError):
     """A loader or labeling error whose message is safe to show."""
+
+
+def known_endpoint(role: dict) -> bool:
+    """A role that sends to its own provider's API: the only endpoints the eval may call."""
+    provider = PROVIDERS.get(role.get("provider"))
+    return provider is not None and role.get("base_url") == provider[0]
 
 
 def validate_calibration(pairs: list[Pair]) -> None:
@@ -86,8 +92,7 @@ def require_calibration(directory: Path, judge_role: dict) -> dict:
     if result is None:
         raise EvaluationInputError("Calibrate the labeled judge pairs before test-set runs.")
     if (
-        judge_role.get("provider") != "groq"
-        or judge_role.get("base_url") != GROQ_URL
+        not known_endpoint(judge_role)
         or result.get("total") != 20
         or type(result.get("agreed")) is not int
         or not 0 <= result["agreed"] <= 20
@@ -97,7 +102,7 @@ def require_calibration(directory: Path, judge_role: dict) -> dict:
         or result.get("judge") != judge_role
         or result.get("service_tier") != "provider_default"
     ):
-        raise EvaluationInputError("The saved calibration does not match this Groq judge.")
+        raise EvaluationInputError("The saved calibration does not match this judge.")
     return result
 
 
@@ -178,6 +183,9 @@ def refresh_report(directory: Path = RESULTS) -> bool:
         raise ValueError(
             "saved baseline and improved runs have incompatible cases or configuration"
         )
+    saved = saved_calibration(directory)
+    if saved is not None and saved.get("judge") != improved["configuration"]["judge"]:
+        return False  # those runs used another judge: their report keeps its own calibration
     calibration = require_calibration(directory, improved["configuration"]["judge"])
     audited = (directory / "LABEL_AUDIT.md").is_file()
     report = build(baseline, improved, calibration, PROMPT_SHA256, audited)
@@ -193,8 +201,8 @@ def live_models(
         models = []
         roles = (settings.judge,) if judge_only else (settings.runtime, settings.judge)
         for role in roles:
-            if role.provider != "groq" or role.base_url != GROQ_URL:
-                raise EvaluationInputError("Evaluation model requests must use the Groq API.")
+            if not known_endpoint(asdict(role)):
+                raise EvaluationInputError("Evaluation requests must use a configured provider.")
             usage = UsageCapture()
             http = resources.enter_context(
                 httpx.Client(
@@ -212,12 +220,8 @@ def run_calibration(
 ) -> dict:
     validate_calibration(pairs)
     saved_calibration(directory)  # A saved prompt stays frozen before any new request.
-    if (
-        settings.llm != "live"
-        or settings.judge.provider != "groq"
-        or settings.judge.base_url != GROQ_URL
-    ):
-        raise EvaluationInputError("Judge calibration requires live mode and the Groq judge.")
+    if settings.llm != "live" or not known_endpoint(asdict(settings.judge)):
+        raise EvaluationInputError("Judge calibration requires live mode and a configured judge.")
     settings.api_key(settings.judge)
     with models(settings, judge_only=True) as (judge,):
         result = calibrate(judge, pairs)
@@ -232,7 +236,8 @@ def run_calibration(
     )
     markdown = (
         f"# Judge calibration\n\n{calibration_summary(result)}\n\n"
-        f"Prompt SHA256: `{PROMPT_SHA256}`\n\nProcessing: Groq provider default.\n\n"
+        f"Judge: {settings.judge.provider} {settings.judge.model}.\n\n"
+        f"Prompt SHA256: `{PROMPT_SHA256}`\n\nProcessing: provider default.\n\n"
         "Label source: AI (user authorized), without independent human review.\n"
     )
     (directory / "calibration.md").write_text(markdown, encoding="utf-8", newline="\n")
@@ -251,21 +256,18 @@ def run_live(
     steps: Steps | None = None,
 ) -> dict:
     validate_cases(cases)
-    expected_model = COMPARISON_RUNTIME_MODEL if name == "dev-groq20b" else DEFAULT_RUNTIME_MODEL
+    expected_model = COMPARISON_RUNTIME_MODEL if name == "dev-compare" else DEFAULT_RUNTIME_MODEL
     if (
         settings.llm != "live"
         or settings.runtime.model != expected_model
         or settings.runtime.model == settings.judge.model
-        or any(
-            role.provider != "groq" or role.base_url != GROQ_URL
-            for role in (settings.runtime, settings.judge)
-        )
+        or not all(known_endpoint(asdict(role)) for role in (settings.runtime, settings.judge))
     ):
-        raise ValueError("evaluation requires its selected Groq runtime and a different Groq judge")
+        raise ValueError("evaluation requires its selected runtime and a different judge")
     if settings.exact_match is not MATCH[name]:
         raise ValueError("the exact-match setting does not match this evaluation variant")
     reference = None
-    if name == "dev-groq20b":
+    if name == "dev-compare":
         reference = reference_run(directory, metadata(cases, settings))
     elif name != "dev":
         require_calibration(directory, asdict(settings.judge))
@@ -278,7 +280,7 @@ def run_live(
     ):
         result = evaluate(name, cases, isolated, runtime, judge, http, steps, directory)
     if reference is not None:
-        (directory / "dev-groq20b.md").write_text(
+        (directory / "dev-compare.md").write_text(
             comparison(reference, result), encoding="utf-8", newline="\n"
         )
     elif name != "dev":

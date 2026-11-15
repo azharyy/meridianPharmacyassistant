@@ -17,8 +17,8 @@ def judge(*script):
     return ModelClient(SETTINGS.judge, fake), fake
 
 
-def test_the_judge_role_is_qwen_on_groq_with_one_structured_call():
-    assert (SETTINGS.judge.provider, SETTINGS.judge.model) == ("groq", "qwen/qwen3.8-27b")
+def test_the_judge_role_is_kimi_on_opencode_go_with_one_structured_call():
+    assert (SETTINGS.judge.provider, SETTINGS.judge.model) == ("opencode", "kimi-k3.1-pro")
     client, fake = judge({"answers_question": True})
     assert verdict(client, "How often can I take it?", "Directions\nTake 1 tablet.") is True
     [(messages, output)] = fake.requests
