@@ -40,9 +40,7 @@ seed-data: | .venv  ## Regenerate data/orders.json and data/stock.json from the 
 
 # A target-specific variable, so `make run` uses the live model with no shell syntax.
 run: export MERIDIAN_LLM := live
-run: export MERIDIAN_RUNTIME_PROVIDER := groq
-run: export MERIDIAN_RUNTIME_MODEL := openai/gpt-oss-120b
-run: | .venv  ## Start the API on port 8001 and the assistant on port 8000. Needs GROQ_API_KEY.
+run: | .venv  ## Start the API on port 8001 and the assistant on port 8000. Needs the runtime's key.
 	$(PY) -m assistant.launcher
 
 .PHONY: eval-dev eval-baseline eval

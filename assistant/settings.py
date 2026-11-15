@@ -10,10 +10,18 @@ from dataclasses import dataclass, field
 from typing import Literal
 
 GROQ_URL = "https://api.groq.com/openai/v1"
+OPENCODE_GO_URL = "https://opencode.ai/inference/go/openai/v1"
 DEFAULT_API_URL = "http://127.0.0.1:8001"
 DEFAULT_RUNTIME_MODEL = "openai/gpt-oss-120b"
 COMPARISON_RUNTIME_MODEL = "openai/gpt-oss-20b"
-KEY_VARIABLES = ("GROQ_API_KEY",)
+# provider: (base URL, key variable, runtime models it may use; the first is the default)
+PROVIDERS = {
+    "groq": (GROQ_URL, "GROQ_API_KEY", (DEFAULT_RUNTIME_MODEL, COMPARISON_RUNTIME_MODEL)),
+    # Go-plan models that OpenCode lists with structured output on chat completions and "low"
+    # effort; its free models answer other clients with 403, and Contributor ones train on data.
+    "opencode": (OPENCODE_GO_URL, "OPENCODE_API_KEY", ("glm-5.3-flash", "deepseek-v4.1-flash")),
+}
+KEY_VARIABLES = tuple(key for _, key, _ in PROVIDERS.values())
 RUNTIME_TIMEOUT = 8.0
 JUDGE_TIMEOUT = 30.0
 
@@ -26,7 +34,7 @@ class MissingKey(SystemExit):
 class Role:
     """Who answers one kind of model call, and how."""
 
-    provider: Literal["groq"]
+    provider: Literal["groq", "opencode"]
     base_url: str
     model: str
     reasoning_effort: str
@@ -34,9 +42,10 @@ class Role:
     key_variable: str  # the environment variable that holds this provider's key
 
 
-def runtime_role(model: str = DEFAULT_RUNTIME_MODEL) -> Role:
-    """The assistant's selected GPT-OSS runtime on Groq."""
-    return Role("groq", GROQ_URL, model, "low", RUNTIME_TIMEOUT, "GROQ_API_KEY")
+def runtime_role(model: str = DEFAULT_RUNTIME_MODEL, provider: str = "groq") -> Role:
+    """The assistant's runtime: GPT-OSS on Groq by default, or an OpenCode Go model."""
+    url, key_variable, _ = PROVIDERS[provider]
+    return Role(provider, url, model, "low", RUNTIME_TIMEOUT, key_variable)  # type: ignore[arg-type]
 
 
 JUDGE = Role("groq", GROQ_URL, "qwen/qwen3.8-27b", "none", JUDGE_TIMEOUT, "GROQ_API_KEY")
@@ -71,20 +80,14 @@ def choice(env: Mapping[str, str], name: str, default: str, allowed: tuple[str, 
 
 def load_settings(env: Mapping[str, str] = os.environ) -> Settings:
     """Settings from a mapping of variables: the real environment, or a dict in a test."""
-    choice(env, "MERIDIAN_RUNTIME_PROVIDER", "groq", ("groq",))
+    provider = choice(env, "MERIDIAN_RUNTIME_PROVIDER", "groq", tuple(PROVIDERS))
+    models = PROVIDERS[provider][2]
     keys = {name: env[name].strip() for name in KEY_VARIABLES if env.get(name, "").strip()}
     return Settings(
         llm=choice(env, "MERIDIAN_LLM", "fake", ("fake", "live")),  # type: ignore[arg-type]
         exact_match=choice(env, "MERIDIAN_EXACT_MATCH", "1", ("0", "1")) == "1",
         api_url=(env.get("MERIDIAN_API_URL", "").strip() or DEFAULT_API_URL).rstrip("/"),
-        runtime=runtime_role(
-            choice(
-                env,
-                "MERIDIAN_RUNTIME_MODEL",
-                DEFAULT_RUNTIME_MODEL,
-                (DEFAULT_RUNTIME_MODEL, COMPARISON_RUNTIME_MODEL),
-            )
-        ),
+        runtime=runtime_role(choice(env, "MERIDIAN_RUNTIME_MODEL", models[0], models), provider),
         judge=JUDGE,
         keys=keys,
     )

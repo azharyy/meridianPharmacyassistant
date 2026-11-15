@@ -38,14 +38,20 @@ GROQ_API_KEY=gsk_your_key_here
 
 | Variable | Needed for | What it is |
 | --- | --- | --- |
-| `GROQ_API_KEY` | `make run` and all eval targets | One Groq API key, starting with `gsk_`, serves the assistant and judge. Groq's free plan is enough to try the demo |
+| `GROQ_API_KEY` | All eval targets, and `make run` by default | One Groq API key, starting with `gsk_`, serves the assistant and judge. Groq's free plan is enough to try the demo |
+| `OPENCODE_API_KEY` | Optional: `make run` on OpenCode Go | An API key from [opencode.ai/auth](https://opencode.ai/auth), used with an OpenCode Go subscription |
+| `MERIDIAN_RUNTIME_PROVIDER` | Optional | `groq` (default) or `opencode`. Applies to `make run` only; the eval targets always use Groq |
+| `MERIDIAN_RUNTIME_MODEL` | Optional | With `opencode`: `glm-5.3-flash` (default) or `deepseek-v4.1-flash` |
 | `MERIDIAN_STAFF_KEY` | Optional | The header value for reading a ticket back in the demo. Default: `dev-staff-key` |
 
 Format: one `NAME=value` per line, with no quotes, no spaces around `=` and no `export`.
 
-The assistant uses Groq-hosted GPT-OSS 120B; the eval judge uses Qwen 3.8 27B.
-The development comparison uses GPT-OSS 20B with the same Qwen judge. All calls
-use the Groq API and strict structured outputs. An OpenAI API key is unused.
+By default the assistant uses Groq-hosted GPT-OSS 120B. The eval judge uses Qwen 3.8 27B,
+and the development comparison uses GPT-OSS 20B with the same judge; every eval call
+uses the Groq API. `make run` can use OpenCode Go instead, limited to the two Go-plan
+models OpenCode lists with structured output on its chat-completions API. Every call
+uses strict structured outputs. OpenCode describes Go as built for coding agents and
+monitors its traffic. An OpenAI API key is unused.
 
 ```bash
 make run          # then open http://localhost:8000/demo
