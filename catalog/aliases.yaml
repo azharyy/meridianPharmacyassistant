@@ -1,0 +1,68 @@
+# Search hints only: matching an ingredient does not imply dose or formulation equivalence.
+# Built 2026-11-15 from the catalog's ingredient list and the public labels below.
+# No eval/cases content was read. Questions existed but were uncommitted (user exception).
+# One national-brand entry per ingredient; specific lines avoid ambiguous parent brands.
+
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2c1ecee3-c2c1-25a2-e063-6294a90aad54
+Zyrtec: cetirizine
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3c9ad1f8-e8ef-bcd0-e063-6394a90ac20e
+Claritin: loratadine
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=81c1dcbb-28b3-4ad5-9f3d-9ccc16ddd173
+Allegra: fexofenadine
+# Historical familiar-brand mapping; no current availability claim.
+# https://www.accessdata.fda.gov/drugsatfda_docs/appletter/2006/007638s032ltr.pdf
+Chlor-Trimeton: chlorpheniramine
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=702f9786-7ce9-43e4-921d-e1db09612127
+Benadryl: diphenhydramine
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1a665e64-9f30-be37-4a83-38789f1f1e89
+Advil: ibuprofen
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1622f694-4d63-4c56-8737-fae31f0ecfb7
+Tylenol: acetaminophen
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1266393e-b55e-4e34-9710-0b87209f4158
+Aleve: naproxen sodium
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=075b103e-0bb4-4b7a-ac0e-5645bcbd0a07
+Bayer Low Dose: aspirin
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a43d59f9-3a6c-4a7c-b98d-b86d6035f716
+Delsym: dextromethorphan
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dd379cdd-90ab-42e0-ad89-f50d3220f611
+Mucinex: guaifenesin
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2ca08917-1a75-4365-8520-c083e6a4225a
+Sudafed PE: phenylephrine
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ecfa14b8-a3f3-4569-b489-c9e1a51cf09e
+Afrin: oxymetazoline
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a06502d9-7903-4f37-833e-e5763d502def
+Pepcid: famotidine
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=37291cab-e350-d8e3-e063-6294a90a9cb1
+Prilosec OTC: omeprazole
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=01da76d0-1979-4c45-9d39-c72ae4e4ffe2
+Imodium A-D: loperamide
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=66d9d631-ba73-3ce4-e053-2a91aa0a1cc4
+Pepto-Bismol: bismuth subsalicylate
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3988e3f8-b276-43a0-bdd3-01ddd422c986
+Tums: calcium carbonate
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24b777e5-f0b5-400d-8ca9-ae0c04b8503b
+Gas-X: simethicone
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=118e55e7-241f-44c4-959e-09bf6221bd77
+Cortizone-10: hydrocortisone
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f9536683-3f32-4c71-9b6a-70f8611e3dcf
+Lotrimin AF: clotrimazole
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1fd313ad-a3d9-6c86-e063-6394a90a7ae4
+Lamisil AT: terbinafine
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7b301b94-3cc8-b05b-e053-2991aa0aa561
+PanOxyl: benzoyl peroxide
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=f591d52f-5610-4517-a96f-1ed63deb00bc
+Unisom SleepTabs: doxylamine
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac66b1e4-c2b0-a4c3-09e3-ebd44a2f7c9f
+Zaditor: ketotifen
+# https://health-products.canada.ca/dpd-bdpp/info?code=42015&lang=eng
+Visine Original: tetrahydrozoline
+# https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=797b0394-2f0f-4733-8d20-ec5bdf3e085d
+TheraTears: carboxymethylcellulose
+
+# Everyday terms independently chosen from the catalog's uses sections.
+stuffy nose: nasal congestion
+blocked nose: nasal congestion
+hayfever: hay fever
+can't sleep: difficulty in falling asleep
+dry eyes: dryness of the eye
+upset tummy: upset stomach
