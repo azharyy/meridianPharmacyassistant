@@ -179,7 +179,8 @@ def refresh_report(directory: Path = RESULTS) -> bool:
             "saved baseline and improved runs have incompatible cases or configuration"
         )
     calibration = require_calibration(directory, improved["configuration"]["judge"])
-    report = build(baseline, improved, calibration, PROMPT_SHA256)
+    audited = (directory / "LABEL_AUDIT.md").is_file()
+    report = build(baseline, improved, calibration, PROMPT_SHA256, audited)
     (directory.parent / "REPORT.md").write_text(report, encoding="utf-8", newline="\n")
     return True
 
