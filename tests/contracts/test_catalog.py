@@ -52,6 +52,9 @@ def test_product_has_exact_plan_fields_and_preserves_text():
         {"warnings": ""},
         {"source_date": "invalid"},
         {"manufacturer": "unwanted"},
+        {"sku": "MRD-ALG-12"},
+        {"sku": "ALG-012"},
+        {"sku": "mrd-alg-012"},
     ],
 )
 def test_invalid_product(changes):

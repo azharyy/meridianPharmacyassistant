@@ -31,6 +31,7 @@ class ReplyType(StrEnum):
     POLICY = "policy"
     ORDER_STATUS = "order_status"
     ORDER_FORM = "order_form"
+    ORDER_NOT_VERIFIED = "order_not_verified"
     EMERGENCY = "emergency"
     MEDICAL_ADVICE = "medical_advice"
     DOSING_BEYOND_LABEL = "dosing_beyond_label"
@@ -39,6 +40,7 @@ class ReplyType(StrEnum):
     FALLBACK = "fallback"
     OFF_TOPIC = "off_topic"
     NOT_FOUND = "not_found"
+    LOOKUP_FAILED = "lookup_failed"
 
 
 class LabelSection(StrEnum):

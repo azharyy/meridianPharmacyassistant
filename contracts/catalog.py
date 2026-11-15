@@ -8,9 +8,12 @@ from pydantic import Field
 
 from contracts.base import Contract
 
+# A SKU such as MRD-ALG-012: the store's prefix, a category code and a number.
+SKU_PATTERN = r"MRD-[A-Z]{3}-\d{3}"
+
 
 class ProductRecord(Contract):
-    sku: str = Field(min_length=1)
+    sku: str = Field(pattern=rf"^{SKU_PATTERN}$")
     name: str = Field(min_length=1)
     category: str
     form: str

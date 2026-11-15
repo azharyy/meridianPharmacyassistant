@@ -20,8 +20,8 @@ from contracts.taxonomy import Intent, LabelSection, ReplyType, RiskLabel, ToolN
         (
             ReplyType,
             "label_sections comparison product_list availability store_info policy order_status "
-            "order_form emergency medical_advice dosing_beyond_label prescription prompt_injection "
-            "fallback off_topic not_found",
+            "order_form order_not_verified emergency medical_advice dosing_beyond_label "
+            "prescription prompt_injection fallback off_topic not_found lookup_failed",
         ),
     ],
 )
