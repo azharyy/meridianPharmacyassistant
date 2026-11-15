@@ -29,7 +29,7 @@ from eval.judge.calibrate import summary as calibration_summary
 from eval.judge.judge import judge_cases
 from eval.loader import Case, load_cases
 from eval.local_api import ROOT, local_api
-from eval.rate_limit import rate_limited_sender
+from eval.rate_limit import QuotaExhausted, rate_limited_sender
 from eval.report import build
 from eval.results import RESULTS, score_all, summary, write_run
 from eval.runner import run_cases, validate_cases
@@ -304,7 +304,7 @@ def entrypoint() -> None:
         main()
     except MissingKey as error:
         raise SystemExit(str(error)) from None
-    except EvaluationInputError as error:
+    except (EvaluationInputError, QuotaExhausted) as error:
         raise SystemExit(str(error)) from None
     except FileNotFoundError:
         raise SystemExit(

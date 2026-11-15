@@ -7,9 +7,10 @@ import pytest
 from assistant import pipeline
 from assistant.llm import FakeSender, ModelClient, ModelUnavailable, TransportError, sdk_sender
 from assistant.settings import load_settings
+from eval.cli import evaluate
 from eval.judge.judge import Verdict
 from eval.metrics.latency import score as latency
-from eval.rate_limit import rate_limited_sender, retry_after
+from eval.rate_limit import QuotaExhausted, rate_limited_sender, retry_after
 from eval.runner import run_cases
 from tests.assistant.fixtures import PLAN, ROUTED, search
 from tests.eval.test_runner import case, chat, no_api
@@ -52,12 +53,24 @@ def test_judge_retries_429_after_the_requested_wait_without_changing_its_message
 @pytest.mark.parametrize(
     "header", ["", "bad", "nan", "inf", "-1", "61", "Wed, 21 Oct 2015 07:28:00 GMT"]
 )
-def test_invalid_or_excessive_retry_after_never_sleeps_or_adds_a_retry(header):
+def test_a_429_too_long_to_wait_out_stops_the_run_instead_of_scoring_a_fallback(header):
     pauses = []
     fake = FakeSender([limited(header), {"answers_question": True}])
-    with pytest.raises(TransportError):
-        rate_limited_sender(fake, ROLE, pauses.append)(MESSAGES, Verdict)
+    model = ModelClient(ROLE, rate_limited_sender(fake, ROLE, pauses.append))
+    with pytest.raises(QuotaExhausted, match="daily limit") as stopped:
+        model.complete(MESSAGES, Verdict)  # the shared client must not retry it into a fallback
     assert pauses == [] and len(fake.requests) == 1
+    assert "synthetic-private" not in str(stopped.value)
+
+
+def test_a_quota_stop_escapes_the_pipeline_and_saves_nothing(tmp_path):
+    settings = load_settings({})
+    send = rate_limited_sender(FakeSender([limited("3600")]), settings.runtime)
+    runtime, judge = ModelClient(settings.runtime, send), ModelClient(settings.judge, FakeSender())
+    steps = pipeline.Steps(retrieve=search)
+    with no_api() as api, pytest.raises(QuotaExhausted, match="3600s"):
+        evaluate("dev", [case(chat())], settings, runtime, judge, api, steps, tmp_path)
+    assert not list(tmp_path.iterdir())
 
 
 @pytest.mark.parametrize("seconds", ["0", "0.5", "60"])
