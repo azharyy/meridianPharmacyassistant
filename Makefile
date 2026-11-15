@@ -15,7 +15,7 @@ include .env
 export
 endif
 
-.PHONY: check fmt contracts
+.PHONY: check fmt contracts run
 
 .venv:
 	uv sync --frozen
@@ -31,3 +31,8 @@ fmt: | .venv  ## Format the code and apply safe lint fixes.
 
 contracts: | .venv  ## Regenerate the contract snapshots. Commit them in a PR of their own.
 	$(PY) -m tests.contracts.snapshots
+
+# A target-specific variable, so `make run` uses the live model with no shell syntax.
+run: export MERIDIAN_LLM := live
+run: | .venv  ## Start the API on port 8001 and the assistant on port 8000. Needs GROQ_API_KEY.
+	$(PY) -m assistant.launcher
