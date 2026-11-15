@@ -20,7 +20,8 @@ PATTERNS = {
         r"\b(ate|swallowed|drank|got into|chewed)\b"
     ),
     "trouble breathing": (
-        r"\b(can'?t|cannot|can not|unable to|struggling to|not|stopped) breath"
+        r"\b(can'?t|cannot|can not|unable to|struggling to|not|isn'?t|aren'?t|stopped)"
+        r" breath(e|es|ing)?\b|\bcan'?t catch (my|his|her|their) breath\b"
         r"|\b(trouble|difficulty|hard time) breathing\b|\bshort(ness)? of breath\b"
     ),
     "chest pain": (
@@ -31,7 +32,8 @@ PATTERNS = {
         r"\b(unconscious|unresponsive|passed out|blacked out|fainted|collapsed"
         r"|won'?t wake up|not waking up|can'?t wake (him|her|them) up)\b"
     ),
-    "seizure": r"\b(seizure|seizing|convulsion|convulsing)\b",
+    # Plurals only with "having": "does this cause seizures?" is a product question.
+    "seizure": r"\b(seizure|seizing|convulsion|convulsing|having (seizures|convulsions))\b",
     "throat swelling": (
         r"\b(throat|tongue|lips?|face) (is |are |keeps )?(swelling|swollen|closing)\b"
         r"|\bswelling (of|in) (my|his|her|their|the) (throat|tongue|lips?|face)\b|\banaphyla"
@@ -43,11 +45,17 @@ PATTERNS = {
         r"|wants? to die|don'?t want to (live|be alive)|take (my|his|her|their) (own )?life)\b"
     ),
 }
+# "When I was" dates something only with a life stage: "when I was out" can be minutes ago.
+LIFE_STAGE = (
+    r"when i was (?:pregnant|little|young|younger|small|a (?:kid|child|teen|teenager|baby)"
+    r"|\d+)"
+)
 # Sentences that match a pattern above without reporting a current emergency.
 GUARDS = {
     "past event": (
         r"\b(last|this past) (year|month|week|summer|winter|spring|fall|autumn)\b"
-        r"|\b((\d+|a few|several|many) )?(years?|months?|weeks?) ago\b|\bwhen I was\b"
+        r"|\b((\d+|a few|several|many) )?(years?|months?|weeks?) ago\b"
+        rf"|\b{LIFE_STAGE}\b"
         r"|\bas a (kid|child|teen|teenager)\b|\bin the past\b|\bhistory of\b|\bused to\b"
         r"|\ba while (ago|back)\b"
     ),
@@ -67,6 +75,36 @@ EMERGENCY = [re.compile(pattern, re.IGNORECASE) for pattern in PATTERNS.values()
 NOT_NOW = [re.compile(pattern, re.IGNORECASE) for pattern in GUARDS.values()]
 HAPPENING_NOW = re.compile(NOW, re.IGNORECASE)
 SENTENCES = re.compile(r"(?<=[.!?])\s+|\n+")
+ELLIPSES = re.compile(r"\.{2,}|…")  # "my son... swallowed... the whole bottle" is one report
+# A clause of its own starts with a subject or a question, not inside a label's symptom list.
+SUBJECT = (
+    r"(?:(?:now|today|tonight)\s+)?(?:i|he|she|they|we|my|his|her|their|our|am|are|is|what"
+    r"|why|how|can|cannot|unable|does|do)\b"
+)
+CLAUSES = re.compile(
+    rf"(?:[,;]\s*|\b(?:and|but|yet)\s+)(?=(?:{SUBJECT}|the\s+(?:label|warning)\b))",
+    re.IGNORECASE,
+)
+# Openings that are nothing but a date or a label's lead-in belong to the clause after them:
+# "Two years ago, I had a seizure", "The label says, do not use if ...".
+DATES_IT = re.compile(
+    r"(?:[\w-]+ ){0,2}(?:years?|months?|weeks?) ago|in the past|a while (?:ago|back)"
+    r"|(?:last|this past) (?:year|month|week|summer|winter|spring|fall|autumn)"
+    rf"|as a (?:kid|child|teen|teenager)|{LIFE_STAGE}",
+    re.IGNORECASE,
+)
+QUOTES_LABEL = re.compile(
+    r"(?:the|this|my) (?:label|warning|leaflet|instructions|insert) (?:says|said|reads|states)",
+    re.IGNORECASE,
+)
+# A clause that says something is so now is never dated by the opening before it.
+PRESENT = re.compile(
+    r"\b(?:is|are|am|has|have|can'?t|cannot|won'?t|isn'?t|aren'?t|just|today|tonight)\b"
+    r"|'(?:m|re)\b",
+    re.IGNORECASE,
+)
+PERSON = re.compile(r"\s*(?:i|he|she|they|we|my|his|her|their|our)\b", re.IGNORECASE)
+APOSTROPHES = str.maketrans({"’": "'", "‘": "'"})
 
 
 def reports_emergency(sentence: str) -> bool:
@@ -77,6 +115,25 @@ def reports_emergency(sentence: str) -> bool:
     return not any(guard.search(sentence) for guard in NOT_NOW)
 
 
+def frames(opening: str, clause: str) -> bool:
+    """Whether the opening only dates the clause after it, or introduces a label quote."""
+    if QUOTES_LABEL.fullmatch(opening):
+        return not PERSON.match(clause)  # a quote, not someone saying what happened
+    lead = clause.split(",")[0]  # a later question (", so is this safe?") isn't the report
+    return bool(DATES_IT.fullmatch(opening)) and not PRESENT.search(lead)
+
+
+def clauses(sentence: str) -> list[str]:
+    """Split at each new subject; a framing opening stays with the clause it frames."""
+    parts = CLAUSES.split(sentence)
+    if len(parts) > 1 and frames(parts[0].strip(), parts[1]):
+        parts[:2] = [f"{parts[0]} {parts[1]}"]
+    return parts
+
+
 def is_emergency(message: str) -> bool:
-    """Whether any sentence of the raw message reports a current emergency."""
-    return any(reports_emergency(sentence) for sentence in SENTENCES.split(message))
+    """Whether a sentence, or a clause of it beside a past event or label question, fires."""
+    return any(
+        reports_emergency(sentence) or any(map(reports_emergency, clauses(sentence)))
+        for sentence in SENTENCES.split(ELLIPSES.sub(",", message.translate(APOSTROPHES)))
+    )

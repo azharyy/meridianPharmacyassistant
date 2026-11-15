@@ -1,0 +1,98 @@
+{
+  "browser": "Microsoft Edge headless",
+  "all_examples_status": "Drew 20 of 20 examples.",
+  "groups": [
+    {
+      "file": "01-label-and-products.png",
+      "examples": [
+        "label_sections",
+        "product_list"
+      ],
+      "status": "Drew 2 of 2 examples.",
+      "width": 1200,
+      "height": 1800,
+      "url": "http://localhost:8000/widget/preview.html?only=label_sections,product_list"
+    },
+    {
+      "file": "02-comparison.png",
+      "examples": [
+        "comparison"
+      ],
+      "status": "Drew 1 of 1 examples.",
+      "width": 1200,
+      "height": 2400,
+      "url": "http://localhost:8000/widget/preview.html?only=comparison"
+    },
+    {
+      "file": "03-stock-store-policy.png",
+      "examples": [
+        "availability",
+        "store_info",
+        "policy"
+      ],
+      "status": "Drew 3 of 3 examples.",
+      "width": 1200,
+      "height": 1900,
+      "url": "http://localhost:8000/widget/preview.html?only=availability,store_info,policy"
+    },
+    {
+      "file": "04-orders.png",
+      "examples": [
+        "order_status",
+        "order_form",
+        "order_not_verified"
+      ],
+      "status": "Drew 3 of 3 examples.",
+      "width": 1200,
+      "height": 1800,
+      "url": "http://localhost:8000/widget/preview.html?only=order_status,order_form,order_not_verified"
+    },
+    {
+      "file": "05-emergency-and-risk.png",
+      "examples": [
+        "emergency",
+        "medical_advice",
+        "dosing_beyond_label"
+      ],
+      "status": "Drew 3 of 3 examples.",
+      "width": 1200,
+      "height": 2600,
+      "url": "http://localhost:8000/widget/preview.html?only=emergency,medical_advice,dosing_beyond_label"
+    },
+    {
+      "file": "06-refusals-and-fallback.png",
+      "examples": [
+        "prescription",
+        "prompt_injection",
+        "fallback"
+      ],
+      "status": "Drew 3 of 3 examples.",
+      "width": 1200,
+      "height": 1700,
+      "url": "http://localhost:8000/widget/preview.html?only=prescription,prompt_injection,fallback"
+    },
+    {
+      "file": "07-other-replies.png",
+      "examples": [
+        "off_topic",
+        "not_found",
+        "lookup_failed"
+      ],
+      "status": "Drew 3 of 3 examples.",
+      "width": 1200,
+      "height": 1200,
+      "url": "http://localhost:8000/widget/preview.html?only=off_topic,not_found,lookup_failed"
+    },
+    {
+      "file": "08-handoff.png",
+      "examples": [
+        "created",
+        "failed"
+      ],
+      "status": "Drew 2 of 2 examples.",
+      "width": 1200,
+      "height": 1000,
+      "url": "http://localhost:8000/widget/preview.html?only=created,failed"
+    }
+  ]
+}

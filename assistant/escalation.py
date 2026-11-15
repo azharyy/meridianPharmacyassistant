@@ -44,7 +44,7 @@ def summarize(session: Session, offer: HandoffOffer) -> TicketSummary:
 
 def handoff(session_id: str, session: Session, http: httpx.Client) -> HandoffReply:
     """The ticket for the session's current offer, created once; a failure keeps the offer."""
-    offer = session.handoff_offer or session.offer_handoff(RiskLabel.NONE, "customer_requested")
+    offer = session.offer_handoff(RiskLabel.NONE, "customer_requested", reuse=True)
     if offer.ticket_id is None:
         key = f"{session_id}:{offer.number}"
         request = TicketCreateRequest(idempotency_key=key, summary=summarize(session, offer))

@@ -9,6 +9,7 @@ from pathlib import Path
 
 import httpx
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -35,6 +36,13 @@ def create_app(
     turn_steps = steps or pipeline.Steps()
     sessions = SessionStore()
     app = FastAPI(title="Meridian assistant", version="0.1.0")
+    # The embeddable widget calls this public API without cookies or browser credentials.
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_methods=["POST"],
+        allow_headers=["Content-Type"],
+    )
 
     @app.post("/chat", response_model=ChatReply)
     def chat(request: ChatRequest) -> ChatReply:

@@ -1,7 +1,9 @@
 """The pharmacist handoff: one ticket per offer, a summary built by code with no contact details."""
 
 import json
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
+from threading import Barrier, Event
 
 import httpx
 import pytest
@@ -46,6 +48,65 @@ def test_confirming_creates_exactly_one_ticket_and_a_repeat_returns_it():
     assert first.ticket_id == "TCK-1001"
     assert first.text == HANDOFF_CREATED_TEXT.format(ticket_id="TCK-1001")
     assert api.app.state.desks.tickets.count() == 1
+
+
+def test_simultaneous_header_confirmations_create_one_offer_and_ticket():
+    ready = Barrier(2)
+
+    class SimultaneousSession(Session):
+        def offer_handoff(self, *args, **kwargs):
+            # Both confirmations reach allocation before either can create an offer.
+            ready.wait(timeout=5)
+            return super().offer_handoff(*args, **kwargs)
+
+    session, api = SimultaneousSession(), mock_api()
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        pending = [pool.submit(handoff, SESSION_ID, session, api) for _ in range(2)]
+        replies = [future.result(timeout=10) for future in pending]
+    assert replies[0] == replies[1]
+    assert session.offers_made == api.app.state.desks.tickets.count() == 1
+
+
+def test_simultaneous_confirmations_of_a_card_return_one_ticket():
+    session, api, ready = medical_session(), mock_api(), Barrier(8)
+
+    def confirm():
+        ready.wait(timeout=5)
+        return handoff(SESSION_ID, session, api)
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        replies = list(pool.map(lambda _: confirm(), range(8)))
+    assert len({reply.ticket_id for reply in replies}) == 1
+    assert api.app.state.desks.tickets.count() == 1
+
+
+def test_an_emergency_does_not_wait_for_a_ticket_in_flight():
+    entered, release, session = Event(), Event(), Session()
+
+    def slow_ticket(request):
+        entered.set()
+        assert release.wait(timeout=5)
+        return httpx.Response(201, json={"ticket_id": "TCK-1001"})
+
+    api = httpx.Client(base_url="http://api.test", transport=httpx.MockTransport(slow_ticket))
+    fake = FakeSender()
+    request = ChatRequest(session_id=SESSION_ID, message="I cannot breathe")
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        ticket = pool.submit(handoff, SESSION_ID, session, api)
+        try:
+            assert entered.wait(timeout=5)
+            emergency = pool.submit(
+                pipeline.run_turn,
+                request,
+                session,
+                pipeline.Steps(),
+                ModelClient(RUNTIME, fake),
+                api,
+            ).result(timeout=2)
+            assert emergency.reply.emergency and fake.requests == []
+        finally:
+            release.set()
+        assert ticket.result(timeout=5).ticket_id == "TCK-1001"
 
 
 def test_a_new_offer_gets_a_new_ticket():
@@ -113,16 +174,17 @@ def test_urgency_follows_the_risk_label(risk, urgency):
     assert summarize(session, session.offer_handoff(risk, "risk")).urgency == urgency
 
 
-def test_no_contact_detail_reaches_a_summary():
+@pytest.mark.parametrize("phone", ["(217) 555-0142", "217 / 555 / 0110", "(217) 555 - 0110"])
+def test_no_contact_detail_reaches_a_summary(phone):
     session, steps = Session(), pipeline.Steps(retrieve=search)
     for message in (
-        "I'm sam@example.com, phone (217) 555-0142, order MRD-ORD-48213.",
+        f"I'm sam@example.com, phone {phone}, order MRD-ORD-48213.",
         "Can I take Meridian All Day Allergy while pregnant?",
     ):
         llm = ModelClient(RUNTIME, FakeSender([MEDICAL]))
         request = ChatRequest(session_id=SESSION_ID, message=message)
         pipeline.run_turn(request, session, steps, llm, httpx.Client())
     text = summarize(session, session.handoff_offer).model_dump_json()
-    for private in ("sam@example.com", "555-0142", "MRD-ORD-48213"):
+    for private in ("sam@example.com", phone, "MRD-ORD-48213"):
         assert private not in text
     assert all(placeholder in text for placeholder in ("[email]", "[phone]", "[order number]"))

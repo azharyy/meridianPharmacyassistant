@@ -53,6 +53,19 @@ def test_a_match_needs_the_number_and_the_email_or_phone_of_that_order():
     assert desk.lookup("MRD-ORD-48213", "   ") is None
 
 
+@pytest.mark.parametrize(
+    "phone", ["+44 217 555 0110", "9992175550110", "+22175550110", "wrong2175550110"]
+)
+def test_arbitrary_phone_prefixes_do_not_authenticate(phone):
+    desk = OrderDesk([ORDER], Clock())
+    assert desk.lookup(ORDER["order_number"], phone) is None
+
+
+@pytest.mark.parametrize("phone", ["2175550110", "12175550110", "+1 (217) 555-0110"])
+def test_only_the_optional_us_country_prefix_is_removed(phone):
+    assert OrderDesk([ORDER], Clock()).lookup(ORDER["order_number"], phone) == status_of(ORDER)
+
+
 def test_the_fifth_failure_locks_for_ten_minutes_and_a_refused_lookup_does_not_extend_it():
     clock = Clock()
     desk = OrderDesk([ORDER], clock)
