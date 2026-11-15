@@ -27,7 +27,10 @@ pairs with the prompt unchanged. All use `OPENCODE_API_KEY`; Groq stays selectab
 runtime only. The held-out test results stay as measured on Groq GPT-OSS 120B with the Groq
 Qwen judge and are not run again; the README says so, and the Qwen calibration is kept as
 `eval/results/calibration-groq-qwen.*`. Folders also: `tests/assistant/test_app.py` and
-`tests/assistant/test_launcher.py`, whose missing-key checks follow the default key.
+`tests/assistant/test_launcher.py`, whose missing-key checks follow the default key, and
+`assistant/llm.py` and `assistant/pipeline.py` with their tests: OpenCode Go answers HTTP 400
+to any request without an `x-opencode-session` header and asks clients to name themselves in
+the User-Agent, so each conversation's model calls carry one stable session ID.
 
 The harness, the metrics, the judge, the report and drafted cases for the user to label. One pull request; the three parts below are its order of work. Keep the loader, the runner, each metric, the judge and the report in separate modules, and make each metric a pure function over recorded results.
 

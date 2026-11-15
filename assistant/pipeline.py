@@ -22,7 +22,7 @@ import httpx
 
 from assistant import orders
 from assistant.catalog_agent import plan as make_plan
-from assistant.llm import ModelClient, ModelUnavailable
+from assistant.llm import CONVERSATION, ModelClient, ModelUnavailable
 from assistant.policy import POLICY, most_restrictive
 from assistant.redaction import redact
 from assistant.render import render as render_reply
@@ -209,11 +209,14 @@ def run_turn(
     if emergency:
         result = risk_reply(None, RiskLabel.EMERGENCY, steps, timings)
     else:
+        conversation = CONVERSATION.set(log_id)  # every model call of this session shares it
         try:
             result = answer(log_id, message, session, steps, llm, http, timings, request.store_id)
         except ModelUnavailable as error:
             log.warning("model unavailable session=%s: %s", log_id, error)
             result = TurnResult(steps.fallback())
+        finally:
+            CONVERSATION.reset(conversation)
     result.timings = timings
     record_offer(session, result)
     session.add(Turn(message=message, reply=result.reply, routed=result.routed))

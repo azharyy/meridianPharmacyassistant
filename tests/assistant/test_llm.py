@@ -6,6 +6,7 @@ import httpx
 import pytest
 
 from assistant.llm import (
+    CONVERSATION,
     FakeSender,
     ModelClient,
     ModelUnavailable,
@@ -90,6 +91,24 @@ def test_the_request_is_strict_structured_output_without_tools(provider, url, mo
     assert response_format["type"] == "json_schema"
     assert response_format["json_schema"]["strict"] is True
     assert response_format["json_schema"]["schema"] == RouterOutput.model_json_schema()
+    go = provider == "opencode"  # Go answers 400 without a session and wants a named client
+    assert ("x-opencode-session" in seen[0].headers) is go
+    assert (seen[0].headers["user-agent"] == "support-assistant/1.0") is go
+
+
+def test_an_opencode_call_carries_its_conversation_or_one_of_its_own():
+    reply = completion(json.dumps(ROUTED))
+    client, seen = live_client(reply, reply, reply, role=load_settings({}).runtime)
+    conversation = CONVERSATION.set("conversation-1")
+    try:
+        client.complete(MESSAGES, RouterOutput)
+        client.complete(MESSAGES, RouterOutput)
+    finally:
+        CONVERSATION.reset(conversation)
+    client.complete(MESSAGES, RouterOutput)  # outside a conversation, such as a judge verdict
+    sessions = [request.headers["x-opencode-session"] for request in seen]
+    assert sessions[:2] == ["conversation-1", "conversation-1"]
+    assert sessions[2] not in {"", "conversation-1"}
 
 
 @pytest.mark.parametrize(
@@ -102,6 +121,14 @@ def test_a_transport_failure_is_retried_once_then_the_model_is_unavailable(failu
     with pytest.raises(ModelUnavailable):
         client.complete(MESSAGES, RouterOutput)
     assert len(seen) == 2
+
+
+def test_unavailable_names_the_provider_error_and_status_but_never_its_body():
+    failure = httpx.Response(400, json={"error": {"message": "provider body text"}})
+    client, _ = live_client(failure, failure)
+    with pytest.raises(ModelUnavailable, match="TransportError: BadRequestError 400") as stopped:
+        client.complete(MESSAGES, RouterOutput)
+    assert "provider body" not in str(stopped.value)
 
 
 def test_a_transport_failure_then_a_good_answer_succeeds():

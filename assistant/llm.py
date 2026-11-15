@@ -7,8 +7,10 @@ caller gets ModelUnavailable, which the pipeline turns into the fallback reply.
 
 import json
 from collections.abc import Callable
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from typing import TypeVar
+from uuid import uuid4
 
 import httpx
 import openai
@@ -19,6 +21,9 @@ from assistant.settings import Role, Settings
 Output = TypeVar("Output", bound=BaseModel)
 Messages = list[dict[str, str]]
 Send = Callable[[Messages, type[BaseModel]], str]  # one request; returns the raw JSON text
+# The conversation a call belongs to: OpenCode Go answers 400 without one, and routes on it.
+CONVERSATION: ContextVar[str | None] = ContextVar("conversation", default=None)
+USER_AGENT = "support-assistant/1.0"  # Go asks a client to name itself, not its SDK
 
 
 class ModelUnavailable(Exception):
@@ -44,6 +49,8 @@ class ModelClient:
             except (TransportError, ValidationError) as error:
                 problem = error
         reason = type(problem).__name__
+        if isinstance(problem, TransportError):
+            reason += f": {problem}"  # the provider's error class and status, which logs may show
         raise ModelUnavailable(f"no valid {output.__name__} after a retry ({reason})") from problem
 
 
@@ -57,24 +64,30 @@ def response_format(output: type[BaseModel]) -> dict:
 
 def sdk_sender(role: Role, api_key: str, http_client: httpx.Client | None = None) -> Send:
     """A `send` that calls the role's provider through the OpenAI SDK, with no SDK retries."""
+    go = role.provider == "opencode"
     client = openai.OpenAI(
         api_key=api_key,
         base_url=role.base_url,
         timeout=role.timeout,
         max_retries=0,
         http_client=http_client,
+        default_headers={"User-Agent": USER_AGENT} if go else None,
     )
 
     def send(messages: Messages, output: type[BaseModel]) -> str:
+        # A call outside a conversation, such as a judge verdict, is a conversation of its own.
+        session = {"x-opencode-session": CONVERSATION.get() or uuid4().hex} if go else None
         try:
             completion = client.chat.completions.create(
                 model=role.model,
                 messages=messages,  # type: ignore[arg-type]
                 response_format=response_format(output),  # type: ignore[arg-type]
                 reasoning_effort=role.reasoning_effort,  # type: ignore[arg-type]
+                extra_headers=session,
             )
         except openai.APIError as error:
-            raise TransportError(type(error).__name__) from error
+            status = getattr(error, "status_code", "")  # the HTTP status, never the body
+            raise TransportError(f"{type(error).__name__} {status}".strip()) from error
         return completion.choices[0].message.content or ""
 
     return send
