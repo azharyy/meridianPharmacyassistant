@@ -12,7 +12,6 @@ from contracts.catalog import ProductRecord
 from scripts.label_text import (
     PHONE,
     SECTION_FIELDS,
-    WARNING_FIELDS,
     field_text,
     normalize,
     problems,
@@ -86,7 +85,18 @@ def test_each_section_is_its_raw_labels_text_word_for_word(product):
 @pytest.mark.parametrize("product", PRODUCTS, ids=lambda product: product["sku"])
 def test_the_warnings_drop_nothing_the_label_says(product):
     label = raw(product)
-    for field in WARNING_FIELDS:
+    # Independent of the extractor's allowlist, so an omitted subsection fails this test.
+    for field in (
+        "warnings",
+        "do_not_use",
+        "ask_doctor",
+        "ask_doctor_or_pharmacist",
+        "when_using",
+        "stop_use",
+        "pregnancy_or_breast_feeding",
+        "keep_out_of_reach_of_children",
+        "overdosage",
+    ):
         part = field_text(label, field)
         if field == "warnings":
             part = strip_heading(part, "warnings")

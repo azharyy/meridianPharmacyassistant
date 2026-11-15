@@ -26,8 +26,10 @@ def contact_key(contact: str) -> str:
     contact = contact.strip()
     if "@" in contact:
         return contact.lower()
+    if not re.fullmatch(r"\+?[0-9\s()./-]+", contact):
+        return ""
     digits = re.sub(r"\D", "", contact)
-    return digits[-10:] if len(digits) > 10 else digits  # "+1 (217) 555-0110" is the same phone
+    return digits[1:] if len(digits) == 11 and digits.startswith("1") else digits
 
 
 def status_of(order: dict) -> OrderStatus:

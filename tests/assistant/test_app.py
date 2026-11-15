@@ -88,3 +88,57 @@ def test_a_handoff_needs_the_customers_confirmation():
     client = web(FakeSender())
     response = client.post("/handoff", json={"session_id": "session-0001", "confirmed": False})
     assert response.status_code == 422
+
+
+@pytest.mark.parametrize("path", ["/chat", "/handoff", "/orders/verify"])
+def test_widget_json_preflight_from_another_origin(path):
+    response = web(FakeSender()).options(
+        path,
+        headers={
+            "Origin": "https://shop.example",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type",
+        },
+    )
+    assert response.status_code == 200
+    assert response.headers["access-control-allow-origin"] == "*"
+    assert response.headers["access-control-allow-methods"] == "POST"
+    assert "content-type" in response.headers["access-control-allow-headers"].lower()
+    assert "access-control-allow-credentials" not in response.headers
+
+
+@pytest.mark.parametrize(
+    ("path", "body", "status"),
+    [
+        ("/chat", CHAT, 200),
+        ("/chat", {"session_id": "invalid"}, 422),
+        ("/handoff", {"session_id": "session-0001", "confirmed": True}, 200),
+        ("/handoff", {"session_id": "session-0001", "confirmed": False}, 422),
+        ("/orders/verify", {}, 404),  # issue 6 supplies the route; CORS already covers its errors
+    ],
+)
+def test_cross_origin_widget_can_read_post_responses_and_errors(path, body, status):
+    api = TestClient(create_api(DATA, staff_key="test-staff-key"))
+    client = TestClient(
+        create_app(
+            SETTINGS, pipeline.Steps(retrieve=search), FakeSender([ROUTED, PLAN]), api, NO_WIDGET
+        )
+    )
+    response = client.post(path, json=body, headers={"Origin": "https://shop.example"})
+    assert response.status_code == status
+    assert response.headers["access-control-allow-origin"] == "*"
+    assert "access-control-allow-credentials" not in response.headers
+    if path == "/handoff" and status == 200:
+        assert response.json()["ticket_id"] == "TCK-1001"
+
+
+def test_cors_does_not_allow_unneeded_methods_or_headers():
+    response = web(FakeSender()).options(
+        "/chat",
+        headers={
+            "Origin": "https://shop.example",
+            "Access-Control-Request-Method": "DELETE",
+            "Access-Control-Request-Headers": "X-Staff-Key",
+        },
+    )
+    assert response.status_code == 400

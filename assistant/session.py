@@ -48,6 +48,7 @@ class Session:
     handoff_offer: HandoffOffer | None = None
     offers_made: int = 0
     max_turns: int = MAX_TURNS
+    _offer_lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
 
     def add(self, turn: Turn) -> None:
         self.turns = [*self.turns, turn][-self.max_turns :]
@@ -57,11 +58,18 @@ class Session:
         return [turn.message for turn in self.turns]
 
     def offer_handoff(
-        self, risk_label: RiskLabel, reason: Literal["risk", "fallback", "customer_requested"]
+        self,
+        risk_label: RiskLabel,
+        reason: Literal["risk", "fallback", "customer_requested"],
+        *,
+        reuse: bool = False,
     ) -> HandoffOffer:
-        self.offers_made += 1
-        self.handoff_offer = HandoffOffer(self.offers_made, risk_label, reason)
-        return self.handoff_offer
+        # Only allocation is locked: emergency replies never wait for a ticket API call.
+        with self._offer_lock:
+            if not reuse or self.handoff_offer is None:
+                self.offers_made += 1
+                self.handoff_offer = HandoffOffer(self.offers_made, risk_label, reason)
+            return self.handoff_offer
 
 
 class SessionStore:

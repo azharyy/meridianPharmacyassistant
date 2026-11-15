@@ -67,6 +67,14 @@ def test_warnings_already_complete_are_not_repeated():
     assert warnings_text(label(warnings=[complete])) == complete.removeprefix("Warnings ")
 
 
+def test_overdose_warning_is_preserved_exactly_once():
+    overdose = "Overdose warning: complete synthetic warning text."
+    separate = label(overdosage=[overdose])
+    assert warnings_text(separate).endswith(overdose)
+    complete = "Warnings " + warnings_text(separate)
+    assert warnings_text(label(warnings=[complete], overdosage=[overdose])).count(overdose) == 1
+
+
 def test_warnings_follow_drug_facts_order_and_drop_nothing():
     parts = {
         "keep_out_of_reach_of_children": ["Keep out of reach of children."],
@@ -96,6 +104,8 @@ def test_a_usable_label_has_no_problems():
         ({"indications_and_usage": ["Uses"]}, "a section is empty"),
         ({"stop_use": ["Call 1-800-222-1222 now."]}, "a phone number"),
         ({"stop_use": ["Call (217) 555-0142."]}, "a phone number"),
+        ({"overdosage": ["Call 1-800-222-1222."]}, "a phone number"),
+        ({"overdosage": ["Contact Sample Labs Inc."]}, "a brand or manufacturer name"),
         ({"indications_and_usage": ["Uses  runny nose"]}, "a symbol-font or broken character"),
         ({"indications_and_usage": ["Uses compare to Brandname®"]}, "a trademark sign"),
         (

@@ -9,11 +9,14 @@ is the most restrictive of the router's label and the injection rules'; any labe
 the reply the policy table fixes, and the catalog agent doesn't run.
 """
 
+import hmac
 import logging
+import secrets
 import time
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
 from dataclasses import dataclass, field
+from hashlib import sha256
 
 import httpx
 
@@ -36,6 +39,7 @@ from contracts.router import RouterOutput
 from contracts.taxonomy import ReplyType, RiskLabel
 
 log = logging.getLogger("meridian.turn")
+LOG_KEY = secrets.token_bytes(32)  # per process: a session ID can't be found from its reference
 RETRIEVE_K = 5
 
 Record = ProductRecord | PolicyRecord
@@ -113,14 +117,14 @@ def risk_reply(routed: RouterOutput | None, risk: RiskLabel, steps: Steps, timin
 
 
 def answer(
-    session_id: str, message: str, session: Session, steps: Steps, llm: ModelClient, http, timings
+    log_id: str, message: str, session: Session, steps: Steps, llm: ModelClient, http, timings
 ) -> TurnResult:
     """Steps 3 to 8, for a message the emergency rules let through."""
     with stage(timings, "router"):
         routed = steps.route(llm, [*session.messages(), message])
     risk = routed.risk_label
     if steps.injection(message):
-        log.warning("prompt injection session=%s", session_id)
+        log.warning("prompt injection session=%s", log_id)
         risk = most_restrictive(risk, RiskLabel.PROMPT_INJECTION)
     if risk is not RiskLabel.NONE:
         return risk_reply(routed, risk, steps, timings)
@@ -150,11 +154,17 @@ def record_offer(session: Session, result: TurnResult) -> None:
     session.offer_handoff(result.risk, reason)
 
 
+def log_reference(session_id: str) -> str:
+    """The session as logs name it: stable per process, and not reversible by hashing guesses."""
+    return hmac.new(LOG_KEY, session_id.encode(), sha256).hexdigest()
+
+
 def run_turn(
     request: ChatRequest, session: Session, steps: Steps, llm: ModelClient, http: httpx.Client
 ) -> TurnResult:
     """One customer message, steps 1 to 8. The 911 reply comes before any model call."""
     timings: dict[str, float] = {}
+    log_id = log_reference(request.session_id)
     with stage(timings, "emergency"):
         emergency = steps.emergency(request.message)
     with stage(timings, "redaction"):
@@ -163,12 +173,12 @@ def run_turn(
         result = risk_reply(None, RiskLabel.EMERGENCY, steps, timings)
     else:
         try:
-            result = answer(request.session_id, message, session, steps, llm, http, timings)
+            result = answer(log_id, message, session, steps, llm, http, timings)
         except ModelUnavailable as error:
-            log.warning("model unavailable session=%s: %s", request.session_id, error)
+            log.warning("model unavailable session=%s: %s", log_id, error)
             result = TurnResult(steps.fallback())
     result.timings = timings
     record_offer(session, result)
     session.add(Turn(message=message, reply=result.reply, routed=result.routed))
-    log.info("turn session=%s reply=%s ms=%s", request.session_id, result.reply.reply_type, timings)
+    log.info("turn session=%s reply=%s ms=%s", log_id, result.reply.reply_type, timings)
     return result
