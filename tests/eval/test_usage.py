@@ -57,7 +57,7 @@ def test_actual_sdk_response_hooks_capture_cache_counts_without_double_counting_
         assert model.complete([{"role": "user", "content": "Synthetic question"}], Verdict)
     result = capture.snapshot(role)
     assert result["requests"] == result["responses_with_usage"] == 1
-    assert result["complete"] and result["completion_tokens"] == 200
+    assert result["unaccounted"] == 0 and result["completion_tokens"] == 200
     assert result["cached_tokens"] == 100 and result["cache_write_tokens"] == 0
     assert result["estimated_cost_usd"] == cost
     assert "2026-11-15" == result["pricing"]["verified_on"]
@@ -83,13 +83,13 @@ def test_actual_sdk_response_hooks_capture_cache_counts_without_double_counting_
         },
     ],
 )
-def test_missing_or_malformed_usage_is_unavailable_instead_of_zero(usage):
+def test_missing_or_malformed_usage_is_unaccounted_and_never_priced(usage):
     capture = UsageCapture()
     capture.request(httpx.Request("POST", "https://model.test"))
     capture.response(httpx.Response(200, json={"usage": usage}))
     result = capture.snapshot(runtime_role())
-    assert result["complete"] is False
-    assert result["estimated_cost_usd"] is None and result["prompt_tokens"] is None
+    assert result["unaccounted"] == 1 and result["responses_with_usage"] == 0
+    assert result["prompt_tokens"] == 0 and result["estimated_cost_usd"] == 0
 
 
 def test_optional_cache_counters_default_to_zero_as_the_api_defines():
@@ -117,8 +117,8 @@ def test_a_transport_failure_then_retry_does_not_disappear_from_usage_accounting
         model = MeteredModel(role, sdk_sender(role, "synthetic-key", http), capture)
         assert model.complete([{"role": "user", "content": "Synthetic question"}], Verdict)
     result = capture.snapshot(role)
-    assert result["requests"] == 2 and result["responses_with_usage"] == 1
-    assert result["estimated_cost_usd"] is None and result["completion_tokens"] is None
+    assert result["requests"] == 2 and result["unaccounted"] == 1
+    assert result["completion_tokens"] == 5 and result["estimated_cost_usd"] == 0.0000045
 
 
 def test_rate_limited_attempts_count_as_unbilled_but_other_failures_stay_unknown():
@@ -130,11 +130,12 @@ def test_rate_limited_attempts_count_as_unbilled_but_other_failures_stay_unknown
         capture.request(httpx.Request("POST", "https://model.test"))
         capture.response(response)
     result = capture.snapshot(role)
-    assert result["complete"] and result["rate_limited"] == 1
+    assert (result["rate_limited"], result["unaccounted"]) == (1, 0)
     assert result["prompt_tokens"] == 1000 and result["estimated_cost_usd"] == 0.00021
     capture.request(httpx.Request("POST", "https://model.test"))
-    capture.response(httpx.Response(500))
-    assert capture.snapshot(role)["estimated_cost_usd"] is None
+    capture.response(httpx.Response(500))  # unknown cost: counted, never priced
+    result = capture.snapshot(role)
+    assert result["unaccounted"] == 1 and result["estimated_cost_usd"] == 0.00021
 
 
 def test_unknown_pricing_and_unsupported_cache_writes_are_unavailable():
@@ -144,12 +145,12 @@ def test_unknown_pricing_and_unsupported_cache_writes_are_unavailable():
     capture.cache_write_tokens = 10
     assert capture.estimated_cost(role) is None
     empty = UsageCapture().snapshot(role)
-    assert empty["complete"] and empty["estimated_cost_usd"] == 0
+    assert empty["unaccounted"] == 0 and empty["estimated_cost_usd"] == 0
 
 
 def test_non_json_and_failed_responses_do_not_fabricate_usage():
     capture = UsageCapture(requests=2)
     capture.response(httpx.Response(200, text="not json"))
     capture.response(httpx.Response(429, json={"usage": {"prompt_tokens": 10}}))
-    assert capture.responses_with_usage == 0
-    assert capture.snapshot(runtime_role())["estimated_cost_usd"] is None
+    assert capture.responses_with_usage == 0 and capture.prompt_tokens == 0
+    assert (capture.rate_limited, capture.unaccounted) == (1, 1)

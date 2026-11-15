@@ -42,10 +42,13 @@ def comparison_rows(run: dict) -> dict[str, str]:
     cost = usage.get("estimated_cost_usd")
     if cost is not None and (type(cost) not in (int, float) or not math.isfinite(cost) or cost < 0):
         raise ValueError("invalid estimated runtime cost")
+    shown = "unavailable" if cost is None else f"${cost:.8f}"
+    if cost is not None and usage.get("unaccounted", 0):
+        shown = f"at least {shown} ({usage['unaccounted']} attempts without usage)"
     return {
         "Answer accuracy": percent(accuracy["passed"], accuracy["total"]),
         "Latency p50 / p95": f"{ms(latency['p50_ms'])} / {ms(latency['p95_ms'])}",
-        "Estimated runtime cost (USD)": "unavailable" if cost is None else f"${cost:.8f}",
+        "Estimated runtime cost (USD)": shown,
     }
 
 
@@ -67,8 +70,9 @@ def build(baseline: dict, comparison: dict) -> str:
         "Cost is estimated from actual provider prompt, cached-input, cache-write and completion"
         " token counts. Completion totals already include reasoning tokens. Rate-limited (429)"
         " attempts return no completion and count as unbilled. Any other attempt without usage,"
-        " unknown pricing and unsupported cache writes make cost unavailable. Judge calls"
-        " are excluded from both runtime cost and stage latency.",
+        " such as a timeout, is counted but not priced, so that cost reads 'at least'. Unknown"
+        " pricing and unsupported cache writes make cost unavailable. Judge calls are excluded"
+        " from both runtime cost and stage latency.",
         "",
         f"Pricing verified {PRICING_DATE}, USD per million tokens:",
         "",

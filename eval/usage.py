@@ -58,9 +58,9 @@ class UsageCapture:
     cache_write_tokens: int = 0
 
     @property
-    def complete(self) -> bool:
-        """Every attempt either reported its usage or was refused with a 429."""
-        return self.requests == self.responses_with_usage + self.rate_limited
+    def unaccounted(self) -> int:
+        """Attempts with neither usage nor a 429, such as a timeout: their cost is unknown."""
+        return self.requests - self.responses_with_usage - self.rate_limited
 
     def request(self, request: httpx.Request) -> None:
         self.requests += 1
@@ -81,10 +81,9 @@ class UsageCapture:
             setattr(self, name, getattr(self, name) + count)
 
     def estimated_cost(self, role: Role) -> float | None:
+        """Cost of the recorded usage: a lower bound while any attempt is unaccounted."""
         price = PRICES.get((role.provider, role.model))
-        if price is None or not self.complete:
-            return None
-        if self.cache_write_tokens:
+        if price is None or self.cache_write_tokens:
             return None
         ordinary = self.prompt_tokens - self.cached_tokens
         total = (
@@ -100,8 +99,8 @@ class UsageCapture:
             "requests": self.requests,
             "responses_with_usage": self.responses_with_usage,
             "rate_limited": self.rate_limited,
-            "complete": self.complete,
-            **{name: getattr(self, name) if self.complete else None for name in names},
+            "unaccounted": self.unaccounted,
+            **{name: getattr(self, name) for name in names},
             "estimated_cost_usd": self.estimated_cost(role),
             "pricing": {
                 "verified_on": PRICING_DATE,
