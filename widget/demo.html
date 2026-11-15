@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Meridian All Day Allergy | Meridian Pharmacy</title>
+  <style>
+    :root { --meridian-accent: #0b6e4f; }
+    body { margin: 0; background: #f7f8f6; color: #1d2127; font: 16px/1.5 Georgia, "Times New Roman", serif; }
+    .bar { background: #0b6e4f; color: #fff; padding: 14px 16px; font: 600 18px/1 system-ui, sans-serif; }
+    .bar nav { max-width: 960px; margin: 0 auto; display: flex; gap: 20px; align-items: center; }
+    .bar a { color: #fff; text-decoration: none; font-weight: 400; font-size: 15px; }
+    main { max-width: 960px; margin: 32px auto; padding: 0 16px; display: grid; gap: 32px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+    .box { aspect-ratio: 4 / 3; border-radius: 16px; background: linear-gradient(135deg, #d8efe5, #b9dccd);
+      display: grid; place-items: center; font: 600 22px/1.2 system-ui, sans-serif; color: #0b6e4f; text-align: center; }
+    h1 { margin: 0 0 8px; }
+    .price { font: 600 22px/1 system-ui, sans-serif; margin: 12px 0 20px; }
+    button.buy { font: 600 16px/1 system-ui, sans-serif; padding: 12px 22px; border-radius: 10px; border: 0;
+      background: #0b6e4f; color: #fff; cursor: pointer; }
+    .note { color: #5b6470; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <nav>Meridian Pharmacy <a href="#">Allergy</a> <a href="#">Pain and fever</a> <a href="#">Stores</a></nav>
+  </header>
+  <main>
+    <div class="box" aria-hidden="true">Meridian<br>All Day Allergy</div>
+    <section>
+      <p class="note">MRD-ALG-012 · Allergy · Tablets, 10 mg</p>
+      <h1>Meridian All Day Allergy</h1>
+      <p class="price">$14.99</p>
+      <button class="buy" type="button">Add to basket</button>
+      <p class="note">This is a demo storefront with fictional products. Use the chat to ask what the label says,
+        whether a store has it in stock, or where your order is.</p>
+    </section>
+  </main>
+  <script src="/widget/meridian-chat.js" data-api="" data-store="store-001" defer></script>
+</body>
+</html>
