@@ -35,6 +35,9 @@ contracts: | .venv  ## Regenerate the contract snapshots. Commit them in a PR of
 fetch-labels: | .venv  ## Fetch OTC label samples from openFDA into catalog/raw/. Needs the network.
 	$(PY) -m scripts.fetch_labels
 
+seed-data: | .venv  ## Regenerate data/orders.json and data/stock.json from the fixed seed.
+	$(PY) -m scripts.seed_data
+
 # A target-specific variable, so `make run` uses the live model with no shell syntax.
 run: export MERIDIAN_LLM := live
 run: | .venv  ## Start the API on port 8001 and the assistant on port 8000. Needs GROQ_API_KEY.
