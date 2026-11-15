@@ -12,12 +12,12 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
-from assistant import pipeline
+from assistant import escalation, pipeline
 from assistant.api_client import connect
 from assistant.llm import FakeSender, make_client
 from assistant.session import SessionStore
 from assistant.settings import Settings, load_settings
-from contracts.chat import ChatReply, ChatRequest
+from contracts.chat import ChatReply, ChatRequest, HandoffReply, HandoffRequest
 
 WIDGET = Path(__file__).resolve().parent.parent / "widget"
 
@@ -40,6 +40,10 @@ def create_app(
     def chat(request: ChatRequest) -> ChatReply:
         session = sessions.get(request.session_id)
         return pipeline.run_turn(request, session, turn_steps, llm, api).reply
+
+    @app.post("/handoff", response_model=HandoffReply)
+    def handoff(request: HandoffRequest) -> HandoffReply:
+        return escalation.handoff(request.session_id, sessions.get(request.session_id), api)
 
     if widget.is_dir():
         app.mount("/widget", StaticFiles(directory=widget), name="widget")
