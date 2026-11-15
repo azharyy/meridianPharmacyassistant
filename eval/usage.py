@@ -1,4 +1,4 @@
-"""Capture Groq token usage and estimate runtime cost from recorded provider token counts."""
+"""Capture provider token usage and estimate runtime cost from the recorded token counts."""
 
 from dataclasses import dataclass
 
@@ -9,6 +9,21 @@ from assistant.settings import Role
 
 PRICING_DATE = "2026-11-15"
 PRICES = {
+    ("opencode", "glm-5.3-flash"): {
+        "input": 0.15,
+        "cached_input": 0.03,
+        "cache_write": None,
+        "output": 0.50,
+        "source": "https://opencode.ai/docs/go/",
+    },
+    ("opencode", "deepseek-v4.1-flash"): {
+        "input": 0.30,
+        "cached_input": 0.006,
+        "cache_write": None,
+        "output": 1.20,
+        "source": "https://opencode.ai/docs/go/",
+        "note": "peak rate, so an upper bound; off-peak is half",
+    },
     ("groq", "openai/gpt-oss-120b"): {
         "input": 0.15,
         "cached_input": 0.075,
@@ -105,7 +120,7 @@ class UsageCapture:
             "pricing": {
                 "verified_on": PRICING_DATE,
                 "usd_per_million_tokens": PRICES.get((role.provider, role.model)),
-                "scope": "Runtime only; Groq text requests; judge excluded.",
+                "scope": "Runtime only; judge excluded.",
             },
         }
 

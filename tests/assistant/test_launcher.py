@@ -5,7 +5,7 @@ import pytest
 from assistant import launcher
 from assistant.settings import MissingKey, load_settings
 
-LIVE = load_settings({"MERIDIAN_LLM": "live", "GROQ_API_KEY": "gsk_test"})
+LIVE = load_settings({"MERIDIAN_LLM": "live", "OPENCODE_API_KEY": "oc_test"})
 
 
 class FakeServer:
@@ -47,7 +47,7 @@ def test_the_commands_start_the_api_on_8001_and_the_assistant_on_8000():
 
 def test_live_mode_without_the_key_stops_before_starting_anything():
     started = []
-    with pytest.raises(MissingKey, match="GROQ_API_KEY"):
+    with pytest.raises(MissingKey, match="OPENCODE_API_KEY"):
         launcher.main(load_settings({"MERIDIAN_LLM": "live"}), start=started.append)
     assert started == []
 

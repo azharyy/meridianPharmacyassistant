@@ -21,7 +21,7 @@ from eval.judge.calibrate import PROMPT_SHA256, Pair
 from eval.judge.judge import Verdict
 from tests.eval.test_cli import SETTINGS, cases, evaluate_fake, saved_calibration
 
-LIVE = load_settings({"MERIDIAN_LLM": "live", "GROQ_API_KEY": "synthetic-groq-key"})
+LIVE = load_settings({"MERIDIAN_LLM": "live", "OPENCODE_API_KEY": "synthetic-opencode-key"})
 
 
 def pairs(label=True):
@@ -63,7 +63,8 @@ def test_calibration_uses_only_the_judge_and_writes_agreement_disagreements_and_
     assert result == json.loads((tmp_path / "calibration.json").read_text())
     text = (tmp_path / "calibration.md").read_text()
     assert "19/20 (95.0%)" in text and "cal-00: labeled True, the judge said False" in text
-    assert PROMPT_SHA256 in text and "Groq provider default" in text
+    assert PROMPT_SHA256 in text and "Processing: provider default" in text
+    assert "Judge: opencode kimi-k3.1-pro." in text
     assert require_calibration(tmp_path, result["judge"]) == result
 
 
@@ -74,9 +75,9 @@ def test_unlabeled_calibration_stops_before_keys_or_models(tmp_path):
     assert started == [] and not list(tmp_path.iterdir())
 
 
-def test_calibration_uses_the_same_groq_key_as_the_runtime(tmp_path):
+def test_calibration_uses_the_same_opencode_key_as_the_runtime(tmp_path):
     started = []
-    with pytest.raises(MissingKey, match="GROQ_API_KEY"):
+    with pytest.raises(MissingKey, match="OPENCODE_API_KEY"):
         run_calibration(
             pairs(),
             load_settings({"MERIDIAN_LLM": "live"}),
@@ -131,11 +132,11 @@ def test_test_set_needs_a_completed_calibration_before_keys_models_or_api(tmp_pa
     assert started == []
 
 
-def test_a_saved_non_groq_calibration_cannot_be_trusted(tmp_path):
+def test_a_saved_calibration_from_an_unknown_endpoint_cannot_be_trusted(tmp_path):
     result = saved_calibration(tmp_path)
     result["judge"]["base_url"] = "https://model.invalid"
     (tmp_path / "calibration.json").write_text(json.dumps(result))
-    with pytest.raises(EvaluationInputError, match="does not match this Groq judge"):
+    with pytest.raises(EvaluationInputError, match="does not match this judge"):
         require_calibration(tmp_path, result["judge"])
 
 
@@ -158,6 +159,16 @@ def test_calibration_refreshes_an_existing_compatible_test_report(tmp_path):
     run_calibration(pairs(), LIVE, models=models(LIVE, [True] * 20), directory=directory)
     text = (tmp_path / "REPORT.md").read_text()
     assert "Agreement with the supplied labels: 20/20 (100.0%)." in text
+
+
+def test_a_calibration_for_another_judge_leaves_the_measured_report_alone(tmp_path):
+    directory = tmp_path / "results"
+    evaluate_fake(directory, "baseline", replace(SETTINGS, exact_match=False))
+    evaluate_fake(directory, "improved")
+    other = replace(LIVE, judge=replace(LIVE.judge, model="another-judge"))
+    result = run_calibration(pairs(), other, models=models(other, [True] * 20), directory=directory)
+    assert result["judge"]["model"] == "another-judge"
+    assert not (tmp_path / "REPORT.md").exists()  # the runs used SETTINGS.judge, not this one
 
 
 def test_bad_calibration_input_never_echoes_pair_text(tmp_path):
@@ -183,7 +194,7 @@ def test_calibration_inputs_require_twenty_unique_hand_labels(tmp_path, alter):
         input_pairs(path)
 
 
-def test_shared_sdk_wire_uses_groq_qwen_with_strict_outputs_and_no_tools():
+def test_shared_sdk_wire_uses_the_opencode_go_judge_with_strict_outputs_and_no_tools():
     requests, urls = [], []
 
     def send(request):
@@ -211,9 +222,9 @@ def test_shared_sdk_wire_uses_groq_qwen_with_strict_outputs_and_no_tools():
         assert client.complete(
             [{"role": "user", "content": "Synthetic evidence"}], Verdict
         ).answers_question
-    assert urls == ["https://api.groq.com/openai/v1/chat/completions"]
-    assert requests[0]["model"] == "qwen/qwen3.8-27b"
-    assert requests[0]["reasoning_effort"] == "none"
+    assert urls == ["https://opencode.ai/inference/go/openai/v1/chat/completions"]
+    assert requests[0]["model"] == "kimi-k3.1-pro"
+    assert requests[0]["reasoning_effort"] == "low"
     assert "service_tier" not in requests[0]
     assert requests[0]["response_format"]["json_schema"]["strict"] is True
     assert "tools" not in requests[0]
@@ -222,5 +233,5 @@ def test_shared_sdk_wire_uses_groq_qwen_with_strict_outputs_and_no_tools():
 def test_the_calibration_make_target_selects_live_mode_and_the_cli_command():
     makefile = Path("Makefile").read_text()
     assert "judge-calibrate: export MERIDIAN_LLM := live" in makefile
-    assert "judge-calibrate: export MERIDIAN_RUNTIME_PROVIDER := groq" in makefile
+    assert "judge-calibrate: export MERIDIAN_RUNTIME_PROVIDER := opencode" in makefile
     assert "\t$(PY) -m eval.cli calibrate\n" in makefile

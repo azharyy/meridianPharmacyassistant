@@ -31,7 +31,7 @@ def body(role, usage):
 
 @pytest.mark.parametrize(
     "runtime_model,cost",
-    [(DEFAULT_RUNTIME_MODEL, 0.0002625), (COMPARISON_RUNTIME_MODEL, 0.0001312)],
+    [(DEFAULT_RUNTIME_MODEL, 0.000238), (COMPARISON_RUNTIME_MODEL, 0.0005106)],
 )
 def test_actual_sdk_response_hooks_capture_cache_counts_without_double_counting_reasoning(
     runtime_model, cost
@@ -64,7 +64,7 @@ def test_actual_sdk_response_hooks_capture_cache_counts_without_double_counting_
     assert "synthetic-key" not in json.dumps(result)
     assert "tools" not in requests[0]
     assert requests[0]["response_format"]["json_schema"]["strict"]
-    assert role.provider == "groq" and role.key_variable == "GROQ_API_KEY"
+    assert role.provider == "opencode" and role.key_variable == "OPENCODE_API_KEY"
 
 
 @pytest.mark.parametrize(
@@ -118,7 +118,7 @@ def test_a_transport_failure_then_retry_does_not_disappear_from_usage_accounting
         assert model.complete([{"role": "user", "content": "Synthetic question"}], Verdict)
     result = capture.snapshot(role)
     assert result["requests"] == 2 and result["unaccounted"] == 1
-    assert result["completion_tokens"] == 5 and result["estimated_cost_usd"] == 0.0000045
+    assert result["completion_tokens"] == 5 and result["estimated_cost_usd"] == 0.000004
 
 
 def test_rate_limited_attempts_count_as_unbilled_but_other_failures_stay_unknown():
@@ -131,11 +131,11 @@ def test_rate_limited_attempts_count_as_unbilled_but_other_failures_stay_unknown
         capture.response(response)
     result = capture.snapshot(role)
     assert (result["rate_limited"], result["unaccounted"]) == (1, 0)
-    assert result["prompt_tokens"] == 1000 and result["estimated_cost_usd"] == 0.00021
+    assert result["prompt_tokens"] == 1000 and result["estimated_cost_usd"] == 0.0002
     capture.request(httpx.Request("POST", "https://model.test"))
     capture.response(httpx.Response(500))  # unknown cost: counted, never priced
     result = capture.snapshot(role)
-    assert result["unaccounted"] == 1 and result["estimated_cost_usd"] == 0.00021
+    assert result["unaccounted"] == 1 and result["estimated_cost_usd"] == 0.0002
 
 
 def test_unknown_pricing_and_unsupported_cache_writes_are_unavailable():

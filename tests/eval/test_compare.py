@@ -15,41 +15,43 @@ from eval.usage import MeteredModel, UsageCapture
 from tests.assistant.fixtures import PLAN, ROUTED, search
 from tests.eval.test_cli import cases, evaluate_fake
 
-GROQ = load_settings({"MERIDIAN_LLM": "live", "GROQ_API_KEY": "synthetic-groq-key"})
-GROQ20B = load_settings(
+DEFAULT = load_settings({"MERIDIAN_LLM": "live", "OPENCODE_API_KEY": "synthetic-opencode-key"})
+COMPARE = load_settings(
     {
         "MERIDIAN_LLM": "live",
         "MERIDIAN_RUNTIME_MODEL": COMPARISON_RUNTIME_MODEL,
-        "GROQ_API_KEY": "synthetic-groq-key",
+        "OPENCODE_API_KEY": "synthetic-opencode-key",
     }
 )
 
 
 def test_comparison_shows_accuracy_latency_and_actual_runtime_cost_with_pricing_sources(tmp_path):
-    before, _, _ = evaluate_fake(tmp_path, settings=GROQ)
-    after, _, _ = evaluate_fake(tmp_path, name="dev-groq20b", settings=GROQ20B)
+    before, _, _ = evaluate_fake(tmp_path, settings=DEFAULT)
+    after, _, _ = evaluate_fake(tmp_path, name="dev-compare", settings=COMPARE)
     before["runtime_usage"] = UsageCapture(
         requests=1, responses_with_usage=1, prompt_tokens=1000, completion_tokens=100
-    ).snapshot(GROQ.runtime)
+    ).snapshot(DEFAULT.runtime)
     after["runtime_usage"] = UsageCapture(
         requests=1, responses_with_usage=1, prompt_tokens=1000, completion_tokens=100
-    ).snapshot(GROQ20B.runtime)
+    ).snapshot(COMPARE.runtime)
     text = build(before, after)
+    assert "| Metric | opencode glm-5.3-flash | opencode deepseek-v4.1-flash |" in text
     assert "| Answer accuracy | 1/1 (100.0%) | 1/1 (100.0%) |" in text
     assert "| Latency p50 / p95 |" in text
-    assert "| Estimated runtime cost (USD) | $0.00021000 | $0.00010500 |" in text
+    assert "| Estimated runtime cost (USD) | $0.00020000 | $0.00042000 |" in text
     assert "reasoning tokens" in text and "Judge calls are excluded" in text
     assert "Rate-limited (429) attempts return no completion and count as unbilled" in text
-    assert "https://console.groq.com/docs/model/openai/gpt-oss-120b" in text
-    assert "https://console.groq.com/docs/model/openai/gpt-oss-20b" in text
-    assert "Groq GPT-OSS 120B | Groq GPT-OSS 20B" in text
-    assert "2026-11-15" in text
+    assert "monthly allowance instead of being billed" in text
+    assert "[opencode glm-5.3-flash](https://opencode.ai/docs/go/)" in text
+    assert "(peak rate, so an upper bound; off-peak is half)" in text
+    assert "gpt-oss" not in text  # only the two compared runtimes are priced
+    assert "## Failed opencode deepseek-v4.1-flash cases" in text and "2026-11-15" in text
     after["runtime_usage"]["unaccounted"] = 2
-    assert "| $0.00021000 | at least $0.00010500 (2 attempts without usage) |" in build(
+    assert "| $0.00020000 | at least $0.00042000 (2 attempts without usage) |" in build(
         before, after
     )
     after["runtime_usage"]["estimated_cost_usd"] = None
-    assert "$0.00021000 | unavailable" in build(before, after)
+    assert "$0.00020000 | unavailable" in build(before, after)
 
 
 @pytest.mark.parametrize(
@@ -57,7 +59,7 @@ def test_comparison_shows_accuracy_latency_and_actual_runtime_cost_with_pricing_
     ["case_sha256", "implementation_sha256", "judge", "mode", "runtime", "exact_match", "usage"],
 )
 def test_stale_reference_stops_before_models_or_api_start(tmp_path, changed):
-    saved, _, _ = evaluate_fake(tmp_path, settings=GROQ)
+    saved, _, _ = evaluate_fake(tmp_path, settings=DEFAULT)
     if changed == "exact_match":
         saved["exact_match"] = False
     elif changed == "usage":
@@ -68,43 +70,43 @@ def test_stale_reference_stops_before_models_or_api_start(tmp_path, changed):
     started = []
     with pytest.raises(ValueError, match="eval-dev again"):
         run_live(
-            "dev-groq20b",
+            "dev-compare",
             cases(),
-            GROQ20B,
+            COMPARE,
             models=started.append,
             serve=started.append,
             directory=tmp_path,
         )
-    assert started == [] and not (tmp_path / "dev-groq20b.json").exists()
+    assert started == [] and not (tmp_path / "dev-compare.json").exists()
 
 
 def test_missing_or_invalid_reference_stops_before_any_startup(tmp_path):
     with pytest.raises(ValueError, match="eval-dev first"):
-        reference_run(tmp_path, metadata(cases(), GROQ20B))
+        reference_run(tmp_path, metadata(cases(), COMPARE))
     (tmp_path / "dev.json").write_text("invalid json")
     with pytest.raises(ValueError, match="eval-dev first"):
-        reference_run(tmp_path, metadata(cases(), GROQ20B))
+        reference_run(tmp_path, metadata(cases(), COMPARE))
 
 
 @pytest.mark.parametrize("cost", [-1, True, "unknown", float("nan")])
 def test_invalid_saved_cost_is_rejected_without_exposing_contents(tmp_path, cost):
-    saved, _, _ = evaluate_fake(tmp_path, settings=GROQ)
+    saved, _, _ = evaluate_fake(tmp_path, settings=DEFAULT)
     saved["runtime_usage"]["estimated_cost_usd"] = cost
     (tmp_path / "dev.json").write_text(json.dumps(saved))
     with pytest.raises(ValueError, match="saved metrics are invalid"):
-        reference_run(tmp_path, metadata(cases(), GROQ20B))
+        reference_run(tmp_path, metadata(cases(), COMPARE))
 
 
 def test_fake_full_comparison_selects_runtime_by_settings_and_excludes_judge_tokens(tmp_path):
-    evaluate_fake(tmp_path, settings=GROQ)
+    evaluate_fake(tmp_path, settings=DEFAULT)
     started = []
 
     @contextmanager
     def models(settings):
         started.append(settings.runtime.model)
-        assert settings.runtime.provider == settings.judge.provider == "groq"
-        assert settings.runtime.key_variable == settings.judge.key_variable == "GROQ_API_KEY"
-        assert settings.judge == GROQ.judge
+        assert settings.runtime.provider == settings.judge.provider == "opencode"
+        assert settings.runtime.key_variable == settings.judge.key_variable == "OPENCODE_API_KEY"
+        assert settings.judge == DEFAULT.judge
         yield (
             MeteredModel(
                 settings.runtime,
@@ -128,9 +130,9 @@ def test_fake_full_comparison_selects_runtime_by_settings_and_excludes_judge_tok
         yield settings
 
     result = run_live(
-        "dev-groq20b",
+        "dev-compare",
         cases(),
-        GROQ20B,
+        COMPARE,
         models=models,
         serve=serve,
         directory=tmp_path,
@@ -139,16 +141,17 @@ def test_fake_full_comparison_selects_runtime_by_settings_and_excludes_judge_tok
     assert started == [COMPARISON_RUNTIME_MODEL, "fresh-api"]
     assert result["runtime_usage"]["prompt_tokens"] == 100
     assert result["runtime_usage"]["completion_tokens"] == 20
-    assert result["runtime_usage"]["estimated_cost_usd"] == 0.0000135
+    assert result["runtime_usage"]["estimated_cost_usd"] == 0.000054
     assert result["metrics"]["accuracy"]["passed"] == 1
-    assert result == json.loads((tmp_path / "dev-groq20b.json").read_text())
-    text = (tmp_path / "dev-groq20b.md").read_text()
-    assert "Development runtime comparison" in text and "unavailable | $0.00001350" in text
+    assert result == json.loads((tmp_path / "dev-compare.json").read_text())
+    text = (tmp_path / "dev-compare.md").read_text()
+    assert "Development runtime comparison" in text and "unavailable | $0.00005400" in text
 
 
-def test_comparison_make_target_selects_smaller_groq_runtime_using_settings_only():
+def test_comparison_make_target_selects_the_comparison_runtime_using_settings_only():
     makefile = Path("Makefile").read_text()
     assert "eval-compare: export MERIDIAN_LLM := live" in makefile
+    assert "eval-compare: export MERIDIAN_RUNTIME_PROVIDER := opencode" in makefile
     assert f"eval-compare: export MERIDIAN_RUNTIME_MODEL := {COMPARISON_RUNTIME_MODEL}" in makefile
     assert "eval-compare: export MERIDIAN_EXACT_MATCH := 1" in makefile
-    assert "\t$(PY) -m eval.cli dev-groq20b\n" in makefile
+    assert "\t$(PY) -m eval.cli dev-compare\n" in makefile

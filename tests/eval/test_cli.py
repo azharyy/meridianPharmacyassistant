@@ -103,7 +103,7 @@ def test_input_errors_are_clear_and_never_echo_case_text(tmp_path):
 
 def test_missing_live_keys_stop_before_models_or_api_start():
     started = []
-    with pytest.raises(MissingKey, match="GROQ_API_KEY"):
+    with pytest.raises(MissingKey, match="OPENCODE_API_KEY"):
         run_live(
             "dev",
             cases(),
@@ -119,8 +119,8 @@ def test_missing_live_keys_stop_before_models_or_api_start():
     [
         SETTINGS,
         load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_EXACT_MATCH": "0"}),
-        load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_MODEL": "openai/gpt-oss-20b"}),
-        load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_PROVIDER": "opencode"}),
+        load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_MODEL": "deepseek-v4.1-flash"}),
+        load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_PROVIDER": "groq"}),
     ],
 )
 def test_wrong_variant_settings_stop_before_models_or_api_start(setting):
@@ -132,9 +132,9 @@ def test_wrong_variant_settings_stop_before_models_or_api_start(setting):
 
 def test_live_composition_rejects_using_the_same_model_for_runtime_and_judge():
     started = []
-    setting = load_settings({"MERIDIAN_LLM": "live", "GROQ_API_KEY": "synthetic-key"})
+    setting = load_settings({"MERIDIAN_LLM": "live", "OPENCODE_API_KEY": "synthetic-key"})
     setting = replace(setting, judge=setting.runtime)
-    with pytest.raises(ValueError, match="different Groq judge"):
+    with pytest.raises(ValueError, match="different judge"):
         run_live("dev", cases(), setting, models=started.append, serve=started.append)
     assert started == []
 
@@ -142,19 +142,19 @@ def test_live_composition_rejects_using_the_same_model_for_runtime_and_judge():
 def test_comparison_rejects_the_default_runtime_before_keys_or_reference_loading():
     started = []
     setting = load_settings({"MERIDIAN_LLM": "live"})
-    with pytest.raises(ValueError, match="selected Groq runtime"):
-        run_live("dev-groq20b", cases(), setting, models=started.append, serve=started.append)
+    with pytest.raises(ValueError, match="selected runtime"):
+        run_live("dev-compare", cases(), setting, models=started.append, serve=started.append)
     assert started == []
 
 
 @pytest.mark.parametrize("role", ["runtime", "judge"])
-def test_non_groq_model_endpoints_are_rejected_before_clients_or_requests(role):
+def test_unknown_model_endpoints_are_rejected_before_clients_or_requests(role):
     started = []
-    setting = load_settings({"MERIDIAN_LLM": "live", "GROQ_API_KEY": "synthetic-key"})
+    setting = load_settings({"MERIDIAN_LLM": "live", "OPENCODE_API_KEY": "synthetic-key"})
     setting = replace(
         setting, **{role: replace(getattr(setting, role), base_url="https://model.invalid")}
     )
-    with pytest.raises(ValueError, match="Groq"):
+    with pytest.raises(ValueError, match="selected runtime"):
         run_live("dev", cases(), setting, models=started.append, serve=started.append)
     assert started == []
 
@@ -188,7 +188,11 @@ def test_report_rejects_mismatched_cases_models_or_prompts(tmp_path, changed):
 
 def test_metadata_never_contains_provider_key_values():
     setting = load_settings(
-        {"GROQ_API_KEY": "synthetic-secret-one", "OPENAI_API_KEY": "synthetic-secret-two"}
+        {
+            "OPENCODE_API_KEY": "synthetic-secret-one",
+            "GROQ_API_KEY": "synthetic-secret-two",
+            "OPENAI_API_KEY": "synthetic-secret-three",
+        }
     )
     data = json.dumps(metadata(cases(), setting))
     assert "synthetic-secret" not in data
@@ -197,11 +201,8 @@ def test_metadata_never_contains_provider_key_values():
 def test_make_targets_set_live_models_and_matching_flags_without_shell_commands():
     makefile = Path("Makefile").read_text()
     assert "eval-dev eval-baseline eval: export MERIDIAN_LLM := live" in makefile
-    assert "eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_PROVIDER := groq" in makefile
-    assert (
-        "eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_MODEL := openai/gpt-oss-120b"
-        in makefile
-    )
+    assert "eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_PROVIDER := opencode" in makefile
+    assert "eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_MODEL := glm-5.3-flash" in makefile
     assert "eval-dev eval: export MERIDIAN_EXACT_MATCH := 1" in makefile
     assert "eval-baseline: export MERIDIAN_EXACT_MATCH := 0" in makefile
     for name in ("dev", "baseline", "improved"):

@@ -1,4 +1,4 @@
-"""Validate a matching Groq development run and compare runtime accuracy, latency and cost."""
+"""Validate a matching development run and compare runtime accuracy, latency and cost."""
 
 import json
 import math
@@ -15,9 +15,7 @@ def reference_run(directory: Path, metadata: dict) -> dict:
     try:
         raw = json.loads((directory / "dev.json").read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        raise ValueError(
-            "Run eval-dev first: its saved Groq results are missing or invalid."
-        ) from None
+        raise ValueError("Run eval-dev first: its saved results are missing or invalid.") from None
     configuration = {**metadata["configuration"], "runtime": asdict(runtime_role())}
     if (
         not isinstance(raw, dict)
@@ -52,18 +50,23 @@ def comparison_rows(run: dict) -> dict[str, str]:
     }
 
 
+def runtime_label(run: dict) -> str:
+    runtime = run["configuration"]["runtime"]
+    return f"{runtime['provider']} {runtime['model']}"
+
+
 def build(baseline: dict, comparison: dict) -> str:
     before, after = comparison_rows(baseline), comparison_rows(comparison)
     failures = failed_cases(comparison["metrics"])
     lines = [
         "# Development runtime comparison",
         "",
-        "The development cases, exact matching, prompts, policy and Qwen judge are the same;"
-        " settings select the Groq runtime model.",
+        "The development cases, exact matching, prompts, policy and judge are the same;"
+        " settings select the runtime model.",
         "Case expectations are AI labels assigned on the user's instruction; independent human"
         " validation remains pending.",
         "",
-        "| Metric | Groq GPT-OSS 120B | Groq GPT-OSS 20B |",
+        f"| Metric | {runtime_label(baseline)} | {runtime_label(comparison)} |",
         "| --- | --- | --- |",
         *[f"| {name} | {before[name]} | {after[name]} |" for name in before],
         "",
@@ -72,18 +75,25 @@ def build(baseline: dict, comparison: dict) -> str:
         " attempts return no completion and count as unbilled. Any other attempt without usage,"
         " such as a timeout, is counted but not priced, so that cost reads 'at least'. Unknown"
         " pricing and unsupported cache writes make cost unavailable. Judge calls are excluded"
-        " from both runtime cost and stage latency.",
+        " from both runtime cost and stage latency. On an OpenCode Go plan this usage counts"
+        " against each model's monthly allowance instead of being billed per token.",
         "",
         f"Pricing verified {PRICING_DATE}, USD per million tokens:",
         "",
     ]
-    for (provider, model), price in PRICES.items():
+    for run in (baseline, comparison):
+        runtime = run["configuration"]["runtime"]
+        price = PRICES.get((runtime["provider"], runtime["model"]))
+        if price is None:
+            lines.append(f"- {runtime_label(run)}: no verified price.")
+            continue
         write = "unsupported" if price["cache_write"] is None else f"${price['cache_write']}"
+        note = f" ({price['note']})" if "note" in price else ""
         lines.append(
-            f"- [{provider} {model}]({price['source']}): input ${price['input']},"
+            f"- [{runtime_label(run)}]({price['source']}): input ${price['input']},"
             f" cached input ${price['cached_input']}, cache write {write},"
-            f" output ${price['output']}."
+            f" output ${price['output']}{note}."
         )
-    lines += ["", "## Failed GPT-OSS 20B cases", ""]
+    lines += ["", f"## Failed {runtime_label(comparison)} cases", ""]
     lines += [f"- {case}: {'; '.join(reasons)}" for case, reasons in failures.items()] or ["None."]
     return "\n".join(lines) + "\n"
