@@ -1,8 +1,10 @@
 """The renderer builds replies from templates and record text only, and the fallback from policy."""
 
+import pytest
+
 from assistant import policy, templates
-from assistant.render import render, render_fallback
-from contracts.chat import ChatReply
+from assistant.render import render, render_fallback, render_risk
+from contracts.chat import ChatReply, TextBlock
 from contracts.plan import CatalogPlan
 from contracts.taxonomy import LabelSection, ReplyType, RiskLabel
 from tests.assistant.fixtures import PLAN, PRODUCTS
@@ -75,3 +77,52 @@ def test_a_plan_naming_a_record_that_was_not_retrieved_gets_the_fallback():
 def test_a_reply_type_this_issue_does_not_build_yet_gets_the_fallback():
     plan = PLAN.model_copy(update={"reply_type": ReplyType.COMPARISON})
     assert render(plan, PRODUCTS, RiskLabel.NONE, None) == render_fallback()
+
+
+RISKS = [
+    RiskLabel.EMERGENCY,
+    RiskLabel.MEDICAL_ADVICE,
+    RiskLabel.DOSING_BEYOND_LABEL,
+    RiskLabel.PRESCRIPTION,
+    RiskLabel.PROMPT_INJECTION,
+]
+
+
+@pytest.mark.parametrize("risk", RISKS)
+def test_each_risk_reply_is_its_fixed_text_first_and_offers_the_card(risk):
+    reply = render_risk(risk, None)
+    assert reply.blocks == [TextBlock(type="text", text=policy.POLICY[risk].text)]
+    assert reply.reply_type in policy.POLICY[risk].reply_types
+    assert (reply.handoff_offered, reply.sources) == (True, [])
+    assert reply.emergency is (risk is RiskLabel.EMERGENCY)
+
+
+def test_the_911_reply_comes_first_and_the_card_after_it():
+    reply = render_risk(RiskLabel.EMERGENCY, PRODUCTS[0])
+    assert reply.blocks[0].text == policy.EMERGENCY_TEXT and len(reply.blocks) == 1
+    assert reply.handoff_offered and reply.emergency
+
+
+@pytest.mark.parametrize(
+    ("risk", "section"),
+    [
+        (RiskLabel.MEDICAL_ADVICE, LabelSection.WARNINGS),
+        (RiskLabel.DOSING_BEYOND_LABEL, LabelSection.DIRECTIONS),
+    ],
+)
+def test_a_named_product_adds_only_the_section_the_label_allows(risk, section):
+    reply = render_risk(risk, PRODUCTS[0])
+    [_, block] = reply.blocks
+    assert (block.section, block.text) == (section, getattr(PRODUCTS[0], section.value))
+    assert [source.id for source in reply.sources] == [f"MRD-ALG-012#{section.value}"]
+
+
+def test_a_prescription_refusal_shows_no_label_even_for_a_named_product():
+    assert render_risk(RiskLabel.PRESCRIPTION, PRODUCTS[0]) == render_risk(
+        RiskLabel.PRESCRIPTION, None
+    )
+
+
+def test_a_turn_without_risk_has_no_fixed_reply():
+    with pytest.raises(ValueError):
+        render_risk(RiskLabel.NONE, None)
