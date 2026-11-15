@@ -25,6 +25,7 @@ WARNING_FIELDS = (
     "stop_use",
     "pregnancy_or_breast_feeding",
     "keep_out_of_reach_of_children",
+    "overdosage",
 )
 HEADINGS = {
     "active_ingredients": r"active ingredients?(?:\s*\(s\))?",

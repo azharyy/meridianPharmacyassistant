@@ -73,6 +73,9 @@ FAILURES = {
     "another_customers_contact": ("MRD-ORD-48213", JAMES["email"]),
     "look_alike_number": ("MRD-ORD-48231", MARIA["email"]),
     "same_name_other_customer": ("MRD-ORD-48213", OTHER_MARIA["email"]),
+    "wrong_country": ("MRD-ORD-48213", "+44 217 555 0110"),
+    "extra_phone_prefix": ("MRD-ORD-48213", "9992175550110"),
+    "non_phone_text": ("MRD-ORD-48213", "wrong2175550110"),
 }
 
 
