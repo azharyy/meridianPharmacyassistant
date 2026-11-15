@@ -168,6 +168,7 @@ def _run_case(
             http.headers.pop("X-Meridian-Test", None)
         else:
             http.headers["X-Meridian-Test"] = original_timeout
+    print(f"{case.id} done", flush=True)  # a rate-limited live run is otherwise silent for minutes
     return RecordedCase(id=case.id, slice=case.slice, turns=turns)
 
 
