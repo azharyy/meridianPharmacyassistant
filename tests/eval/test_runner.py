@@ -79,7 +79,7 @@ def test_product_identity_evidence_is_captured_only_for_the_turn_that_retrieved_
     assert record.turns[1].product_names == {}
 
 
-def test_cases_start_with_fresh_conversation_state_and_safe_generated_session_ids(caplog):
+def test_cases_start_with_fresh_conversation_state_and_safe_generated_session_ids(caplog, capsys):
     llm, fake = model(ROUTED, PLAN, ROUTED, PLAN)
     sources = [case(chat("My email is synthetic@example.com.")), case(chat(), id="case-002")]
     records = run_cases(sources, SETTINGS, llm, no_api(), pipeline.Steps(retrieve=search))
@@ -87,6 +87,7 @@ def test_cases_start_with_fresh_conversation_state_and_safe_generated_session_id
     assert second_router == f"Customer: {QUESTION}"
     assert [record.id for record in records] == ["case-001", "case-002"]
     assert "synthetic@example.com" not in caplog.text
+    assert capsys.readouterr().out == "case-001 done\ncase-002 done\n"  # progress shows ids only
 
 
 def test_order_form_cached_status_handoff_and_timeout_actions_use_actual_api_calls():
