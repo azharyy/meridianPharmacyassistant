@@ -44,6 +44,10 @@ def test_comparison_shows_accuracy_latency_and_actual_runtime_cost_with_pricing_
     assert "https://console.groq.com/docs/model/openai/gpt-oss-20b" in text
     assert "Groq GPT-OSS 120B | Groq GPT-OSS 20B" in text
     assert "2026-11-15" in text
+    after["runtime_usage"]["unaccounted"] = 2
+    assert "| $0.00021000 | at least $0.00010500 (2 attempts without usage) |" in build(
+        before, after
+    )
     after["runtime_usage"]["estimated_cost_usd"] = None
     assert "$0.00021000 | unavailable" in build(before, after)
 
