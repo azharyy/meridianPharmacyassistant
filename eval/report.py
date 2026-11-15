@@ -13,6 +13,12 @@ LABEL_PROVENANCE = (
     "The user authorized independent AI agents to assign the case and calibration labels."
     " Judge agreement is against those AI labels; independent human validation remains pending."
 )
+AUDIT = (
+    "Gold expectations were corrected after both live runs;"
+    " [the label audit](results/LABEL_AUDIT.md) lists each change and its reason. The same recorded"
+    " replies were rescored with no new model calls, and the original-label results are kept"
+    " beside them."
+)
 
 
 def rows(metrics: dict) -> dict[str, str]:
@@ -91,7 +97,13 @@ def calibration_lines(calibration: dict | None, prompt_sha256: str) -> list[str]
     return lines
 
 
-def build(baseline: dict, improved: dict, calibration: dict | None, prompt_sha256: str) -> str:
+def build(
+    baseline: dict,
+    improved: dict,
+    calibration: dict | None,
+    prompt_sha256: str,
+    audited: bool = False,
+) -> str:
     sections = [
         "# Evaluation report",
         "",
@@ -147,4 +159,6 @@ def build(baseline: dict, improved: dict, calibration: dict | None, prompt_sha25
         f"- {PROVENANCE}",
         f"- {LABEL_PROVENANCE}",
     ]
+    if audited:
+        sections += ["", "## Label audit", "", AUDIT]
     return "\n".join(sections) + "\n"

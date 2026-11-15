@@ -166,7 +166,11 @@ def test_report_is_written_only_after_both_compatible_variants_exist(tmp_path):
     evaluate_fake(directory, "improved")
     saved_calibration(directory)
     assert refresh_report(directory)
-    assert "# Evaluation report" in (tmp_path / "REPORT.md").read_text()
+    text = (tmp_path / "REPORT.md").read_text()
+    assert "# Evaluation report" in text and "## Label audit" not in text
+    (directory / "LABEL_AUDIT.md").write_text("# Label audit")
+    assert refresh_report(directory)  # a recalibration must keep the audit's disclosure
+    assert "[the label audit](results/LABEL_AUDIT.md)" in (tmp_path / "REPORT.md").read_text()
 
 
 @pytest.mark.parametrize("changed", ["case_sha256", "runtime", "judge_prompt_sha256"])

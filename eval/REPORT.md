@@ -86,4 +86,4 @@ The judge prompt is unchanged since the calibration.
 
 ## Label audit
 
-One unsupported AI gold expectation was corrected after both live runs. The same recorded replies were rescored with zero additional model calls; original-label results are preserved. See [the label audit](results/LABEL_AUDIT.md). No test question or runtime implementation changed.
+Gold expectations were corrected after both live runs; [the label audit](results/LABEL_AUDIT.md) lists each change and its reason. The same recorded replies were rescored with no new model calls, and the original-label results are kept beside them.
