@@ -194,6 +194,14 @@ def cited_ids(block: Block) -> set[str]:
     return {block.source_id}
 
 
+def product_names_match(block: Block, names: dict[str, str]) -> bool:
+    if isinstance(block, (LabelSectionBlock, AvailabilityBlock)):
+        return names.get(block.sku) == block.name
+    if isinstance(block, (ComparisonBlock, ProductListBlock)):
+        return all(names.get(product.sku) == product.name for product in block.products)
+    return True
+
+
 def structure_errors(reply: ChatReply) -> list[str]:
     sources = {source.id: source for source in reply.sources}
     if len(sources) != len(reply.sources):
@@ -221,6 +229,8 @@ def failure_reasons(turn: RecordedTurn) -> list[str]:
         return errors
     sources = {source.id: source for source in reply.sources}
     for block in reply.blocks:
+        if not product_names_match(block, turn.product_names):
+            return ["displayed product name lacks matching catalog evidence"]
         if fixed_block(block, reply.reply_type):
             continue
         if catalog_block(block, sources, turn.record_evidence):

@@ -121,8 +121,10 @@ def test_an_empty_script_means_the_model_is_unavailable():
         make_client(SETTINGS, RUNTIME).complete(MESSAGES, RouterOutput)
 
 
-def test_live_mode_uses_the_sdk_and_needs_the_roles_key():
+@pytest.mark.parametrize("role_name", ["runtime", "judge"])
+def test_live_mode_uses_the_sdk_and_both_roles_need_the_groq_key(role_name):
     live = load_settings({"MERIDIAN_LLM": "live", "GROQ_API_KEY": "gsk_test"})
-    assert not isinstance(make_client(live, live.runtime).send, FakeSender)
-    with pytest.raises(MissingKey, match="OPENAI_API_KEY"):
-        make_client(live, live.judge)
+    assert not isinstance(make_client(live, getattr(live, role_name)).send, FakeSender)
+    missing = load_settings({"MERIDIAN_LLM": "live", "OPENAI_API_KEY": "ignored_test"})
+    with pytest.raises(MissingKey, match="GROQ_API_KEY"):
+        make_client(missing, getattr(missing, role_name))

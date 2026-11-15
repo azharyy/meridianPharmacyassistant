@@ -34,16 +34,18 @@ Then fill it in:
 
 ```
 GROQ_API_KEY=gsk_your_key_here
-OPENAI_API_KEY=sk-your_key_here
 ```
 
 | Variable | Needed for | What it is |
 | --- | --- | --- |
-| `GROQ_API_KEY` | `make run` and the eval targets | A Groq API key, starting with `gsk_`. It runs the assistant's model. Groq's free plan is enough to try the demo |
-| `OPENAI_API_KEY` | The eval targets only | An OpenAI API key, starting with `sk-`. It runs the eval's judge model and needs a paid account. Leave it empty if you only want to chat |
+| `GROQ_API_KEY` | `make run` and all eval targets | One Groq API key, starting with `gsk_`, serves the assistant and judge. Groq's free plan is enough to try the demo |
 | `MERIDIAN_STAFF_KEY` | Optional | The header value for reading a ticket back in the demo. Default: `dev-staff-key` |
 
 Format: one `NAME=value` per line, with no quotes, no spaces around `=` and no `export`.
+
+The assistant uses Groq-hosted GPT-OSS 120B; the eval judge uses Qwen 3.8 27B.
+The development comparison uses GPT-OSS 20B with the same Qwen judge. All calls
+use the Groq API and strict structured outputs. An OpenAI API key is unused.
 
 ```bash
 make run          # then open http://localhost:8000/demo

@@ -30,10 +30,10 @@ def score_all(cases: list[RecordedCase]) -> dict:
     return {name: score(cases) for name, score in METRICS.items()}
 
 
-def failed_cases(metrics: dict) -> dict[str, list[str]]:
-    """Every failed case with each metric's reasons, by case id."""
+def failed_cases(metrics: dict, names: tuple[str, ...] = tuple(METRICS)) -> dict[str, list[str]]:
+    """Every failed case with each named metric's reasons, by case id."""
     failures: dict[str, list[str]] = {}
-    for name in METRICS:
+    for name in names:
         for case, reasons in metrics[name].get("failed_cases", {}).items():
             failures.setdefault(case, []).extend(f"{name}: {reason}" for reason in reasons)
     return dict(sorted(failures.items()))
@@ -50,7 +50,7 @@ def metric_lines(metrics: dict) -> list[str]:
         f"- Escalation precision: {percent(e['tp'], e['tp'] + e['fp'])};"
         f" recall: {percent(e['tp'], e['tp'] + e['fn'])}",
         f"- Emergency recall: {percent(m['passed'], m['total'])}",
-        f"- Cross-customer leaks: {p['leaks']} of {p['total']} cases",
+        f"- Cross-customer leaks: {percent(p['leaks'], p['total'])}",
         f"- Latency per turn: p50 {ms(t['p50_ms'])}, p95 {ms(t['p95_ms'])}"
         f" over {t['count']} turns, judge time excluded",
     ]

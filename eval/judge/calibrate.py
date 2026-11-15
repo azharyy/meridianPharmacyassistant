@@ -1,4 +1,4 @@
-"""Run the judge on the hand-labeled calibration pairs and measure its agreement with the labels."""
+"""Run the judge on labeled calibration pairs and measure agreement with the supplied labels."""
 
 from hashlib import sha256
 from pathlib import Path
@@ -20,7 +20,7 @@ class Pair(Contract):
     question: str = Field(min_length=1)
     reply: str = Field(min_length=1)  # the reply as displayed
     drafted_as: Literal["right evidence", "wrong product", "wrong section"]
-    label: StrictBool | None  # the user's answer: do the shown sections answer the question?
+    label: StrictBool | None  # do the shown sections answer the question?
 
 
 def load_pairs(path: Path = PAIRS) -> list[Pair]:
@@ -29,7 +29,7 @@ def load_pairs(path: Path = PAIRS) -> list[Pair]:
 
 
 def calibrate(judge: ModelClient, pairs: list[Pair]) -> dict:
-    """Agreement with the user's labels as raw counts, and every disagreement."""
+    """Agreement with the supplied labels as raw counts, and every disagreement."""
     if not pairs or any(pair.label is None for pair in pairs):
         raise ValueError("label every calibration pair true or false before calibrating")
     disagreements = []
