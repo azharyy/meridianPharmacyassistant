@@ -1,0 +1,36 @@
+# Meridian's two stores. The mock API serves them (issue 4) and the assistant shows them as given.
+# Hours run Monday to Sunday under display names. Phone numbers are in the 555-01xx range,
+# which is reserved for fiction.
+- store_id: store-001
+  name: Meridian Downtown
+  address: 120 Harbor Street, Springfield, IL 62701
+  phone: (217) 555-0142
+  hours:
+    Monday: 8:00 AM to 9:00 PM
+    Tuesday: 8:00 AM to 9:00 PM
+    Wednesday: 8:00 AM to 9:00 PM
+    Thursday: 8:00 AM to 9:00 PM
+    Friday: 8:00 AM to 9:00 PM
+    Saturday: 9:00 AM to 6:00 PM
+    Sunday: 10:00 AM to 4:00 PM
+  services:
+    - Pharmacist consultations
+    - Prescription pickup
+    - Home delivery
+    - Free medication reviews
+- store_id: store-002
+  name: Meridian Riverside
+  address: 48 Mill Road, Springfield, IL 62704
+  phone: (217) 555-0187
+  hours:
+    Monday: 9:00 AM to 7:00 PM
+    Tuesday: 9:00 AM to 7:00 PM
+    Wednesday: 9:00 AM to 7:00 PM
+    Thursday: 9:00 AM to 7:00 PM
+    Friday: 9:00 AM to 7:00 PM
+    Saturday: 9:00 AM to 5:00 PM
+    Sunday: Closed
+  services:
+    - Pharmacist consultations
+    - Prescription pickup
+    - Drive-through pickup
