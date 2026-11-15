@@ -1,6 +1,7 @@
 """A turn runs its steps in order; risk labels get the policy's reply; failures get the fallback."""
 
 import logging
+from functools import partial
 from hashlib import sha256
 
 import httpx
@@ -12,12 +13,14 @@ from assistant.render import render_fallback, render_risk
 from assistant.safety.emergency import is_emergency
 from assistant.safety.injection import looks_like_injection
 from assistant.safety.reviewer import review
-from assistant.session import Session
+from assistant.session import Session, VerifiedOrder
 from assistant.settings import load_settings
+from assistant.tools import execute
+from contracts.api import OrderStatus
 from contracts.catalog import PolicyRecord
 from contracts.chat import ChatRequest
 from contracts.plan import CatalogPlan
-from contracts.taxonomy import LabelSection, RiskLabel
+from contracts.taxonomy import Intent, LabelSection, RiskLabel
 from tests.assistant.fixtures import PLAN, PRODUCTS, QUESTION, ROUTED, search
 
 RUNTIME = load_settings({}).runtime
@@ -72,8 +75,8 @@ def test_a_turn_runs_its_steps_top_to_bottom():
     request = ChatRequest(session_id=SESSION_ID, message="raw message")
     result = pipeline.run_turn(request, Session(), steps, llm, HTTP)
     names = [
-        "emergency", "redact", "route", "injection", "retrieve", "plan", "review", "execute",
-        "render",
+        "emergency", "redact", "route", "injection", "redact", "retrieve", "plan",
+        "review", "execute", "render",
     ]  # fmt: skip
     assert [name for name, _ in calls] == names
     args = dict(calls)
@@ -213,13 +216,13 @@ def test_a_model_failure_gives_the_fallback_with_the_card(script):
     assert result.reply.handoff_offered is True
 
 
-def test_offers_are_recorded_from_the_card_and_cleared_without_it():
+def test_offers_are_recorded_from_the_card_and_kept_until_a_newer_card():
     session = Session()
     turn("Can I take it?", FakeSender([routed(RiskLabel.MEDICAL_ADVICE)]), session=session)
     offer = session.handoff_offer
     assert (offer.number, offer.risk_label, offer.reason) == (1, RiskLabel.MEDICAL_ADVICE, "risk")
     turn(QUESTION, FakeSender([ROUTED, PLAN]), session=session)
-    assert session.handoff_offer is None
+    assert session.handoff_offer is offer  # a reply without a card keeps the older card's offer
     turn(QUESTION, FakeSender(), session=session)
     assert (session.handoff_offer.number, session.handoff_offer.reason) == (2, "fallback")
 
@@ -272,6 +275,18 @@ def test_the_session_keeps_redacted_turns_and_the_router_sees_earlier_ones():
     )
 
 
+def test_an_earlier_circumstance_reaches_the_router_and_controls_the_later_reply():
+    session = Session()
+    medical = routed(RiskLabel.MEDICAL_ADVICE, PRODUCTS[0].name)
+    fake = FakeSender([ROUTED, PLAN, medical])
+    turn("I'm pregnant, email sam@example.com.", fake, session=session)
+    result = turn("Can I take it?", fake, session=session)
+    assert result.reply == render_risk(RiskLabel.MEDICAL_ADVICE, PRODUCTS[0])
+    assert len(fake.requests) == 3  # no catalog call after the medical-advice classification
+    context = fake.requests[2][0][1]["content"]
+    assert "I'm pregnant, email [email]." in context and "Can I take it?" in context
+
+
 def test_logs_carry_the_session_and_timings_but_no_message_text(caplog):
     caplog.set_level(logging.INFO, logger="meridian")
     message = "I'm sam@example.com, phone 217-555-0142. How do I take it?"
@@ -307,7 +322,7 @@ def test_customer_chosen_identifiers_never_appear_in_any_log_path(session_id, ca
     assert "model unavailable" in caplog.text and "prompt injection" in caplog.text
 
 
-def test_the_default_steps_are_the_real_rules_and_the_later_issues_stubs():
+def test_the_default_steps_use_real_guards_and_require_an_injected_retriever():
     steps = pipeline.Steps()
     assert (steps.emergency, steps.injection, steps.review) == (
         is_emergency,
@@ -315,4 +330,84 @@ def test_the_default_steps_are_the_real_rules_and_the_later_issues_stubs():
         review,
     )
     assert pipeline.retrieve_nothing("anything", 5) == []
-    assert pipeline.no_tool(HTTP, None) is None
+    assert steps.execute is execute and steps.execute(HTTP, None) is None
+
+
+def test_a_tool_for_another_intent_is_rejected_before_execution():
+    calls = []
+    plan = CatalogPlan(
+        reply_type="label_sections",
+        records=PLAN.records,
+        tool={"name": "get_store_info", "store_id": "store-001"},
+    )
+    steps = pipeline.Steps(retrieve=search, execute=lambda *args: calls.append(args))
+    result = turn(QUESTION, FakeSender([ROUTED, plan]), steps)
+    assert result.reply.reply_type == "lookup_failed"
+    assert calls == [] and result.tool is None and result.reply.sources == []
+
+
+def test_a_failed_availability_tool_gets_the_fixed_lookup_failure():
+    availability = ROUTED.model_copy(update={"intent": Intent.AVAILABILITY})
+    plan = CatalogPlan(
+        reply_type="availability",
+        records=[{"record_id": PRODUCTS[0].sku, "sections": []}],
+        tool={"name": "check_availability", "sku": PRODUCTS[0].sku},
+    )
+    result = turn(QUESTION, FakeSender([availability, plan]))
+    assert result.reply.reply_type == "lookup_failed" and result.reply.sources == []
+
+
+@pytest.mark.parametrize("timeout", [False, True])
+def test_the_models_stock_request_is_executed_and_traced_or_times_out_safely(timeout):
+    seen = []
+    payload = {
+        "sku": PRODUCTS[0].sku,
+        "stores": [{"store_id": "store-001", "store_name": "Downtown", "quantity": 12}],
+    }
+
+    def handle(request):
+        seen.append(request.url.path)
+        if timeout:
+            raise httpx.ReadTimeout("timeout", request=request)
+        return httpx.Response(200, json=payload)
+
+    http = httpx.Client(base_url="http://api.test", transport=httpx.MockTransport(handle))
+    availability = ROUTED.model_copy(update={"intent": Intent.AVAILABILITY})
+    plan = CatalogPlan(
+        reply_type="availability",
+        records=[{"record_id": PRODUCTS[0].sku, "sections": []}],
+        tool={"name": "check_availability", "sku": PRODUCTS[0].sku},
+    )
+    fake = FakeSender([availability, plan])
+    steps = pipeline.Steps(
+        retrieve=search,
+        execute=partial(execute, skus=[PRODUCTS[0].sku], store_ids=["store-001"]),
+    )
+    result = pipeline.run_turn(
+        ChatRequest(session_id=SESSION_ID, message="Is this in stock?"),
+        Session(),
+        steps,
+        ModelClient(RUNTIME, fake),
+        http,
+    )
+    assert result.tool == "check_availability" and result.plan == plan
+    assert seen == [f"/v1/products/{PRODUCTS[0].sku}/availability"] * (2 if timeout else 1)
+    assert result.reply.reply_type == ("lookup_failed" if timeout else "availability")
+    assert len(fake.requests) == 2
+
+
+@pytest.mark.parametrize("verified", [False, True])
+def test_order_chat_uses_session_verification_and_never_calls_catalog_or_tools(verified):
+    from datetime import UTC, datetime
+
+    session = Session()
+    if verified:
+        session.verified_order = VerifiedOrder(
+            OrderStatus(status="shipped", delivery_estimate="2026-11-17", item_count=2),
+            datetime.now(UTC),
+        )
+    fake = FakeSender([ROUTED.model_copy(update={"intent": Intent.ORDER_STATUS})])
+    result = turn("Where is my order?", fake, session=session)
+    assert result.reply.reply_type == ("order_status" if verified else "order_form")
+    assert len(fake.requests) == 1 and result.retrieved == [] and result.tool is None
+    assert set(result.timings) == {"emergency", "redaction", "router", "render"}

@@ -1,8 +1,8 @@
 """Run one chat turn: the plan's eight steps as plain functions, called top to bottom.
 
 The only module that wires steps together. Each step comes in through `Steps`, with what it
-depends on passed as arguments, so a test can swap any step without patching. Retrieval and the
-tool executor still have do-nothing defaults here, behind the signatures issues 5 and 6 keep.
+depends on passed as arguments, so a test can swap any step without patching. The app binds
+the startup retriever and the tool executor's trusted identities.
 
 An emergency gets the 911 reply before any model call. After the router, the turn's risk label
 is the most restrictive of the router's label and the injection rules'; any label but none gets
@@ -20,41 +20,35 @@ from hashlib import sha256
 
 import httpx
 
+from assistant import orders
 from assistant.catalog_agent import plan as make_plan
 from assistant.llm import ModelClient, ModelUnavailable
 from assistant.policy import POLICY, most_restrictive
 from assistant.redaction import redact
 from assistant.render import render as render_reply
-from assistant.render import render_fallback, render_risk
+from assistant.render import render_fallback, render_fixed, render_risk
 from assistant.router import route
 from assistant.safety.emergency import is_emergency
 from assistant.safety.injection import looks_like_injection
 from assistant.safety.reviewer import review
-from assistant.session import Session, Turn
-from contracts.api import Availability, StoreInfo
+from assistant.session import Session, Turn, VerifiedOrder
+from assistant.tools import ToolRequest, ToolResult, allowed, execute
 from contracts.catalog import PolicyRecord, ProductRecord
-from contracts.chat import ChatReply, ChatRequest
-from contracts.plan import AvailabilityRequest, CatalogPlan, StoreRequest
+from contracts.chat import ChatReply, ChatRequest, OrderFormRequest
+from contracts.plan import CatalogPlan, StoreRequest
 from contracts.router import RouterOutput
-from contracts.taxonomy import ReplyType, RiskLabel
+from contracts.taxonomy import Intent, ReplyType, RiskLabel, ToolName
 
 log = logging.getLogger("meridian.turn")
 LOG_KEY = secrets.token_bytes(32)  # per process: a session ID can't be found from its reference
 RETRIEVE_K = 5
 
 Record = ProductRecord | PolicyRecord
-ToolRequest = AvailabilityRequest | StoreRequest
-ToolResult = Availability | StoreInfo | None
 
 
 def retrieve_nothing(query: str, k: int) -> list[Record]:
     """Step 4 until issue 5: nothing is found. A retriever returns at most k whole records."""
     return []
-
-
-def no_tool(http: httpx.Client, tool: ToolRequest | None) -> ToolResult:
-    """Step 7 until issue 6: no tool runs. The executor returns the API's result or None."""
-    return None
 
 
 @dataclass(frozen=True)
@@ -66,8 +60,10 @@ class Steps:
     retrieve: Callable[[str, int], list[Record]] = retrieve_nothing
     plan: Callable[[ModelClient, str, list[Record]], CatalogPlan] = make_plan
     review: Callable[[CatalogPlan, list[Record], RiskLabel], CatalogPlan | None] = review
-    execute: Callable[[httpx.Client, ToolRequest | None], ToolResult] = no_tool
-    render: Callable[[CatalogPlan, list[Record], RiskLabel, ToolResult], ChatReply] = render_reply
+    execute: Callable[[httpx.Client, ToolRequest | None], ToolResult] = execute
+    render: Callable[
+        [CatalogPlan, list[Record], RiskLabel, ToolResult | VerifiedOrder], ChatReply
+    ] = render_reply
     render_risk: Callable[[RiskLabel, ProductRecord | None], ChatReply] = render_risk
     fallback: Callable[[], ChatReply] = render_fallback
 
@@ -117,7 +113,14 @@ def risk_reply(routed: RouterOutput | None, risk: RiskLabel, steps: Steps, timin
 
 
 def answer(
-    log_id: str, message: str, session: Session, steps: Steps, llm: ModelClient, http, timings
+    log_id: str,
+    message: str,
+    session: Session,
+    steps: Steps,
+    llm: ModelClient,
+    http,
+    timings,
+    store_id: str | None = None,
 ) -> TurnResult:
     """Steps 3 to 8, for a message the emergency rules let through."""
     with stage(timings, "router"):
@@ -128,15 +131,38 @@ def answer(
         risk = most_restrictive(risk, RiskLabel.PROMPT_INJECTION)
     if risk is not RiskLabel.NONE:
         return risk_reply(routed, risk, steps, timings)
+    if routed.intent is Intent.ORDER_STATUS:
+        reply_type = ReplyType.ORDER_STATUS if session.verified_order else ReplyType.ORDER_FORM
+        plan = CatalogPlan(reply_type=reply_type, records=[], tool=None)
+        with stage(timings, "render"):
+            reply = steps.render(plan, [], risk, session.verified_order)
+        return TurnResult(reply, routed, plan=plan)
+    if routed.intent is Intent.STORE_INFO:
+        plan = CatalogPlan(
+            reply_type=ReplyType.STORE_INFO,
+            records=[],
+            tool=StoreRequest(name=ToolName.GET_STORE_INFO, store_id=store_id or ""),
+        )
+        return fulfill(routed, plan, [], steps, http, timings)
     with stage(timings, "retrieval"):
-        records = steps.retrieve(message, RETRIEVE_K)
+        query = steps.redact(" ".join([*routed.product_mentions, message]))
+        records = steps.retrieve(query, RETRIEVE_K)
     with stage(timings, "catalog_agent"):
         plan = steps.plan(llm, message, records)
+    return fulfill(routed, plan, records, steps, http, timings)
+
+
+def fulfill(routed, plan: CatalogPlan, records: list[Record], steps: Steps, http, timings):
+    """Review a public answer plan, authorize its tool and render the resulting evidence."""
+    risk = routed.risk_label
     with stage(timings, "review"):
         reviewed = steps.review(plan, records, risk)
     found = [record_id(record) for record in records]
     if reviewed is None:
         return TurnResult(steps.fallback(), routed, found, plan, risk=risk)
+    if not allowed(routed.intent, reviewed.tool):
+        reply = render_fixed(ReplyType.LOOKUP_FAILED)
+        return TurnResult(reply, routed, found, reviewed, risk=risk)
     with stage(timings, "tool"):
         tool_result = steps.execute(http, reviewed.tool)
     with stage(timings, "render"):
@@ -146,12 +172,23 @@ def answer(
 
 
 def record_offer(session: Session, result: TurnResult) -> None:
-    """The card on this reply becomes the session's current offer; a reply without one clears it."""
-    if not result.reply.handoff_offered:
-        session.handoff_offer = None
-        return
-    reason = "fallback" if result.reply.reply_type is ReplyType.FALLBACK else "risk"
-    session.offer_handoff(result.risk, reason)
+    """The card on this reply becomes the session's current offer. A reply without one keeps
+    the earlier offer: an older card's Confirm still files that card's risk and urgency."""
+    if result.reply.handoff_offered:
+        reason = "fallback" if result.reply.reply_type is ReplyType.FALLBACK else "risk"
+        session.offer_handoff(result.risk, reason)
+
+
+def verify_order(
+    request: OrderFormRequest, session: Session, steps: Steps, http: httpx.Client
+) -> ChatReply:
+    """The private form bypasses models and renders only the API-verified status or failure."""
+    verified = orders.verify(request, session, http)
+    reply_type = ReplyType.ORDER_STATUS if verified is not None else ReplyType.ORDER_NOT_VERIFIED
+    plan = CatalogPlan(reply_type=reply_type, records=[], tool=None)
+    reply = steps.render(plan, [], RiskLabel.NONE, verified)
+    record_offer(session, TurnResult(reply))
+    return reply
 
 
 def log_reference(session_id: str) -> str:
@@ -173,7 +210,7 @@ def run_turn(
         result = risk_reply(None, RiskLabel.EMERGENCY, steps, timings)
     else:
         try:
-            result = answer(log_id, message, session, steps, llm, http, timings)
+            result = answer(log_id, message, session, steps, llm, http, timings, request.store_id)
         except ModelUnavailable as error:
             log.warning("model unavailable session=%s: %s", log_id, error)
             result = TurnResult(steps.fallback())
