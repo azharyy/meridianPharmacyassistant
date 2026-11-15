@@ -40,5 +40,41 @@ seed-data: | .venv  ## Regenerate data/orders.json and data/stock.json from the 
 
 # A target-specific variable, so `make run` uses the live model with no shell syntax.
 run: export MERIDIAN_LLM := live
+run: export MERIDIAN_RUNTIME_PROVIDER := groq
+run: export MERIDIAN_RUNTIME_MODEL := openai/gpt-oss-120b
 run: | .venv  ## Start the API on port 8001 and the assistant on port 8000. Needs GROQ_API_KEY.
 	$(PY) -m assistant.launcher
+
+.PHONY: eval-dev eval-baseline eval
+
+eval-dev eval-baseline eval: export MERIDIAN_LLM := live
+eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_PROVIDER := groq
+eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_MODEL := openai/gpt-oss-120b
+eval-dev eval: export MERIDIAN_EXACT_MATCH := 1
+eval-baseline: export MERIDIAN_EXACT_MATCH := 0
+
+eval-dev: | .venv  ## Run labeled development cases with live runtime and judge models.
+	$(PY) -m eval.cli dev
+
+eval-baseline: | .venv  ## Run the labeled test set with keyword retrieval alone.
+	$(PY) -m eval.cli baseline
+
+eval: | .venv  ## Run the same labeled test set with exact matching enabled.
+	$(PY) -m eval.cli improved
+
+.PHONY: judge-calibrate
+
+judge-calibrate: export MERIDIAN_LLM := live
+judge-calibrate: export MERIDIAN_RUNTIME_PROVIDER := groq
+judge-calibrate: export MERIDIAN_RUNTIME_MODEL := openai/gpt-oss-120b
+judge-calibrate: | .venv  ## Check the Groq Qwen judge against the 20 labeled pairs.
+	$(PY) -m eval.cli calibrate
+
+.PHONY: eval-compare
+
+eval-compare: export MERIDIAN_LLM := live
+eval-compare: export MERIDIAN_RUNTIME_PROVIDER := groq
+eval-compare: export MERIDIAN_RUNTIME_MODEL := openai/gpt-oss-20b
+eval-compare: export MERIDIAN_EXACT_MATCH := 1
+eval-compare: | .venv  ## Compare Groq 20B with the saved matching Groq 120B development run.
+	$(PY) -m eval.cli dev-groq20b

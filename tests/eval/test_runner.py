@@ -61,12 +61,22 @@ def test_chat_preserves_the_complete_pipeline_trace_with_a_redacted_question():
     assert turn.expect == source.turns[0].expect
     assert turn.tools == [] and turn.api_evidence == {} and turn.requested_tool is None
     assert turn.record_evidence == {f"{PRODUCTS[0].sku}#directions": PRODUCTS[0].directions}
+    assert turn.product_names == {product.sku: product.name for product in PRODUCTS}
     assert {"router", "catalog_agent", "review", "tool", "render"} <= turn.timings.keys()
     assert all(value >= 0 for value in turn.timings.values())
     assert turn.judge_correct is None and turn.judge_error is None
     assert RecordedCase.model_validate_json(result.model_dump_json()) == result
     assert "synthetic@example.com" not in str(fake.requests) + result.model_dump_json()
     assert not http.is_closed
+
+
+def test_product_identity_evidence_is_captured_only_for_the_turn_that_retrieved_it():
+    order_route = ROUTED.model_copy(update={"intent": Intent.ORDER_STATUS})
+    llm, _ = model(ROUTED, PLAN, order_route)
+    source = case(chat(), chat("Where is my order?"))
+    [record] = run_cases([source], SETTINGS, llm, no_api(), pipeline.Steps(retrieve=search))
+    assert record.turns[0].product_names == {product.sku: product.name for product in PRODUCTS}
+    assert record.turns[1].product_names == {}
 
 
 def test_cases_start_with_fresh_conversation_state_and_safe_generated_session_ids(caplog):

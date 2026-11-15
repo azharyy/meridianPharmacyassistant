@@ -22,6 +22,7 @@ def recorded_turn(**changes) -> RecordedTurn:
         "retrieved": [PRODUCTS[0].sku],
         "timings": {"router": 10.0, "catalog_agent": 20.0},
         "record_evidence": RECORDS,
+        "product_names": {product.sku: product.name for product in PRODUCTS},
         "judge_correct": True,
     }
     return RecordedTurn.model_validate({**values, **changes})

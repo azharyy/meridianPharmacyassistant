@@ -1,6 +1,16 @@
 Builder: Claude · Review: CI and the user's read · Starts after: 2 and 3
-Folders: `eval/`, `tests/eval/`. Adds the make targets `eval-dev`, `eval-baseline`, `eval`, `eval-compare` and `judge-calibrate`.
+Folders: `eval/`, `tests/eval/`, `assistant/settings.py`, `tests/assistant/test_settings.py`, `tests/assistant/test_llm.py`. A narrow README setup correction is allowed. Adds the make targets `eval-dev`, `eval-baseline`, `eval`, `eval-compare` and `judge-calibrate`.
 Plan sections: Evaluation; Architecture (Model calls); Module map and rules.
+
+User amendment (2026-11-15): use the Groq API exclusively. The runtime remains
+`openai/gpt-oss-120b`, the judge is `qwen/qwen3.8-27b`, and the development comparison
+uses `openai/gpt-oss-20b` with the same Qwen judge. All support strict structured
+outputs; no tools are sent. Both roles use the existing `GROQ_API_KEY` and Groq URL;
+OpenAI API configuration is removed. `MERIDIAN_RUNTIME_MODEL` selects either runtime
+through settings alone. Pin the runtime model in every eval target. The user also
+authorized live runs and independent AI labeling; report AI provenance and the lack
+of independent human validation. These changes supersede the original provider and
+human-label requirements below; contracts, dependencies and PLAN stay unchanged.
 
 The harness, the metrics, the judge, the report and drafted cases for the user to label. One pull request; the three parts below are its order of work. Keep the loader, the runner, each metric, the judge and the report in separate modules, and make each metric a pure function over recorded results.
 
@@ -13,11 +23,11 @@ Acceptance criteria, part (a)
 - [ ] `make eval-dev` runs the development set. `make eval-baseline` and `make eval` run the test set with `MERIDIAN_EXACT_MATCH=0` and `1`. All three use the live models, and each target sets `MERIDIAN_LLM` and the match flag itself as make variables, so nothing but the keys has to be in `.env`. The harness itself is tested offline with the runtime and the judge both faked.
 
 Acceptance criteria, part (b)
-- [ ] The judge runs GPT-6 Luna on OpenAI, on Standard processing, through the shared model client's judge role, with structured outputs only. Its one job: given the customer's question and the reply as displayed, return whether the records and sections shown answer the question.
+- [ ] The judge runs Qwen 3.8 27B on Groq, through the shared model client's judge role, with strict structured outputs only. Its one job: given the customer's question and the reply as displayed, return whether the records and sections shown answer the question.
 - [ ] The judge scores only replies that show catalog or policy text, and its verdict is one condition of answer accuracy. Judge time is never counted in latency.
 - [ ] `eval/judge/calibration.jsonl` holds 20 drafted question-and-reply pairs for the user to label, about half of them showing deliberately wrong evidence (the wrong product, or the wrong section), built from the catalog and apart from both case sets.
 - [ ] `make judge-calibrate` runs the judge on those pairs and prints the agreement and each disagreement; the report includes that result. The judge prompt lives in `eval/judge/` and is not changed after calibration.
-- [ ] `make eval-compare` runs the development set with GPT-6 Luna as the runtime, by settings alone, and writes `eval/results/dev-openai.md` with accuracy, latency and cost beside the Groq run.
+- [ ] `make eval-compare` runs the development set with Groq-hosted GPT-OSS 20B as the runtime, by settings alone, and writes `eval/results/dev-groq20b.md` with accuracy, latency and cost beside the GPT-OSS 120B run. The Qwen judge stays fixed.
 
 Acceptance criteria, part (c)
 - [ ] Drafted cases for the user to label: 12 in `eval/cases/dev.jsonl` and 60 in `eval/cases/test.jsonl`, following the plan's slice table, with at least ten multi-turn test cases. The product cases phrased with a brand name or an everyday word are the user's own questions from `eval/cases/handwritten_questions.md`, wrapped in the case format without changing a word.

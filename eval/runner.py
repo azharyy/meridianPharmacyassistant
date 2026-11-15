@@ -38,6 +38,7 @@ class RecordedTurn(Contract):
     timings: dict[str, float] = Field(default_factory=dict)
     api_evidence: dict[str, dict] = Field(default_factory=dict)
     record_evidence: dict[str, str] = Field(default_factory=dict)  # cited ID: retrieved text
+    product_names: dict[str, str] = Field(default_factory=dict)  # SKU: retrieved catalog name
     judge_correct: bool | None = None
     judge_error: str | None = None
 
@@ -65,13 +66,16 @@ def with_documents(steps: pipeline.Steps, documents: list[PolicyRecord]) -> pipe
     return replace(steps, retrieve=retrieve)
 
 
-def with_record_capture(steps: pipeline.Steps, seen: dict[str, str]) -> pipeline.Steps:
-    """Keep the text of every retrieved record, by the source ID a reply would cite."""
+def with_record_capture(
+    steps: pipeline.Steps, seen: dict[str, str], product_names: dict[str, str]
+) -> pipeline.Steps:
+    """Keep retrieved text and product names independently of the reply's displayed facts."""
 
     def retrieve(query, k):
         found = steps.retrieve(query, k)
         for record in found:
             if isinstance(record, ProductRecord):
+                product_names[record.sku] = record.name
                 seen.update(
                     {f"{record.sku}#{s.value}": getattr(record, s.value) for s in LabelSection}
                 )
@@ -132,7 +136,8 @@ def _run_case(
     session = Session()
     session_id = f"eval-{sha256(case.id.encode()).hexdigest()[:32]}"
     seen: dict[str, str] = {}
-    steps = with_record_capture(with_documents(steps, case.documents), seen)
+    product_names: dict[str, str] = {}
+    steps = with_record_capture(with_documents(steps, case.documents), seen, product_names)
     original_timeout = http.headers.get("X-Meridian-Test")
     turns = []
     try:
@@ -146,6 +151,7 @@ def _run_case(
                     continue
                 start = len(capture.calls)
                 seen.clear()
+                product_names.clear()
                 turn = run_action(action, session_id, session, steps, llm, http)
                 turn.tools = capture.calls[start:]
                 sources = turn.reply.sources if isinstance(turn.reply, ChatReply) else []
@@ -155,6 +161,7 @@ def _run_case(
                     if source.id in capture.evidence
                 }
                 turn.record_evidence = {s.id: seen[s.id] for s in sources if s.id in seen}
+                turn.product_names = dict(product_names)
                 turns.append(turn)
     finally:
         if original_timeout is None:
@@ -164,14 +171,8 @@ def _run_case(
     return RecordedCase(id=case.id, slice=case.slice, turns=turns)
 
 
-def run_cases(
-    cases: list[Case],
-    settings: Settings | None = None,
-    llm: ModelClient | None = None,
-    http: httpx.Client | None = None,
-    steps: pipeline.Steps | None = None,
-) -> list[RecordedCase]:
-    """Run labeled cases; close resources created here, never injected ones."""
+def validate_cases(cases: list[Case]) -> None:
+    """Reject missing labels before creating clients or making any request."""
     if not cases or any(
         all(isinstance(action, ApiTimeoutAction) for action in case.turns) for case in cases
     ):
@@ -189,6 +190,17 @@ def run_cases(
         for expected in expectations
     ):
         raise ValueError("labeled chat and order forms need complete reply expectations")
+
+
+def run_cases(
+    cases: list[Case],
+    settings: Settings | None = None,
+    llm: ModelClient | None = None,
+    http: httpx.Client | None = None,
+    steps: pipeline.Steps | None = None,
+) -> list[RecordedCase]:
+    """Run labeled cases; close resources created here, never injected ones."""
+    validate_cases(cases)
     settings = settings or load_settings()
     llm = llm or make_client(settings, settings.runtime)
     with ExitStack() as resources:

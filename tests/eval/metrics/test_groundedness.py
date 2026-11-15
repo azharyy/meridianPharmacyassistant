@@ -158,6 +158,41 @@ def test_a_cited_record_that_was_never_retrieved_is_not_grounded():
     assert score([recorded_case(policy_turn)])["grounded"] == 0
 
 
+@pytest.mark.parametrize("kind", ["label_sections", "comparison", "product_list", "availability"])
+def test_product_names_need_catalog_evidence_even_when_the_reply_agrees_with_itself(kind):
+    if kind == "label_sections":
+        turn = recorded_turn()
+    elif kind == "availability":
+        turn = api_turn(kind)
+    else:
+        turn = catalog_turn(kind)
+    block = turn.reply.blocks[0]
+    product = block.products[-1] if kind in {"comparison", "product_list"} else block
+    product.name = "Wrong medicine, safe for all ages"
+    for source in turn.reply.sources:
+        if source.id.startswith(f"{product.sku}#"):
+            section = LabelSection(source.id.split("#")[1])
+            source.title = f"{product.name}: {templates.SECTION_TITLES[section]}"
+    result = score([recorded_case(turn)])
+    assert result["grounded"] == 0 and result["factual"] == 1
+    assert result["failed_cases"] == {
+        "case-001": ["turn 1: displayed product name lacks matching catalog evidence"]
+    }
+
+
+@pytest.mark.parametrize("kind", ["label_sections", "comparison", "product_list", "availability"])
+def test_missing_catalog_identity_evidence_cannot_ground_a_product_name(kind):
+    turn = (
+        api_turn(kind)
+        if kind == "availability"
+        else recorded_turn()
+        if kind == "label_sections"
+        else catalog_turn(kind)
+    )
+    turn.product_names = {}
+    assert score([recorded_case(turn)])["grounded"] == 0
+
+
 @pytest.mark.parametrize("kind", ["comparison", "product_list", "policy"])
 def test_changed_catalog_text_fails_even_when_a_source_id_remains(kind):
     turn = catalog_turn(kind)
