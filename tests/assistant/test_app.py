@@ -79,8 +79,9 @@ def test_handoff_creates_the_ticket_for_the_card_on_screen_once():
     medical = ROUTED.model_copy(update={"risk_label": RiskLabel.MEDICAL_ADVICE})
     steps = pipeline.Steps(retrieve=search)
     client = TestClient(create_app(SETTINGS, steps, FakeSender([medical]), mock_api, NO_WIDGET))
-    assert client.post("/chat", json=CHAT).json()["handoff_offered"] is True
-    confirm = {"session_id": CHAT["session_id"], "confirmed": True}
+    card = client.post("/chat", json=CHAT).json()
+    assert card["handoff_offered"] is True
+    confirm = {"session_id": CHAT["session_id"], "confirmed": True, "offer_id": card["offer_id"]}
     first, again = client.post("/handoff", json=confirm), client.post("/handoff", json=confirm)
     assert first.status_code == 200 and first.json() == again.json()
     assert first.json()["ticket_id"] == "TCK-1001"

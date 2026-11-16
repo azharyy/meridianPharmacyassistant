@@ -42,13 +42,24 @@ def medical_session() -> Session:
     return session
 
 
+def recorded_keys(api: httpx.Client) -> list[str]:
+    """The idempotency key of every ticket request the client sends from now on."""
+    keys: list[str] = []
+    api.event_hooks["request"].append(
+        lambda request: keys.append(json.loads(request.content)["idempotency_key"])
+    )
+    return keys
+
+
 def test_confirming_creates_exactly_one_ticket_and_a_repeat_returns_it():
     api, session = mock_api(), medical_session()
-    first, again = handoff(SESSION_ID, session, api), handoff(SESSION_ID, session, api)
+    keys, card = recorded_keys(api), session.handoff_offer.id
+    first, again = handoff(SESSION_ID, session, api, card), handoff(SESSION_ID, session, api, card)
     assert first == again
     assert first.ticket_id == "TCK-1001"
     assert first.text == HANDOFF_CREATED_TEXT.format(ticket_id="TCK-1001")
     assert api.app.state.desks.tickets.count() == 1
+    assert keys == [f"{SESSION_ID}:{card}"]  # the repeat is answered without a second request
 
 
 def test_simultaneous_header_confirmations_create_one_offer_and_ticket():
@@ -90,15 +101,17 @@ def test_an_old_or_unknown_card_files_nothing_and_allocates_no_offer():
 
 def test_simultaneous_confirmations_of_a_card_return_one_ticket():
     session, api, ready = medical_session(), mock_api(), Barrier(8)
+    keys, card = recorded_keys(api), session.handoff_offer.id
 
     def confirm():
         ready.wait(timeout=5)
-        return handoff(SESSION_ID, session, api)
+        return handoff(SESSION_ID, session, api, card)
 
     with ThreadPoolExecutor(max_workers=8) as pool:
         replies = list(pool.map(lambda _: confirm(), range(8)))
     assert len({reply.ticket_id for reply in replies}) == 1
     assert api.app.state.desks.tickets.count() == 1
+    assert keys and set(keys) == {f"{SESSION_ID}:{card}"}  # racing requests share one key
 
 
 def test_an_emergency_does_not_wait_for_a_ticket_in_flight():
@@ -168,6 +181,42 @@ def test_a_failed_creation_says_so_and_the_retry_reuses_the_same_key():
     assert (failed.ticket_id, failed.text) == (None, HANDOFF_FAILED_TEXT)
     assert handoff(SESSION_ID, session, api, card).ticket_id == "TCK-1001"
     assert [body["idempotency_key"] for body in sent] == [f"{SESSION_ID}:{card}"] * 2
+
+
+def test_a_retry_after_a_lost_response_gets_the_ticket_already_made():
+    desk, session, keys = mock_api(), medical_session(), []
+
+    def lose_the_first_response(request: httpx.Request) -> httpx.Response:
+        body = json.loads(request.content)
+        keys.append(body["idempotency_key"])
+        made = desk.post("/v1/tickets", json=body)  # the ticket exists even when its reply is lost
+        return httpx.Response(504) if len(keys) == 1 else httpx.Response(201, json=made.json())
+
+    api = httpx.Client(
+        base_url="http://api.test", transport=httpx.MockTransport(lose_the_first_response)
+    )
+    card = session.handoff_offer.id
+    assert handoff(SESSION_ID, session, api, card).text == HANDOFF_FAILED_TEXT
+    assert handoff(SESSION_ID, session, api, card).ticket_id == "TCK-1001"
+    assert keys == [f"{SESSION_ID}:{card}"] * 2
+    assert desk.app.state.desks.tickets.count() == 1
+
+
+def test_a_retry_of_a_superseded_card_files_neither_card():
+    keys = []
+
+    def down(request: httpx.Request) -> httpx.Response:
+        keys.append(json.loads(request.content)["idempotency_key"])
+        return httpx.Response(504, json={"detail": "timeout"})
+
+    api = httpx.Client(base_url="http://api.test", transport=httpx.MockTransport(down))
+    session = medical_session()
+    old = session.handoff_offer
+    assert handoff(SESSION_ID, session, api, old.id).text == HANDOFF_FAILED_TEXT
+    newer = session.offer_handoff(RiskLabel.PRESCRIPTION, "risk")
+    assert handoff(SESSION_ID, session, api, old.id) == STALE
+    assert keys == [f"{SESSION_ID}:{old.id}"]  # the stale retry sent no request
+    assert newer.ticket_id is None and session.handoff_offer is newer
 
 
 def test_the_summary_holds_every_field():
