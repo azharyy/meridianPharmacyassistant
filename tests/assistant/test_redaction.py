@@ -56,6 +56,15 @@ def test_local_phones_need_contact_context(context):
     assert redact(f"{context} 555-0142") == f"{context} [phone]"
 
 
+@pytest.mark.parametrize("suffix", [". 10 mg", ". 34 years old.", " / 555-0142", "; 500 mg"])
+def test_international_phones_stop_before_adjacent_numeric_fields(suffix):
+    assert redact(f"Call +44 20 7946 0958{suffix}") == f"Call [phone]{suffix}"
+
+
+def test_international_internal_dots_are_phone_separators():
+    assert redact("Call +44.20.7946.0958.") == "Call [phone]."
+
+
 @pytest.mark.parametrize(
     "message",
     [

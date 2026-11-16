@@ -16,7 +16,7 @@ NUMBER = "[number]"
 # Emails go first, so no digits inside one are read as anything else; order numbers go before
 # phone numbers for the same reason. Short local numbers need explicit contact context.
 SEPARATOR = r"[\s./‐-―−﹣－-]*"  # dashes as phones and autocorrect type
-INTERNATIONAL_SEPARATOR = r"[ \t./()‐-―−﹣－-]*"
+INTERNATIONAL_SEPARATOR = r"(?:[ \t()‐-―−﹣－-]*|\.(?=\d))"
 NOT_A_DOSE = (
     r"(?!\s*(?:mg|mcg|g|ml|iu|units?|tablets?|caplets?|capsules?|pills?"
     r"|milligrams?|micrograms?|grams?|millilit(?:er|re)s?)\b)"
