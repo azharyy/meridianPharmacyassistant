@@ -14,8 +14,10 @@ PATTERNS = {
     "overdose": (
         r"\boverdos|\bpoison(ed|ing)\b"
         r"|\b(took|taken|swallowed|swallowing|ate|drank)\b[^.?!]{0,40}?"
-        r"\b(too many|too much|a whole|the whole|an entire|all of|\d{2,}|bottle|pack|packet|box"
-        r"|handful)\b"
+        r"\b(?:too many|too much|handful"
+        r"|(?:a whole|the whole|an entire|all of) (?:bottle|pack|packet|box)"
+        r"|(?:bottle|pack|packet|box) of (?:pills?|tablets?|capsules?|caplets?|medicine|medication)"
+        r"|\d{2,} (?:[a-z]+ ){0,3}(?:pills?|tablets?|capsules?|caplets?))\b"
         r"|\b(toddler|baby|child|kid|son|daughter|grandchild)\b[^.?!]{0,30}"
         r"\b(ate|swallowed|drank|got into|chewed)\b"
     ),

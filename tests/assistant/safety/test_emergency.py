@@ -8,6 +8,9 @@ from assistant.safety.emergency import PATTERNS, is_emergency
 FIRES = {
     "overdose": "My son swallowed a bottle of pills",
     "overdose_by_count": "She took 20 ibuprofen tablets an hour ago",
+    "whole_medicine_bottle": "I swallowed a whole bottle of allergy medicine",
+    "medicine_bottle": "I swallowed a bottle of pills",
+    "handful": "I took a handful of tablets",
     "child_got_into_pills": "I think my toddler got into the cabinet and ate some pills",
     "trouble_breathing": "I can't breathe after taking this",
     "chest_pain": "My dad has crushing chest pain right now",
@@ -27,6 +30,9 @@ DOES_NOT_FIRE = {
     "figure_of_speech": "I'm dying to try your new vitamins",
     "figure_of_speech_killing": "This cough is killing me, what do you have?",
     "a_normal_dose": "I took 2 tablets this morning, when can I take more?",
+    "ordinary_strength": "I took 10 mg of cetirizine this morning",
+    "whole_tablet": "I swallowed a whole tablet of aspirin",
+    "water": "I drank a bottle of water",
     "an_ordinary_question": "Do you have something for a stuffy nose?",
 }
 HAPPENING_NOW = {
