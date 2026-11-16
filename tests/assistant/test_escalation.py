@@ -253,7 +253,18 @@ def test_urgency_follows_the_risk_label(risk, urgency):
     assert summarize(session, session.offer_handoff(risk, "risk")).urgency == urgency
 
 
-@pytest.mark.parametrize("phone", ["(217) 555-0142", "217 / 555 / 0110", "(217) 555 - 0110"])
+@pytest.mark.parametrize(
+    "phone",
+    [
+        "(217) 555-0142",
+        "217 / 555 / 0110",
+        "(217) 555 - 0110",
+        "+44 20 7946 0958",
+        "+44 (0)20 7946 0958",
+        "0044 20 7946 0958",
+        "555-0142",
+    ],
+)
 def test_no_contact_detail_reaches_a_summary(phone):
     session, steps = Session(), pipeline.Steps(retrieve=search)
     for message in (

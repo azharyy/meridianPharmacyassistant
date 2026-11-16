@@ -43,6 +43,20 @@ def test_a_message_with_all_three():
 
 
 @pytest.mark.parametrize(
+    "phone",
+    ["+44 20 7946 0958", "+44 (0)20 7946 0958", "0044 20 7946 0958", "+49 30 12345 6789"],
+)
+def test_explicit_international_phones_are_hidden_before_numeric_groups(phone):
+    assert redact(f"Call me at {phone} please") == "Call me at [phone] please"
+    assert redact(redact(phone)) == "[phone]"
+
+
+@pytest.mark.parametrize("context", ["call me at", "text me on", "Phone:", "telephone number is"])
+def test_local_phones_need_contact_context(context):
+    assert redact(f"{context} 555-0142") == f"{context} [phone]"
+
+
+@pytest.mark.parametrize(
     "message",
     [
         "I'm 34 and pregnant. Can I take 10 mg of cetirizine?",

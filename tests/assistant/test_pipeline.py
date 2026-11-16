@@ -305,6 +305,17 @@ def test_the_model_sees_only_the_redacted_message():
     assert "[email]" in sent and "[order number]" in sent
 
 
+@pytest.mark.parametrize("phone", ["+44 20 7946 0958", "+44 (0)20 7946 0958", "555-0142"])
+def test_new_phone_forms_never_reach_models_sessions_or_logs(phone, caplog):
+    caplog.set_level(logging.INFO, logger="meridian")
+    fake, session = FakeSender([routed(RiskLabel.MEDICAL_ADVICE)]), Session()
+    turn(f"Can I take cetirizine while pregnant? Call me at {phone}.", fake, session=session)
+    assert fake.requests
+    for recorded in (str(fake.requests), str(session.messages()), caplog.text):
+        assert phone not in recorded
+    assert session.messages() == ["Can I take cetirizine while pregnant? Call me at [phone]."]
+
+
 @pytest.mark.parametrize(
     ("typed", "placeholder"),
     [
