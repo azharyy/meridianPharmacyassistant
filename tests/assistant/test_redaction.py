@@ -67,6 +67,9 @@ def test_local_phones_need_contact_context(context):
         "I took 250 / 500 / 1000 mg, between 400 - 800 - 1200mg a day.",
         "Doses 100  200  1000 mg, or 10000 IU of vitamin D for $12.99?",
         "Can I ord 2 tablets? Is 250 500 1000 milligrams too much?",
+        "Use +10000000 mg? Phone 400-1200 mg is a dose range, not a contact.",
+        "Compare MRD-ALG-012 and MRD-SKN-008 for a 34 year old.",
+        "The 555-0142 code is not marked as a phone. Take 10 mg at 08:00.",
     ],
 )
 def test_ages_doses_medicine_names_and_skus_stay_intact(message):
