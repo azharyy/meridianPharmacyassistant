@@ -578,7 +578,7 @@ What the reviews and checks caught:
   question got acetaminophen's directions, because that label's warnings mention warfarin.
   Issue 17 shows a label only for a product the customer named exactly.
 
-## Limitations and next steps
+## Limitations
 
 ### Measured quality
 
@@ -640,18 +640,91 @@ typo respelling in the exact stage is likewise unmeasured.
   the keyboard and live checks are manual. In `widget/preview.html`, the failed-handoff
   example has no "Try again" button.
 
-### Next steps
+## Possible future improvements
 
-- A one-time code to prove control of the email or phone before showing an order.
-- Independent human review of the labels and a hand audit of the judge; investigate
-  accuracy, excess handoff offers and timeout reliability using development/synthetic
-  cases. Preserve the completed held-out evidence rather than tuning against its questions.
-- Give the judge a conversation's earlier messages if follow-ups become a bigger share of
-  the cases; each historical Groq held-out run had 2 among its 30 judged turns.
-- Fixes for the open safety and privacy gaps above.
-- Holiday hours, clarifying questions with buttons (such as "Did you mean ibuprofen?"),
-  and turns that ask two things at once.
-- Embedding search, if keyword misses show up in the evaluation.
-- Browser tests of the widget and a type checker in CI.
-- A local open-weight model compared with the hosted one; Arabic or Spanish; staff
-  analytics; a fine-tuned router.
+Each item says what it would fix. None of them changes the rules the design rests on: a
+model returns a plan, code builds the reply, and nothing delays the 911 reply.
+
+### Tracing and evaluation tooling
+
+- **Trace every turn with LangSmith.** The model client is the OpenAI SDK, so LangSmith's
+  `wrap_openai` and a `@traceable` decorator on the turn would record each turn as one
+  trace, with a span for each stage the pipeline already times. This needs no LangChain.
+  A trace may carry only what the logs already may: redacted messages and plans, never
+  order data or the contact details the order form sends. For real customers, a
+  self-hosted open-source tracer (Langfuse, or Arize Phoenix over OpenTelemetry) keeps
+  traces in-house.
+- **Datasets and experiments.** The development cases become a dataset, the
+  deterministic metrics and the calibrated judge become evaluators, and runs are compared
+  side by side instead of in Markdown reports. The 60 held-out cases stay out of hosted
+  tools, so they remain unseen.
+- **Human review in an annotation queue.** A pharmacist confirms or corrects each case
+  label and judge verdict: the independent review the labels still lack.
+- **A larger development set.** With 12 cases, one case moves accuracy by 8 points. About
+  60 synthetic development cases, drafted the way the test cases were (without the alias
+  table, retrieval code, prompts or safety rules), would make tuning measurable without
+  touching the held-out set.
+- **A live regression gate.** A manually triggered CI job, with the key as a repository
+  secret, runs the development cases and fails on any emergency miss or cross-customer leak.
+
+### Where LangChain and LangGraph fit
+
+- **LangChain for the pipeline: not recommended.** A turn is a few plain functions with
+  typed contracts, injected dependencies and a scripted fake model, which already gives
+  the testability a framework offers. LangChain's tool-calling agents conflict with the
+  core rule that the model returns a plan and code checks and runs the one tool. Its
+  value here is limited to integrations, such as a vector store if embedding search is
+  added.
+- **LangGraph once the handoff becomes two-way.** A checkpointed graph would keep
+  conversations across restarts and pause one while a pharmacist answers, then resume it.
+  Until then, a SQLite or Redis session store is the smaller fix.
+
+### Quality and latency
+
+- **One model call for plain label questions.** p95 is 13.1 s against 4 s, and a product
+  question makes two model calls. The router already returns the label sections a question
+  asks for, though no code reads them. When the exact stage finds exactly one product,
+  code could build the plan, as it already does for store and order questions, and skip
+  the catalog agent.
+- **Accuracy, precision and reliability.** Accuracy is 81.7% against 90%, escalation
+  precision 82.1% against 85%, and some turns ended in timeout fallbacks. Investigate all
+  three on development and synthetic cases, never on the held-out questions.
+- **More aliases:** bare brand names ("Prilosec", "Motrin") and several brands per
+  ingredient, taken from development failures only.
+- **"Did you mean ibuprofen?"** A clarifying reply with buttons, instead of respelling a
+  typo silently. It needs a new reply type in `contracts/`.
+- **Embedding search** (sqlite-vec in the same SQLite file, fused with BM25), only if the
+  evaluation shows misses that keywords and aliases can't fix.
+- **The judge sees the conversation**, as the router already does, if follow-ups become a
+  bigger share of the cases; each historical Groq held-out run had 2 among its 30 judged
+  turns.
+
+### Testing
+
+- **Property-based tests** (Hypothesis) for redaction and the emergency rules: generate
+  phone formats, doses, dates and lot numbers, and assert that no contact detail survives
+  and doses with units stay as typed.
+- **A red-team suite** (promptfoo or garak) for prompt injection, emergency phrasings and
+  attempts to reach order data, run against the live pipeline.
+- **Mutation testing** (mutmut) on `assistant/safety/` and `assistant/redaction.py`, to
+  show the tests fail when a guard is weakened.
+- **Browser tests in CI** (Playwright) for the widget's handoff, focus and keyboard flow,
+  replacing the manual `widget/handoff-test.html` check, and a type checker (mypy or
+  pyright).
+
+### Safety, privacy and production
+
+- **A one-time code** sent to the email or phone before an order status is shown.
+- **Names and street addresses in redaction**, for example with Microsoft Presidio.
+  Today it covers emails, phones and order numbers, with the gaps listed above.
+- **A second emergency layer:** a small classifier beside the router that can only add
+  the emergency reply. The rules still answer first, before any model call.
+- **Rate limits** per session and IP on `/chat`, durable sessions, and a Dockerfile with
+  Compose for the assistant and the mock API.
+- **Idempotent retries after a lost reply:** return the ticket an offer already created,
+  even after a newer card has appeared.
+
+### Product features
+
+- Holiday hours, turns that ask two things at once, Arabic or Spanish, staff analytics, a
+  fine-tuned router, and a local open-weight model compared with the hosted one.
