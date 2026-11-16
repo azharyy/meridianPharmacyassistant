@@ -523,8 +523,11 @@ What the reviews and checks caught:
 - Every case and calibration label is an AI judgment. Independent human review is still
   pending, so the judge's 20/20 is agreement with AI labels.
 - The judge sees only the latest customer question, so a follow-up such as "How do I
-  take it?" can lose the product it refers to. This gap in the evaluator was confirmed
-  offline; it isn't known to have caused any reported failure.
+  take it?" loses the product it refers to; two synthetic conversations reproduce this.
+  It barely touches the saved results: follow-ups are 2 of the 30 judged turns in each
+  held-out run, and the one that failed (test-043's third turn, in the baseline) also
+  failed on its reply type and risk label. The evaluator is unchanged, because changing
+  it would need a new calibration for no measured effect.
 
 ### Safety and privacy gaps found in review and left open
 
@@ -558,8 +561,8 @@ What the reviews and checks caught:
 - A one-time code to prove control of the email or phone before showing an order.
 - Independent human review of the labels, a hand audit of the judge on the test set,
   and a fresh held-out run of the current default, written to separate files.
-- Give the judge the conversation's context, if that gap turns out to matter: the one
-  item of the quality follow-up in `docs/FIXES.md` section D still open.
+- Give the judge a conversation's earlier messages if follow-ups become a bigger share of
+  the cases; today they are 2 of 30 judged held-out turns.
 - Fixes for the open safety and privacy gaps above.
 - Holiday hours, typo tolerance in search, clarifying questions with buttons, and turns
   that ask two things at once.
