@@ -4,7 +4,8 @@ A guard-railed customer-support assistant for a fictional pharmacy storefront. I
 answers product, stock, store and order questions from real data, shows the
 source behind every answer, and hands anything medical to a pharmacist.
 
-**Status:** in progress. The build plan is in [docs/PLAN.md](docs/PLAN.md).
+The build plan is in [docs/PLAN.md](docs/PLAN.md), and the fixes made after the build
+review are in [docs/FIXES.md](docs/FIXES.md).
 
 All data is synthetic or public sample data. Not medical advice.
 
@@ -32,7 +33,7 @@ cp .env.example .env
 
 Then fill it in:
 
-```
+```dotenv
 OPENCODE_API_KEY=your_opencode_key_here
 ```
 
@@ -209,7 +210,7 @@ example payloads in `contracts/examples/` and snapshots in `contracts/schemas.js
 | `data/` | `stores.yaml`, `orders.json`, `stock.json` and the policy pages in `data/policies/` |
 | `scripts/` | The one-off data scripts: `fetch_labels.py`, `label_text.py`, `seed_data.py` |
 | `eval/` | Cases, harness, metrics, judge and report (see [Evaluation](#evaluation)) |
-| `tests/` | Mirrors the tree: `assistant/x.py` is tested by `tests/assistant/test_x.py` |
+| `tests/` | Mirrors the tree: `assistant/safety/reviewer.py` is tested by `tests/assistant/safety/test_reviewer.py` |
 
 `tests/test_architecture.py` runs with every `make check`. It fails the build if
 `contracts/` imports anything from the project; if `api/`, `assistant/` or `scripts/`
