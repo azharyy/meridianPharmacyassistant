@@ -184,6 +184,8 @@
     constructor() {
       super();
       this.session = sessionId();
+      this.newestCard = 0; /* only the newest pharmacist card can be confirmed */
+      this.controls = []; /* the newest card's buttons, disabled when a newer card appears */
       this.root = this.attachShadow({ mode: "open" });
       this.root.append(el("style", { text: STYLE }));
     }
@@ -239,8 +241,9 @@
     async post(path, body) {
       const response = await fetch(`${this.api}${path}`, {
         method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      return response.json();
+      /* 409 is the server refusing an out-of-date card; its body is a reply to show. */
+      if (!response.ok && response.status !== 409) throw new Error(`HTTP ${response.status}`);
+      return { stale: response.status === 409, reply: await response.json() };
     }
 
     append(node) {
@@ -252,7 +255,7 @@
     async exchange(path, body) {
       const indicator = this.append(el("p", { class: "checking", role: "status", text: WORDS.checking }));
       try {
-        this.showReply(await this.post(path, body));
+        this.showReply((await this.post(path, body)).reply);
       } catch (_) {
         this.append(el("p", { class: "notice", text: WORDS.unreachable }));
       } finally {
@@ -278,28 +281,44 @@
       const body = reply.emergency
         ? el("div", { class: "banner", role: "alert" }, ...blocks)
         : el("div", { class: "body" }, ...blocks);
-      const offer = reply.handoff_offered
-        ? el("div", { class: "offer" }, el("p", { text: WORDS.offer }),
-          el("button", { type: "button", class: "primary", text: WORDS.confirm, onclick: (event) => this.handoff(event.target) }))
-        : null;
+      const offer = reply.handoff_offered ? this.offerCard(reply.offer_id) : null;
       return this.append(el("article", { class: "reply", "data-reply-type": reply.reply_type }, body, sourcesRow(reply.sources), offer));
     }
 
-    async handoff(button) {
-      if (button) button.disabled = true;
-      try {
-        this.showHandoff(await this.post("/handoff", { session_id: this.session, confirmed: true }));
-      } catch (_) {
-        this.showHandoff({ ticket_id: null, text: WORDS.unreachable });
-      } finally {
-        if (button) button.disabled = false;
-      }
+    /* A card confirms only its own offer. Showing it retires every older card's buttons: the
+     * server would refuse them anyway, since only its newest offer can be filed. */
+    offerCard(offerId) {
+      this.retire();
+      const card = ++this.newestCard;
+      const button = el("button", { type: "button", class: "primary", text: WORDS.confirm,
+        onclick: () => this.handoff(offerId, card, button) });
+      this.controls.push(button);
+      return el("div", { class: "offer" }, el("p", { text: WORDS.offer }), button);
     }
 
-    showHandoff(reply) {
-      const retry = reply.ticket_id ? null
-        : el("button", { type: "button", text: WORDS.retry, onclick: (event) => { event.target.remove(); this.handoff(); } });
-      return this.append(el("div", { class: "offer handoff", "data-ticket": reply.ticket_id || "" }, el("p", { text: reply.text }), retry));
+    retire() {
+      for (const control of this.controls) control.disabled = true;
+      this.controls = [];
+    }
+
+    /* A card sends its offer's ID; the header sends null, which asks about the conversation as
+     * it stands. A late answer never re-enables a retired button, and only a failure on the
+     * newest card offers a retry: a 409 or a failed header request offers none. */
+    async handoff(offerId = null, card = 0, button = null) {
+      if (button) button.disabled = true;
+      const { stale, reply } = await this.post("/handoff", { session_id: this.session, confirmed: true, offer_id: offerId })
+        .catch(() => ({ stale: false, reply: { ticket_id: null, text: WORDS.unreachable } }));
+      const newest = button !== null && card === this.newestCard;
+      const retry = newest && !reply.ticket_id && !stale;
+      if (retry) button.disabled = false;
+      else if (newest) this.retire(); /* filed or refused: this card is done */
+      this.showHandoff(reply, retry ? () => this.handoff(offerId, card, button) : null);
+    }
+
+    showHandoff(reply, retry) {
+      const again = retry ? el("button", { type: "button", text: WORDS.retry, onclick: (event) => { event.target.remove(); retry(); } }) : null;
+      if (again) this.controls.push(again);
+      return this.append(el("div", { class: "offer handoff", "data-ticket": reply.ticket_id || "" }, el("p", { text: reply.text }), again));
     }
   }
 

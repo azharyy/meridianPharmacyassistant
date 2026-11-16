@@ -86,7 +86,7 @@ def with_record_capture(
     return replace(steps, retrieve=retrieve)
 
 
-def run_action(action, session_id, session, steps, llm, http) -> RecordedTurn:
+def run_action(action, session_id, session, steps, llm, http, card=None) -> RecordedTurn:
     if isinstance(action, ChatAction):
         result = pipeline.run_turn(
             ChatRequest(session_id=session_id, message=action.message, store_id=action.store_id),
@@ -118,7 +118,7 @@ def run_action(action, session_id, session, steps, llm, http) -> RecordedTurn:
         requested_tool = "lookup_order"
     else:
         with pipeline.stage(timings, "handoff"):
-            reply = escalation.handoff(session_id, session, http)
+            reply = escalation.handoff(session_id, session, http, card)
         requested_tool = "create_ticket"
     return RecordedTurn(
         action=action.action,
@@ -140,6 +140,7 @@ def _run_case(
     steps = with_record_capture(with_documents(steps, case.documents), seen, product_names)
     original_timeout = http.headers.get("X-Meridian-Test")
     turns = []
+    card = None  # the latest card shown: a scripted handoff confirms it, as its button would
     try:
         with capture_api(http) as capture:
             for action in case.turns:
@@ -152,7 +153,9 @@ def _run_case(
                 start = len(capture.calls)
                 seen.clear()
                 product_names.clear()
-                turn = run_action(action, session_id, session, steps, llm, http)
+                turn = run_action(action, session_id, session, steps, llm, http, card)
+                if isinstance(turn.reply, ChatReply) and turn.reply.offer_id:
+                    card = turn.reply.offer_id
                 turn.tools = capture.calls[start:]
                 sources = turn.reply.sources if isinstance(turn.reply, ChatReply) else []
                 turn.api_evidence = {

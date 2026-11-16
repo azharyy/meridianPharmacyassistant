@@ -8,6 +8,7 @@ import threading
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Literal
+from uuid import uuid4
 
 from contracts.api import OrderStatus
 from contracts.chat import ChatReply
@@ -33,11 +34,11 @@ class VerifiedOrder:
 
 @dataclass
 class HandoffOffer:
-    """The last pharmacist card shown, and why. Its number and the session ID key the ticket."""
+    """A pharmacist card, and why it was shown. Its ID and the session ID key the ticket."""
 
-    number: int
     risk_label: RiskLabel
     reason: Literal["risk", "fallback", "customer_requested"]
+    id: str = field(default_factory=lambda: str(uuid4()))  # never repeats, even after a restart
     ticket_id: str | None = None  # set once the ticket exists
 
 
@@ -45,8 +46,7 @@ class HandoffOffer:
 class Session:
     turns: list[Turn] = field(default_factory=list)
     verified_order: VerifiedOrder | None = None
-    handoff_offer: HandoffOffer | None = None
-    offers_made: int = 0
+    handoff_offer: HandoffOffer | None = None  # the current card: the only one that can be filed
     max_turns: int = MAX_TURNS
     _offer_lock: threading.Lock = field(default_factory=threading.Lock, repr=False, compare=False)
 
@@ -57,19 +57,25 @@ class Session:
         """The customer's messages so far, redacted, oldest first."""
         return [turn.message for turn in self.turns]
 
+    # The lock covers only these two short steps: no model or ticket API call ever waits on it.
     def offer_handoff(
-        self,
-        risk_label: RiskLabel,
-        reason: Literal["risk", "fallback", "customer_requested"],
-        *,
-        reuse: bool = False,
+        self, risk_label: RiskLabel, reason: Literal["risk", "fallback", "customer_requested"]
     ) -> HandoffOffer:
-        # Only allocation is locked: emergency replies never wait for a ticket API call.
+        """A new card. It becomes the current offer, so older cards can no longer be filed."""
         with self._offer_lock:
-            if not reuse or self.handoff_offer is None:
-                self.offers_made += 1
-                self.handoff_offer = HandoffOffer(self.offers_made, risk_label, reason)
+            self.handoff_offer = HandoffOffer(risk_label, reason)
             return self.handoff_offer
+
+    def confirm_offer(self, offer_id: str | None) -> HandoffOffer | None:
+        """The offer a confirmation files: the current one if `offer_id` names it, else None and
+        nothing changes. No ID is the header button: the current offer, or one it requests."""
+        with self._offer_lock:
+            if offer_id is None:
+                if self.handoff_offer is None:
+                    self.handoff_offer = HandoffOffer(RiskLabel.NONE, "customer_requested")
+                return self.handoff_offer
+            current = self.handoff_offer
+            return current if current is not None and current.id == offer_id else None
 
 
 class SessionStore:

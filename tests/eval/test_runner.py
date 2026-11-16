@@ -9,13 +9,13 @@ import pytest
 from fastapi.testclient import TestClient
 
 from api.app import create_app as create_api
-from assistant import pipeline
+from assistant import escalation, pipeline
 from assistant.llm import FakeSender, ModelClient
 from assistant.settings import load_settings
 from assistant.tools import execute
 from contracts.catalog import PolicyRecord
 from contracts.plan import CatalogPlan
-from contracts.taxonomy import Intent
+from contracts.taxonomy import Intent, RiskLabel
 from eval.loader import Case, Document
 from eval.runner import RecordedCase, run_cases, with_documents
 from tests.assistant.fixtures import PLAN, PRODUCTS, QUESTION, ROUTED, search
@@ -143,6 +143,30 @@ def test_order_form_cached_status_handoff_and_timeout_actions_use_actual_api_cal
     assert api.app.state.desks.tickets.count() == 1 and len(fake.requests) == 3
     assert form["order_number"] not in str(fake.requests)
     assert form["contact"] not in str(fake.requests)
+
+
+def test_a_scripted_handoff_confirms_the_latest_card_by_its_id(monkeypatch):
+    api, confirmed = TestClient(create_api(DATA, staff_key="test-staff-key")), []
+    real = escalation.handoff
+    monkeypatch.setattr(
+        escalation, "handoff", lambda *args: confirmed.append(args[3]) or real(*args)
+    )
+    medical = ROUTED.model_copy(
+        update={"risk_label": RiskLabel.MEDICAL_ADVICE, "product_mentions": []}
+    )
+    llm, _ = model(medical, ROUTED, PLAN)
+    handoff = {"action": "handoff", "confirmed": True, "expect": HANDOFF_EXPECT}
+    medical_turn = {"reply_type": "medical_advice", "risk_label": "medical_advice"}
+    card = chat("Can I take it?", **medical_turn, handoff_offered=True)
+    source = case(handoff, card, chat(), handoff)
+    [record] = run_cases([source], SETTINGS, llm, api, pipeline.Steps(retrieve=search))
+    shown = record.turns[1].reply.offer_id
+    assert shown is not None and record.turns[2].reply.offer_id is None
+    assert confirmed == [None, shown]  # no card yet: the header action; then the card on screen
+    ticket = api.get(
+        f"/v1/tickets/{record.turns[3].reply.ticket_id}", headers={"X-Staff-Key": "test-staff-key"}
+    )
+    assert ticket.json()["summary"]["risk_label"] == "medical_advice"
 
 
 def test_a_requested_but_rejected_tool_is_distinct_from_an_actual_api_call():

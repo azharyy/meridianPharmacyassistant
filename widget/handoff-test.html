@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Handoff card checks</title>
+  <!-- Drives the real widget against a fake fetch whose answers each check releases in its own
+       order. Open it in a browser, or run it headless with --dump-dom: the title and the results
+       block read PASS or FAIL. No server and no network. -->
+  <script src="meridian-chat.js"></script>
+</head>
+<body>
+  <pre id="results">Running…</pre>
+  <script>
+    "use strict";
+    const A = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+    const B = "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb";
+    const E = "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee";
+    const FAILED = { ticket_id: null, text: "Sorry, your request didn't go through. Please try again." };
+    const STALE = { ticket_id: null, text: "That card is out of date, so nothing was sent." };
+
+    let calls = []; /* every request the widget makes, each waiting for its answer */
+    window.fetch = (url, options) => new Promise((resolve, reject) =>
+      calls.push({ path: new URL(url).pathname, body: JSON.parse(options.body), resolve, reject }));
+    const settle = async () => { for (let i = 0; i < 10; i += 1) await new Promise((r) => setTimeout(r, 0)); };
+    async function answer(call, status, body) {
+      call.resolve(new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } }));
+      await settle();
+    }
+    async function fail(call) { call.reject(new TypeError("network down")); await settle(); }
+    const card = (id, extra = {}) => ({ reply_type: "fallback", blocks: [{ type: "text", text: `Card ${id[0]}` }],
+      sources: [], handoff_offered: true, emergency: false, offer_id: id, ...extra });
+    const ticket = (id) => ({ ticket_id: id, text: `Request ${id}` });
+
+    function widget() {
+      calls = [];
+      const chat = document.createElement("meridian-chat");
+      chat.setAttribute("api", "http://assistant.test");
+      chat.setAttribute("inline", "");
+      document.body.append(chat);
+      return chat;
+    }
+    const all = (chat, selector) => [...chat.shadowRoot.querySelectorAll(selector)];
+    const confirms = (chat) => all(chat, "article .offer button");
+    const retries = (chat) => all(chat, ".handoff button");
+    const handoffs = () => calls.filter((call) => call.path === "/handoff");
+    async function say(chat, text) {
+      chat.shadowRoot.querySelector("textarea").value = text;
+      chat.shadowRoot.querySelector("form.composer button[type=submit]").click();
+      await settle();
+    }
+    async function click(button) { button.click(); await settle(); }
+    function expect(condition, what) { if (!condition) throw new Error(what); }
+
+    const checks = {
+      "out-of-order replies: the card that arrives last is live and sends its own ID": async () => {
+        const chat = widget();
+        await say(chat, "first");
+        await say(chat, "second");
+        const [first, second] = calls;
+        await answer(second, 200, card(B));
+        await answer(first, 200, card(A));
+        const [b, a] = confirms(chat);
+        expect(b.disabled && !a.disabled, "B is retired and A is live");
+        await click(b);
+        expect(handoffs().length === 0, "a retired card sends nothing");
+        await click(a);
+        expect(handoffs().length === 1 && handoffs()[0].body.offer_id === A, "A sends A's ID");
+        await answer(handoffs()[0], 200, ticket("TCK-1001"));
+        expect(a.disabled, "a filed card stays disabled");
+      },
+      "success and double click: one request, then the button stays disabled": async () => {
+        const chat = widget();
+        await say(chat, "hello");
+        await answer(calls[0], 200, card(A));
+        const [a] = confirms(chat);
+        a.click();
+        await click(a);
+        expect(handoffs().length === 1, "one request for a double click");
+        const sent = JSON.stringify(handoffs()[0].body);
+        expect(sent === JSON.stringify({ session_id: chat.session, confirmed: true, offer_id: A }), sent);
+        await answer(handoffs()[0], 200, ticket("TCK-1001"));
+        expect(a.disabled && retries(chat).length === 0, "disabled, with no retry");
+        expect(all(chat, '.handoff[data-ticket="TCK-1001"]').length === 1, "the ticket is shown");
+        await click(a);
+        expect(handoffs().length === 1, "no request after success");
+      },
+      "transient failure: Retry sends the same ID while the card is newest": async () => {
+        const chat = widget();
+        await say(chat, "hello");
+        await answer(calls[0], 200, card(A));
+        const [a] = confirms(chat);
+        await click(a);
+        await fail(handoffs()[0]);
+        expect(!a.disabled && retries(chat).length === 1, "the card is live again with one Retry");
+        await click(retries(chat)[0]);
+        expect(handoffs().length === 2 && handoffs()[1].body.offer_id === A, "Retry sends A's ID");
+        await answer(handoffs()[1], 200, FAILED);
+        expect(retries(chat).length === 1, "a failure the server reports offers Retry again");
+        await click(retries(chat)[0]);
+        expect(handoffs()[2].body.offer_id === A, "the second Retry sends A's ID");
+        await answer(handoffs()[2], 200, ticket("TCK-1001"));
+        expect(a.disabled && retries(chat).length === 0, "filed, nothing left to retry");
+      },
+      "stale rejection: the server's text, no retry, the card stays disabled": async () => {
+        const chat = widget();
+        await say(chat, "hello");
+        await answer(calls[0], 200, card(A));
+        const [a] = confirms(chat);
+        await click(a);
+        await answer(handoffs()[0], 409, STALE);
+        const notices = all(chat, ".handoff");
+        expect(notices.length === 1 && notices[0].textContent === STALE.text, "the stale text is shown");
+        expect(retries(chat).length === 0 && a.disabled, "no retry, and the card stays disabled");
+      },
+      "failed header request: it sends null and offers no retry": async () => {
+        const chat = widget();
+        const header = chat.shadowRoot.querySelector("header button");
+        await click(header);
+        expect(handoffs().length === 1 && handoffs()[0].body.offer_id === null, "the header sends null");
+        await answer(handoffs()[0], 503, { detail: "unavailable" });
+        await click(header);
+        await answer(handoffs()[1], 200, FAILED);
+        expect(all(chat, ".handoff").length === 2 && retries(chat).length === 0, "two failures, no Retry");
+        expect(!header.disabled && handoffs().length === 2, "the header stays usable; nothing retried itself");
+      },
+      "old callbacks: a late answer for a retired card revives nothing": async () => {
+        const chat = widget();
+        await say(chat, "one");
+        await answer(calls[0], 200, card(A));
+        const [a] = confirms(chat);
+        await click(a);
+        await say(chat, "two");
+        await answer(calls[2], 200, card(B));
+        const b = confirms(chat)[1];
+        expect(a.disabled && !b.disabled, "B retires A while A's request is pending");
+        await fail(handoffs()[0]);
+        expect(a.disabled && retries(chat).length === 0 && !b.disabled, "A stays retired, no Retry, B untouched");
+      },
+      "old controls: a newer card retires an older card's Retry": async () => {
+        const chat = widget();
+        await say(chat, "one");
+        await answer(calls[0], 200, card(A));
+        const [a] = confirms(chat);
+        await click(a);
+        await answer(handoffs()[0], 200, FAILED);
+        const [retry] = retries(chat);
+        expect(!a.disabled && !retry.disabled, "A may retry");
+        await say(chat, "two");
+        await answer(calls[2], 200, card(B));
+        expect(a.disabled && retry.disabled, "B retires A and A's Retry");
+        await click(retry);
+        expect(handoffs().length === 1, "the retired Retry sends nothing");
+      },
+      "emergency while a handoff is pending: the input works and the banner shows at once": async () => {
+        const chat = widget();
+        await say(chat, "one");
+        await answer(calls[0], 200, card(A));
+        await click(confirms(chat)[0]);
+        expect(!chat.shadowRoot.querySelector("textarea").disabled, "the input is enabled");
+        await say(chat, "I cannot breathe");
+        expect(calls[2] && calls[2].path === "/chat", "the message goes out while the handoff waits");
+        await answer(calls[2], 200, card(E, { reply_type: "emergency", emergency: true }));
+        expect(all(chat, '.banner[role="alert"]').length === 1, "the banner shows before the handoff answers");
+        await answer(handoffs()[0], 200, ticket("TCK-1001"));
+        expect(!confirms(chat)[1].disabled, "the old card's late success leaves the emergency card live");
+      },
+    };
+
+    (async () => {
+      const results = [];
+      for (const [name, run] of Object.entries(checks)) {
+        try { await run(); results.push(`PASS ${name}`); }
+        catch (error) { results.push(`FAIL ${name}: ${error.message}`); }
+      }
+      const passed = results.filter((line) => line.startsWith("PASS")).length;
+      document.getElementById("results").textContent = results.join("\n");
+      document.title = `${passed === results.length ? "PASS" : "FAIL"} ${passed}/${results.length}`;
+    })();
+  </script>
+</body>
+</html>
