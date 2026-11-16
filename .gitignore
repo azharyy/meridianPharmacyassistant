@@ -12,6 +12,9 @@ wheels/
 # Agent working note: one per working folder, never committed
 HANDOFF.md
 
+# The user's local demo-video recording script, never committed
+demo-video-script.txt
+
 # Keys: real ones live outside the repo; this is a second line of defense
 .env
 .env.*
