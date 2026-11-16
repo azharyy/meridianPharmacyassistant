@@ -754,6 +754,19 @@
         "title": "Handoff Offered",
         "type": "boolean"
       },
+      "offer_id": {
+        "anyOf": [
+          {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Offer Id"
+      },
       "reply_type": {
         "$ref": "#/$defs/ReplyType"
       },
@@ -843,6 +856,19 @@
         "const": true,
         "title": "Confirmed",
         "type": "boolean"
+      },
+      "offer_id": {
+        "anyOf": [
+          {
+            "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Offer Id"
       },
       "session_id": {
         "pattern": "^[A-Za-z0-9_-]{8,64}$",
