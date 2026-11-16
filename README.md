@@ -56,8 +56,8 @@ monitors its traffic. An OpenAI API key is unused.
 
 The historical held-out results in [`eval/REPORT.md`](eval/REPORT.md) were measured before this
 change, on Groq-hosted GPT-OSS 120B with a Groq Qwen 3.8 27B judge (its calibration is
-kept in `eval/results/calibration-groq-qwen.md`). A fresh OpenCode pair now measures
-the current code. The [provider results comparison](eval/experiments/opencode-2026-11-16/PROVIDER_COMPARISON.md)
+kept in `eval/results/calibration-groq-qwen.md`). The newer OpenCode pair measured
+the code at issue 33. The [provider results comparison](eval/experiments/opencode-2026-11-16/PROVIDER_COMPARISON.md)
 shows both configurations with their actual models, judges and code fingerprints;
 the historical files remain unchanged.
 
@@ -504,9 +504,9 @@ beside the corrected ones ([eval/results/LABEL_AUDIT.md](eval/results/LABEL_AUDI
 
 | Configuration | Evidence | Accuracy | p95 |
 | --- | --- | --- | --- |
-| OpenCode GLM-5.3 + Kimi judge, current fixed code | New 60-case [held-out pair](eval/experiments/opencode-2026-11-16/REPORT.md) | 46/60 -> 49/60 (76.7% -> 81.7%) | 16.859 s -> 13.118 s |
-| OpenCode GLM-5.3 + Kimi judge, current fixed code | New 12-case [development run](eval/experiments/opencode-2026-11-16/results/dev.md) | 12/12 (100%) | 12.400 s |
-| OpenCode GLM-5.3-Flash + Kimi judge, current fixed code | New 12-case [development comparison](eval/experiments/opencode-2026-11-16/results/dev-compare.md) | 10/12 (83.3%) | 13.534 s |
+| OpenCode GLM-5.3 + Kimi judge, issue 33 code | New 60-case [held-out pair](eval/experiments/opencode-2026-11-16/REPORT.md) | 46/60 -> 49/60 (76.7% -> 81.7%) | 16.859 s -> 13.118 s |
+| OpenCode GLM-5.3 + Kimi judge, issue 33 code | New 12-case [development run](eval/experiments/opencode-2026-11-16/results/dev.md) | 12/12 (100%) | 12.400 s |
+| OpenCode GLM-5.3-Flash + Kimi judge, issue 33 code | New 12-case [development comparison](eval/experiments/opencode-2026-11-16/results/dev-compare.md) | 10/12 (83.3%) | 13.534 s |
 | Groq GPT-OSS 120B + Qwen judge | Historical 60-case [held-out comparison](eval/REPORT.md) | 50/60 -> 51/60 (83.3% -> 85.0%) | 25.545 s -> 17.226 s |
 | OpenCode GLM-5.3 + Kimi judge | 12-case [development comparison](eval/results/dev-compare.md) after issue 17; the default model | 12/12 (100%) | 1.928 s |
 | OpenCode GLM-5.3-Flash + Kimi judge | 12-case [development run](eval/results/dev.md) after issue 17 | 12/12 (100%) | 10.209 s |
@@ -625,8 +625,9 @@ What the reviews and checks caught:
 These fixes have offline regression coverage ([fix plan](docs/FIXES.md#e-feasible-follow-ups-from-the-latest-review-completed-locally));
 the new live pair measures the fixed code while original measurements remain intact.
 Evaluation fingerprints now include API/contract code and actual policy documents.
-The fresh runs have matching current fingerprints; old development files cannot be
-mixed into a new same-code comparison.
+The issue 33 runs have matching fingerprints for their measured code. Issue 34's
+unused report-option and docstring cleanup changes that fingerprint and was checked
+offline only; saved runs cannot be mixed with new code in a same-code comparison.
 
 ### Product
 

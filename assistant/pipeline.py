@@ -47,7 +47,7 @@ Record = ProductRecord | PolicyRecord
 
 
 def retrieve_nothing(query: str, k: int) -> list[Record]:
-    """Step 4 until issue 5: nothing is found. A retriever returns at most k whole records."""
+    """No catalog bound: return no records."""
     return []
 
 

@@ -6,9 +6,9 @@ Inspected by Codex on 2026-11-15 using installed Microsoft Edge headless against
 
 The full page reported **Drew 20 of 20 examples.** Eight grouped screenshots cover
 all 18 chat replies and both handoff states; every group reported its expected
-count with no failures. `render-results.json` records the URLs, counts and viewport
-sizes. The accompanying HTML files preserve the page's render-status output;
-rendered shadow content is visible in the PNGs.
+count with no failures. [render-results.json](render-results.json) records the URLs,
+counts and viewport sizes; the PNGs preserve the rendered content. Use the
+[preview page](../../widget/preview.html) to render the examples again.
 
 Visual review found no clipping, overlapping controls or missing reply content at
 the captured desktop widths. The comparison table, product list, stock and store

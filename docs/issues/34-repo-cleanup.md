@@ -21,7 +21,7 @@ Acceptance criteria (full offline checks and a commit after each):
   remove only proven unused code or unreachable branches, updating tests that
   solely exercise removed internals. Record the evidence and retained edge cases
   in HANDOFF. Supported runtime and tooling behavior remains covered and green.
-- [ ] 2. Remove obsolete/redundant documentation or duplicated preview artifacts
+- [x] 2. Remove obsolete/redundant documentation or duplicated preview artifacts
   with no distinct remaining use, repair affected links, and retain unique
   instructions, issue history and evaluation evidence. Record the audit's scope
   and exclusions; local documentation links and full offline checks pass.
