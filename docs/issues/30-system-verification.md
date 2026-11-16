@@ -8,7 +8,7 @@ workspace-only verification harness/artifacts may be created and removed.
 Production/test fixes, if needed, get a separate scoped issue before editing.
 
 Acceptance (one verification checkpoint):
-- [ ] 1. Run lint/format/full offline tests, real loopback HTTP checks of the
+- [x] 1. Run lint/format/full offline tests, real loopback HTTP checks of the
   assistant and mock API with scripted FakeSender and real catalog retrieval,
   browser checks of widget demo/sources/order form/escalation/keyboard and its
   existing handoff/preview fixtures. Record exact results and any blockers in

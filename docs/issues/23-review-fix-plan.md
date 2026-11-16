@@ -15,7 +15,7 @@ completed A-D work as historical so stale model numbers, Git instructions and
 previous implementation authorization cannot restart it. Preserve earlier work.
 
 Acceptance criterion
-- [ ] The plan contains a prioritized, bounded queue with concrete acceptance
+- [x] The plan contains a prioritized, bounded queue with concrete acceptance
   checks, separates pending video/validation from implementation, records the
   judge-context deferral, and explicitly authorizes planning only. Local links
   and `git diff --check` pass; the full offline checks remain green. Only the

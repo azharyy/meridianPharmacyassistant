@@ -8,13 +8,13 @@ Scope: `assistant/safety/emergency.py`, its mirrored test and
 contract, prompt or eval data changes. Detection only; E4 handles HTTP scheduling.
 
 Acceptance criteria, each with full offline check and HANDOFF checkpoint:
-- [ ] 1. Explicit current recurrence after an adjacent historical emergency
+- [x] 1. Explicit current recurrence after an adjacent historical emergency
   sentence and current throat tightness get the existing 911 reply/offer with
   zero model/API calls. Prove detector and pipeline cases, including model down.
-- [ ] 2. Water, a whole single tablet and a 10 mg strength do not independently
+- [x] 2. Water, a whole single tablet and a 10 mg strength do not independently
   trigger overdose. Retain genuine overdose, bulk medicine containers, large
   tablet counts and existing child-ingestion checks. Add detector regressions.
-- [ ] 3. Unrelated present-time words after a historical event and negative
+- [x] 3. Unrelated present-time words after a historical event and negative
   recurrence do not trigger; existing historical and label-question tests pass.
   Recognition patterns remain centralized in the existing module.
 
