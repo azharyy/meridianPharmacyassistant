@@ -175,7 +175,9 @@ def test_report_is_written_only_after_both_compatible_variants_exist(tmp_path):
     assert "[the label audit](results/LABEL_AUDIT.md)" in (tmp_path / "REPORT.md").read_text()
 
 
-@pytest.mark.parametrize("changed", ["case_sha256", "runtime", "judge_prompt_sha256"])
+@pytest.mark.parametrize(
+    "changed", ["case_sha256", "runtime", "judge_prompt_sha256", "implementation_sha256"]
+)
 def test_report_rejects_mismatched_cases_models_or_prompts(tmp_path, changed):
     directory = tmp_path / "results"
     evaluate_fake(directory, "baseline", replace(SETTINGS, exact_match=False))
@@ -229,3 +231,22 @@ def test_implementation_digest_tracks_runtime_inputs(tmp_path, monkeypatch, rela
     assert cli.implementation_digest() != original
     source.write_text("synthetic initial content", encoding="utf-8")
     assert cli.implementation_digest() == original
+
+
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "notes.md",
+        "eval/results/notes.txt",
+        "eval/results/synthetic.py",
+        "eval/cases/synthetic.txt",
+        "assistant/__pycache__/synthetic.py",
+    ],
+)
+def test_implementation_digest_ignores_nonruntime_artifacts(tmp_path, monkeypatch, relative):
+    monkeypatch.setattr(cli, "ROOT", tmp_path)
+    before = cli.implementation_digest()
+    artifact = tmp_path / relative
+    artifact.parent.mkdir(parents=True, exist_ok=True)
+    artifact.write_text("synthetic excluded content", encoding="utf-8")
+    assert cli.implementation_digest() == before

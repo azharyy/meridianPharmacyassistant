@@ -9,6 +9,7 @@ import pytest
 from assistant.llm import FakeSender
 from assistant.pipeline import Steps
 from assistant.settings import COMPARISON_RUNTIME_MODEL, load_settings
+from eval import cli
 from eval.cli import metadata, run_live
 from eval.compare import build, reference_run
 from eval.usage import MeteredModel, UsageCapture
@@ -157,3 +158,33 @@ def test_comparison_make_target_selects_the_comparison_runtime_using_settings_on
     assert f"eval-compare: export MERIDIAN_RUNTIME_MODEL := {COMPARISON_RUNTIME_MODEL}" in makefile
     assert "eval-compare: export MERIDIAN_EXACT_MATCH := 1" in makefile
     assert "\t$(PY) -m eval.cli dev-compare\n" in makefile
+
+
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "api/orders.py",
+        "contracts/catalog.py",
+        "data/policies/delivery.md",
+    ],
+)
+def test_changed_runtime_file_rejects_comparison_before_startup(tmp_path, monkeypatch, relative):
+    root = tmp_path / "source"
+    source = root / relative
+    source.parent.mkdir(parents=True)
+    source.write_text("synthetic original", encoding="utf-8")
+    monkeypatch.setattr(cli, "ROOT", root)
+    directory = tmp_path / "results"
+    evaluate_fake(directory, settings=DEFAULT)
+    source.write_text("synthetic changed", encoding="utf-8")
+    started = []
+    with pytest.raises(ValueError, match="eval-dev again"):
+        run_live(
+            "dev-compare",
+            cases(),
+            COMPARE,
+            models=started.append,
+            serve=started.append,
+            directory=directory,
+        )
+    assert started == [] and not (directory / "dev-compare.json").exists()
