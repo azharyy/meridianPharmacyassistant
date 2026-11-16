@@ -11,7 +11,15 @@ from assistant.llm import FakeSender, ModelClient
 from assistant.pipeline import Steps
 from assistant.settings import MissingKey, load_settings
 from eval import cli
-from eval.cli import EvaluationInputError, evaluate, input_cases, metadata, refresh_report, run_live
+from eval.cli import (
+    EvaluationInputError,
+    evaluate,
+    input_cases,
+    live_models,
+    metadata,
+    refresh_report,
+    run_live,
+)
 from eval.judge.calibrate import PROMPT_SHA256
 from eval.loader import Case
 from tests.assistant.fixtures import PLAN, QUESTION, ROUTED, search
@@ -250,3 +258,40 @@ def test_implementation_digest_ignores_nonruntime_artifacts(tmp_path, monkeypatc
     artifact.parent.mkdir(parents=True, exist_ok=True)
     artifact.write_text("synthetic excluded content", encoding="utf-8")
     assert cli.implementation_digest() == before
+
+
+@pytest.mark.parametrize("role_name", ["runtime", "judge"])
+def test_live_evaluation_rejects_non_opencode_roles_before_startup(role_name):
+    setting = load_settings({"MERIDIAN_LLM": "live", "OPENCODE_API_KEY": "synthetic-key"})
+    other = load_settings({"MERIDIAN_RUNTIME_PROVIDER": "groq"}).runtime
+    if role_name == "runtime":
+        other = replace(other, model=setting.runtime.model)
+    setting = replace(setting, **{role_name: other})
+    started = []
+    with pytest.raises(ValueError, match="selected runtime"):
+        run_live("dev", cases(), setting, models=started.append, serve=started.append)
+    assert started == []
+    with pytest.raises(EvaluationInputError, match="OpenCode roles only"):
+        with live_models(setting):
+            pytest.fail("non-OpenCode client construction must not succeed")
+
+
+@pytest.mark.parametrize("run", ["dev", "calibrate"])
+def test_cli_routes_a_new_experiment_directory_without_touching_archives(
+    tmp_path, monkeypatch, run
+):
+    destination = tmp_path / "experiment" / "results"
+    seen = []
+    monkeypatch.setattr(cli, "input_cases", lambda path: cases())
+    monkeypatch.setattr(cli, "input_pairs", lambda: [])
+
+    def capture(*args, directory):
+        seen.append(directory)
+        return {"metrics": {}}
+
+    monkeypatch.setattr(cli, "run_live", capture)
+    monkeypatch.setattr(cli, "run_calibration", capture)
+    monkeypatch.setattr(cli, "summary", lambda *args: "synthetic summary")
+    monkeypatch.setattr(cli, "calibration_summary", lambda *args: "synthetic calibration")
+    cli.main([run, "--output-dir", str(destination)], settings=SETTINGS)
+    assert seen == [destination] and not destination.exists()
