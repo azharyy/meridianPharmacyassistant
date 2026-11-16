@@ -1,8 +1,13 @@
 """The launcher starts both servers as plain commands and checks the live key before anything."""
 
-import pytest
+import re
 
+import pytest
+from fastapi.testclient import TestClient
+
+from api.app import app as api
 from assistant import launcher
+from assistant.app import create_app
 from assistant.settings import MissingKey, load_settings
 
 LIVE = load_settings({"MERIDIAN_LLM": "live", "OPENCODE_API_KEY": "oc_test"})
@@ -50,6 +55,15 @@ def test_live_mode_without_the_key_stops_before_starting_anything():
     with pytest.raises(MissingKey, match="OPENCODE_API_KEY"):
         launcher.main(load_settings({"MERIDIAN_LLM": "live"}), start=started.append)
     assert started == []
+
+
+def test_every_link_the_launcher_prints_opens_a_page(capsys):
+    launcher.main(LIVE, start=FakeServer, wait=interrupt)
+    links = re.findall(r"http://localhost:(\d+)(/[^\s,)]*)?", capsys.readouterr().out)
+    with TestClient(create_app(load_settings({}))) as assistant, TestClient(api) as mock_api:
+        clients = {"8000": assistant, "8001": mock_api}
+        opened = [clients[port].get(path or "/").status_code for port, path in links]
+    assert opened and opened == [200] * len(opened)
 
 
 def test_ctrl_c_stops_both_servers():
