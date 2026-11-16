@@ -2,7 +2,7 @@
 
 import pytest
 
-from assistant.retrieval.exact import exact_products, ingredients
+from assistant.retrieval.exact import exact_products, ingredients, respell, typos
 from assistant.retrieval.index import SearchIndex
 from assistant.settings import load_settings
 from tests.assistant.fixtures import product
@@ -116,3 +116,66 @@ def test_comparison_preserves_both_named_products_with_k_two(query, expected):
         assert [record.sku for record in index.search(query, 2)] == expected
     finally:
         index.close()
+
+
+TERMS = [
+    "ibuprofen",
+    "acetaminophen",
+    "tylenol",
+    "loratadine",
+    "cetirizine",
+    "guaifenesin",
+    "chlorpheniramine maleate",
+    "diphenhydramine",
+    "omeprazole",
+    "lamisil",
+    "claritin",
+    "aleve",
+]
+
+
+@pytest.mark.parametrize(
+    ("a", "b", "count"),
+    [("kitten", "sitting", 3), ("ab", "ba", 1), ("", "abc", 3), ("ibuprofen", "ibuprofen", 0)],
+)
+def test_typos_count_inserts_deletes_replacements_and_neighbor_swaps(a, b, count):
+    assert typos(a, b) == count
+
+
+@pytest.mark.parametrize(
+    ("typed", "respelled"),
+    [
+        ("meridian ibuprufen", "meridian ibuprofen"),  # a letter replaced
+        ("ibuprfoen", "ibuprofen"),  # two neighbors swapped
+        ("acetominophen", "acetaminophen"),
+        ("tylenal", "tylenol"),  # a brand
+        ("cetrizine", "cetirizine"),  # a letter missing
+        ("guaifenisen", "guaifenesin"),  # two typos in a name of nine or more letters
+        ("chlorpheniramine maleat", "chlorpheniramine maleate"),
+    ],
+)
+def test_a_word_one_typo_from_one_catalog_word_is_respelled(typed, respelled):
+    assert respell(typed, TERMS) == respelled
+
+
+@pytest.mark.parametrize(
+    "typed",
+    [
+        "ibuprofen",  # already a catalog word
+        "aleeve",  # five-letter names such as aleve are left out
+        "clarity",  # two typos from the eight-letter claritin
+        "desloratadine",  # look-alike drugs outside the catalog
+        "levocetirizine",
+        "chlorpromazine",
+        "guanfacine",
+        "dimenhydrinate",
+        "esomeprazole",
+        "lamictal",
+    ],
+)
+def test_correct_words_short_names_and_look_alike_drugs_stay_as_typed(typed):
+    assert respell(typed, TERMS) == typed
+
+
+def test_a_word_near_two_catalog_words_is_not_guessed():
+    assert respell("loratidine", ["loratadine", "loratidane"]) == "loratidine"

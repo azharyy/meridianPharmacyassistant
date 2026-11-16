@@ -7,7 +7,15 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from assistant.retrieval.aliases import load_aliases
-from assistant.retrieval.exact import alias_terms, exact_products, named_products, normalize, phrase
+from assistant.retrieval.exact import (
+    alias_terms,
+    exact_products,
+    named_products,
+    normalize,
+    phrase,
+    product_terms,
+    respell,
+)
 from contracts.catalog import PolicyRecord, ProductRecord
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -61,6 +69,10 @@ class SearchIndex:
             for alias, target in self.aliases.items()
             if not any(phrase(normalize(p.active_ingredients), target) for p in self.products)
         }
+        # The ingredient and brand names that find products; search respells typos of them.
+        self.terms = [
+            term for term, skus in product_terms(self.products, self.aliases).items() if skus
+        ]
         self.connection = sqlite3.connect(":memory:", check_same_thread=False)
         self.connection.execute(
             "CREATE VIRTUAL TABLE sections USING fts5(record_id UNINDEXED, title, text)"
@@ -81,7 +93,9 @@ class SearchIndex:
     def search(self, query: str, k: int) -> list[Record]:
         ids = []
         if self.exact_match:
-            ids.extend(exact_products(query, self.products, self.aliases))
+            # Only here: named() and keyword search keep the customer's words as typed.
+            respelled = respell(normalize(query), self.terms)
+            ids.extend(exact_products(respelled, self.products, self.aliases))
             targets = alias_terms(normalize(query), self.label_aliases)
             ids.extend(self.keyword_ids(" ".join(targets)))
         ids.extend(self.keyword_ids(query))

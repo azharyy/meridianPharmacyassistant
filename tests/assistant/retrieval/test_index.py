@@ -4,7 +4,7 @@ import json
 
 import pytest
 
-from assistant.retrieval.index import SECTIONS, SearchIndex
+from assistant.retrieval.index import SECTIONS, SearchIndex, record_id
 from contracts.catalog import PolicyRecord, ProductRecord, Retriever
 from tests.assistant.fixtures import product
 
@@ -134,5 +134,27 @@ def test_named_lookup_requires_one_identity_independent_of_search_flag(flag, que
     try:
         found = index.named(query)
         assert (found.sku if found else None) == sku
+    finally:
+        index.close()
+
+
+IBUPROFEN = ["MRD-PAN-001", "MRD-PAN-003", "MRD-PAN-004"]
+TYPO = "i want to ask about meridian ibuprufen"
+
+
+def test_a_typo_of_a_drug_name_finds_its_products_but_never_a_safety_label():
+    index = SearchIndex()
+    try:
+        assert [record_id(record) for record in index.search(TYPO, 5)][:3] == IBUPROFEN
+        assert index.named("ibuprufen") is None  # a safety reply's label needs the exact name
+        assert index.search("desloratadine", 5) == []  # a look-alike drug outside the catalog
+    finally:
+        index.close()
+
+
+def test_the_keyword_only_baseline_keeps_the_typo():
+    index = SearchIndex(exact_match=False)
+    try:
+        assert not {record_id(record) for record in index.search(TYPO, 5)} & set(IBUPROFEN)
     finally:
         index.close()
