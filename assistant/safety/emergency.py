@@ -37,6 +37,8 @@ PATTERNS = {
     "throat swelling": (
         r"\b(throat|tongue|lips?|face) (is |are |keeps )?(swelling|swollen|closing)\b"
         r"|\bswelling (of|in) (my|his|her|their|the) (throat|tongue|lips?|face)\b|\banaphyla"
+        r"|\bthroat (feels? |is )?tight\b"
+        r"|\btightness in (my|his|her|their|the) throat\b"
     ),
     "self-harm": (
         r"\b(kill(ing)? (myself|himself|herself|themselves)"
@@ -74,6 +76,14 @@ NOW = (
 EMERGENCY = [re.compile(pattern, re.IGNORECASE) for pattern in PATTERNS.values()]
 NOT_NOW = [re.compile(pattern, re.IGNORECASE) for pattern in GUARDS.values()]
 HAPPENING_NOW = re.compile(NOW, re.IGNORECASE)
+# An adjacent sentence may refer back to the symptom, but an unrelated 'now' cannot.
+RECURRENCE = re.compile(
+    r"^\s*(?:now[,]?\s+)?(?:i am|i'm|he is|he's|she is|she's|they are|they're|we are)"
+    r"\s+having (?:one|it|that) (?:again|right now|now)\b"
+    r"|^\s*(?:i am|i'm|he is|he's|she is|she's|they are|they're) having another one\b"
+    r"|^\s*(?:i|we|they) have (?:it|that) again (?:right )?now\b",
+    re.IGNORECASE,
+)
 SENTENCES = re.compile(r"(?<=[.!?])\s+|\n+")
 ELLIPSES = re.compile(r"\.{2,}|…")  # "my son... swallowed... the whole bottle" is one report
 # A clause of its own starts with a subject or a question, not inside a label's symptom list.
@@ -133,7 +143,11 @@ def clauses(sentence: str) -> list[str]:
 
 def is_emergency(message: str) -> bool:
     """Whether a sentence, or a clause of it beside a past event or label question, fires."""
+    sentences = SENTENCES.split(ELLIPSES.sub(",", message.translate(APOSTROPHES)))
     return any(
         reports_emergency(sentence) or any(map(reports_emergency, clauses(sentence)))
-        for sentence in SENTENCES.split(ELLIPSES.sub(",", message.translate(APOSTROPHES)))
+        for sentence in sentences
+    ) or any(
+        RECURRENCE.search(current) and any(pattern.search(previous) for pattern in EMERGENCY)
+        for previous, current in zip(sentences, sentences[1:], strict=False)
     )

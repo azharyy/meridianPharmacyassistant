@@ -30,6 +30,11 @@ DOES_NOT_FIRE = {
     "an_ordinary_question": "Do you have something for a stuffy nose?",
 }
 HAPPENING_NOW = {
+    "adjacent_recurrence": "I had a seizure last year. I am having one again now.",
+    "adjacent_pain": "I had chest pain last year. I have it again now.",
+    "adjacent_third_party": "My son had a seizure last year. He's having another one.",
+    "tight_throat": "My throat feels tight right now",
+    "throat_tightness": "There is tightness in my throat",
     "label_question_during_it": "I have chest pain right now, what does the label say?",
     "past_and_present": "I had a seizure as a child and now I'm having one again",
     "history_and_breathing": "I have a history of asthma and I cannot breathe",

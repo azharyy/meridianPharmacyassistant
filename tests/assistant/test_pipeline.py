@@ -117,6 +117,8 @@ def test_a_turn_runs_its_steps_top_to_bottom():
     "message",
     [
         "My son swallowed a bottle of pills",
+        "I had a seizure last year. I am having one again now.",
+        "My throat feels tight right now",
         "I'm sam@example.com and I can't breathe",
         "I have a history of asthma and I cannot breathe",
         "The warning says chest pain and I have chest pain",
@@ -126,6 +128,8 @@ def test_a_turn_runs_its_steps_top_to_bottom():
     ],
     ids=[
         "third_party",
+        "adjacent_recurrence",
+        "tight_throat",
         "with_an_email",
         "history_clause",
         "label_clause",
