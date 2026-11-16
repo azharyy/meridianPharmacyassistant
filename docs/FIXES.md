@@ -1,9 +1,19 @@
 # Review fixes and submission plan
 
-Written 2026-11-16 after the whole-project review. The user has now requested
-implementation. The initial documentation task is [issue 13](issues/13-fix-plan.md);
-Git-permission/synchronization instructions are in [issue 16](issues/16-git-permissions-and-sync.md).
-Record completed implementation criteria in `HANDOFF.md`.
+Updated 2026-11-16 after the latest whole-project review, under
+[issue 23](issues/23-review-fix-plan.md). **Planning only: the user explicitly
+said not to start implementation.** Section E is the proposed next queue; none
+of its fixes has been implemented by this update. A later user instruction is
+needed to begin a fix.
+
+The earlier A-D queue has been addressed through issues 14-22: offer binding,
+README completion, the named-product fix, the default-model decision and the
+judge-context investigation. A-D below preserve the historical proposals, not
+current instructions or current model measurements. Their unchecked boxes do
+not reopen completed work. The video and validation gaps remain pending.
+
+The initial plan is [issue 13](issues/13-fix-plan.md). Record each future issue's
+implementation criteria in `HANDOFF.md` once implementation is requested.
 
 Use one shared queue. Codex and Claude can both build every item; there are no
 separate owners. The active agent works through the queue while reserving enough
@@ -15,9 +25,12 @@ from that record without needing the chat.
 
 | Priority | Problem and evidence | Smallest useful fix |
 | --- | --- | --- |
-| 1 | A card confirms whichever offer is current on the server. Emergency, then fallback, then clicking the emergency card creates a routine ticket. `widget/meridian-chat.js` sends no offer identity; `assistant/escalation.py` uses the current offer. | Give each card an offer ID. Reject stale confirmations instead of filing a different offer. Retire obsolete controls. |
-| 2 | The README's architecture, guardrails, evaluation, AI usage and limitations sections are empty. These are submission requirements. | Finish existing [issue 10](issues/10-readme.md), using the implementation and recorded evidence. Include the demo checklist and eventual video link. |
-| 3 | The preserved held-out improvement is 50/60 to 51/60; accuracy and latency miss the project's targets. Those runs used the previous provider/model. | Explain exactly what was measured. Diagnose current development failures and timings before choosing one small quality/performance change. Preserve the old held-out runs. |
+| 1 | International phone numbers survive redaction and reach model requests and ticket summaries. | E1: extend bounded phone recognition, preserving doses and product identifiers. |
+| 2 | Current emergencies across sentences and throat tightness are missed; water and ordinary dose statements trigger overdose. | E2: repair the reproduced recognition cases with positive and negative regressions. |
+| 3 | Ingredient matching attaches oral-tablet directions to a topical-spray question, or selects the wrong strength. | E3: omit labels when exact product identity remains ambiguous. |
+| 4 | All 40 normal HTTP worker slots can be waiting on model calls, delaying even a recognized emergency. | E4: keep the immediate emergency path outside the normal blocking-work queue. |
+| 5 | Evaluation fingerprints omit API/contract code and the real policy directory. | E5: hash the actual runtime inputs so incompatible runs cannot be compared as one configuration. |
+| Submission | The video is missing; human label review and current-default held-out quality remain pending. | E6: finish the video and review checklist; preserve historical evidence and require a separate measurement decision. |
 
 The brief does not mandate 90% accuracy or four-second p95; those are this
 project's targets. Missing them must be disclosed. Documentation alone does not
@@ -27,11 +40,11 @@ fix performance, and a passing offline suite does not establish model quality.
 
 1. Before implementation, read `AGENTS.md`, this file, the active issue and
    `HANDOFF.md`. Check the branch, working tree and commits against the note.
-   The existing note belongs to issue 9; settle its recorded PR/branch state
-   before starting a new implementation branch. Do not assume it was merged.
-2. Use the queue below, one issue and one PR at a time. Before starting A or B,
-   create its issue file with the listed scope, steps, criteria and tests; read
-   it in full. C reuses issue 10. Do not create duplicate README work.
+   Use the current note's actual issue/branch state; do not resume an issue from
+   a historical paragraph in this plan. No implementation starts during issue 23.
+2. Once implementation is requested, use section E, one issue and one PR at a
+   time. Create the selected issue with its listed scope, criteria and tests,
+   then read it in full. A-D are historical; do not repeat their completed work.
 3. Either agent may continue the same issue and branch. A `codex/` or `claude/`
    prefix records how the branch started, not exclusive ownership. In this
    checkout there is only one writer; do not run two implementing sessions
@@ -66,17 +79,25 @@ fix performance, and a passing offline suite does not establish model quality.
    criterion. A mismatch is reported rather than guessed around. Continue
    implementation; do not restart the issue merely because the agent changed.
 7. Either agent may create/switch issue branches, stage scoped files, commit and
-   push under AGENTS.md. A handover never requires a second PR. The user's
-   2026-11-16 instruction authorizes the one-time force-with-lease sync to `main`
-   and continuation of the proposed handoff contract/binding work; do not ask
-   again for those already authorized actions. Later main/history rewrites still
-   require an explicit user instruction.
+   push under AGENTS.md. A handover never requires a second PR. The one-time
+   synchronization described in [issue 16](issues/16-git-permissions-and-sync.md)
+   is historical, not permission to repeat it. Main/history rewrites require a
+   new explicit user instruction. Issue 23 ends with a local documentation commit.
 
 Checks are offline: Ruff lint, Ruff format check and pytest. If `make` is absent,
 run its three check commands directly. This sandbox's shared pytest temp/cache
 directory can be inaccessible; use a fresh temporary directory inside the
 workspace and disable pytest's cache provider if necessary. This is an execution
 environment workaround, not a product fix. Never change the architecture test.
+
+## Historical A-D proposals
+
+These sections retain the original design and acceptance checks. Implementation
+and follow-up status comes from the current handoff and issues 14-22. In
+particular, C's measurements/default and D's proposed model choice are historical:
+GLM-5.3 is now the default, and issue 20 deliberately left judge context unchanged.
+Use the README and linked saved reports for current evidence. The active queue
+resumes at E; none of the authorization language below applies to new work.
 
 ## A. Define the small handoff contract change
 
@@ -298,8 +319,175 @@ the required submission. Create a narrowly scoped issue only after diagnosis.
    limitation. Do not claim 90% held-out accuracy or sub-four-second general p95
    from offline tests, a changed configuration or a twelve-case development run.
 
-## First action when implementation is authorized
+## E. Feasible follow-ups from the latest review (not started)
 
-Follow the issue-16 Git sync, then create the `handoff-offer-contract` branch and
-implement issue 14. The contract/binding work is authorized; live evaluation
-remains subject to the existing user-run rule.
+All reproductions below used synthetic inputs and offline fakes. The review's
+baseline was Ruff lint/format green and 1,365 passing tests. Those checks do not
+cover the reproduced defects. Implement these later as separate issues in the
+priority order above, using installed dependencies and existing contracts only.
+Each future issue names relevant PLAN sections and runs the full offline checks
+after each acceptance criterion. Do not change protected files to make a fix fit.
+
+### E1. Close the reproduced phone-redaction gaps
+
+Proposed slug: `phone-redaction`. Scope: `assistant/redaction.py`,
+`tests/assistant/test_redaction.py`, and integration tests in
+`tests/assistant/test_pipeline.py` / `test_escalation.py`.
+
+`Call me at +44 20 7946 0958` survives redaction; the review observed it in the
+fake model's request and the ticket summary. Add bounded recognition for
+country-code/grouped international phones and context-marked local phones such
+as `call me at 555-0142`. Keep patterns centralized. Preserve email/order
+redaction, ages, doses and SKUs; do not turn every numeric sequence into a phone.
+Document supported forms without claiming universal contact recognition.
+
+Acceptance:
+- [ ] Synthetic international and context-marked local numbers are absent from
+  fake-model requests, stored messages, captured logs and ticket summaries.
+- [ ] Existing US/email/order cases still redact. Dose ranges, strengths, ages
+  and catalog identifiers keep their existing intended behavior. No new package
+  or changes to private order verification are needed.
+
+### E2. Repair emergency misses and false overdose matches
+
+Proposed slug: `emergency-recognition`. Scope:
+`assistant/safety/emergency.py`, `tests/assistant/safety/test_emergency.py`, and
+`tests/assistant/test_pipeline.py`. This issue changes detection only; E4 handles
+HTTP scheduling. Emergency/injection precedence and fixed replies stay intact.
+
+Handle explicit current recurrence across adjacent sentences, for example
+`I had a seizure last year. I am having one again now.`, and current throat
+tightness. Constrain ingestion/count patterns by context so `I drank a bottle
+of water`, `I swallowed a whole tablet of aspirin`, and `I took 10 mg of
+cetirizine this morning` do not independently establish an overdose. This is
+classification of the reported event, not a judgment that a dose is safe.
+Keep recognition patterns centralized at the top of the existing module; do not
+add a medical dosing engine or a model call.
+
+Acceptance:
+- [ ] The recurrence and throat-tightness regressions return the fixed emergency
+  reply and offer with zero model/API calls, including when the model is down.
+- [ ] The ordinary-ingestion examples do not trigger the emergency detector;
+  explicit overdose, swallowed medicine bottles and child ingestion remain
+  covered. Existing historical-event and label-question tests still pass.
+- [ ] `I had a seizure last year. Are you open now?` does not become an emergency.
+  A present-time word elsewhere must not globally override historical context.
+
+### E3. Withhold ambiguous product labels in safety replies
+
+Proposed slug: `unambiguous-risk-label`. Scope:
+`assistant/retrieval/index.py`, `assistant/retrieval/exact.py` only as needed,
+their mirrored tests, and integration assertions in
+`tests/assistant/test_app.py` / `tests/eval/test_runner.py`.
+
+`named("diphenhydramine 2% spray")` currently chooses oral 25 mg tablets;
+`famotidine 10 mg` chooses 20 mg. The full risk path displays those directions
+even with the correct model risk label. Issue 17 removed keyword guessing but
+left ingredient/alias variants ambiguous.
+
+Use the smallest safe rule: a unique exact full product name or SKU can identify
+a record; ingredient/alias matching may attach a label only when it identifies
+one distinct product. Multiple variants return no product and therefore the
+existing fixed refusal plus pharmacist offer, without label text. Do not add a
+form/strength parser at this stage. Conflicting explicit identifiers must also
+abstain. Preserve ordinary catalog retrieval, which may return multiple records.
+
+Acceptance:
+- [ ] The spray and strength examples never show another variant's directions
+  in full fake-model HTTP responses. Ambiguous cases retain the fixed refusal
+  and offer, with no orphan label sources.
+- [ ] Exact SKU/full-name and unambiguous ingredient/alias matches still show
+  verbatim text with correct sources. Multiple explicit products do not silently
+  select the first. Behavior is independent of the retrieval feature flag.
+- [ ] Normal catalog search/comparisons and eval evidence capture still work;
+  an intentionally omitted label is not recorded as displayed evidence.
+
+### E4. Keep emergencies responsive when normal work is saturated
+
+Proposed slug: `emergency-request-scheduling`. Scope: `assistant/app.py`,
+`assistant/pipeline.py` only for a small shared emergency-path extraction if
+necessary, and their mirrored tests. Depends on preserving E2's detector behavior.
+
+The synchronous `/chat` handler waits for a shared worker before it even checks
+the message. The review filled all 40 available workers with event-blocked fake
+router calls; an emergency completed only after release. Raising worker limits
+moves this failure threshold and is not the fix.
+
+Check the cheap emergency path before dispatching ordinary blocking work. Reuse
+the existing detector, redactor, renderer and offer/turn bookkeeping. Dispatch
+normal pipeline work through the framework's existing thread facility. No model,
+HTTP or ticket I/O may run on the event loop. Do not convert the whole service to
+async, add a second renderer, or hold session locks across network calls.
+
+Acceptance:
+- [ ] An event-controlled HTTP test fills the normal-work capacity and proves an
+  emergency finishes before those calls are released, with zero model/API calls.
+  Derive capacity from the test limiter; use events and a bounded failure timeout,
+  not a sleep-based performance assertion.
+- [ ] The immediate path keeps redaction, fixed reply, offer identity, session
+  recording and logging behavior. Normal chat, private verification, stale-card
+  rejection and overlapping ticket/model work retain their existing checks.
+
+### E5. Fingerprint the inputs the evaluation actually uses
+
+Proposed slug: `eval-input-fingerprint`. Scope: `eval/cli.py` and
+`tests/eval/test_cli.py` / `test_compare.py`. No cases, judge prompts, metric
+definitions, saved reports or runtime behavior change.
+
+`implementation_digest()` omits `api/` and `contracts/` code and checks a root
+`policies/` directory instead of `data/policies/`. Include those actual runtime
+inputs alongside existing assistant/eval code, prompts, catalog and public data.
+Keep explicit paths/extensions and deterministic ordering. Exclude environment
+files, keys, generated caches, results and held-out case contents; the case set
+already has its own separate fingerprint.
+
+Acceptance:
+- [ ] Temporary fixtures show that changing a policy, API module or contract
+  module changes the digest; identical inputs produce the same digest.
+- [ ] Comparisons reject different implementation fingerprints before live
+  work. Adding unrelated/cache/result files does not change the digest.
+- [ ] Archived measurements remain byte-for-byte unchanged. State that old
+  development fingerprints are incompatible with new runs; any later comparison
+  needs a fresh compatible pair, run by the user, not silent report replacement.
+
+### E6. Submission and validation, separate from the code queue
+
+- The README already contains setup, architecture, guardrail design and AI Usage.
+  Do not rewrite it wholesale. After fixes, update only claims/limitations that
+  their tests establish, under a separate documentation issue.
+- The user records the existing 5-7 minute demo and supplies its link. Use the
+  existing flow checklist, including cited answers, private order lookup, safety
+  refusal and confirmed ticket summary. Keep video status pending until it exists.
+- Human review of safety/calibration labels and live widget/keyboard acceptance
+  remain explicit validation tasks. Do not present AI labels as human-reviewed.
+- Keep the historical 60-case Groq comparison, original-label artifacts and
+  matching calibration intact. GLM-5.3's 12-case development result does not
+  establish current held-out quality. A new held-out experiment needs a separate
+  user decision, compatible calibration and separate output paths. Codex does
+  not run `make run`, `make eval*` or `make judge*` under the repo rules.
+- Preserve the disclosed historical metrics and one-net-case improvement. The
+  90% accuracy/four-second p95 targets are project goals, not submission thresholds
+  from the brief. No metric improvement is claimed for this planning update.
+
+### Deferred at this stage
+
+- Judge conversation context: [issue 20](issues/20-judge-context-check.md)
+  investigated it and deliberately left it unchanged because the measured effect
+  was limited. Revisit only as an explicit evaluation-method change, with redacted
+  history, synthetic fake-request tests and recalibration before new claims.
+- Ingredient/alias caching and other micro-optimizations: retrieval already found
+  29/30 gold source sets in the historical runs. Prioritize correct selection and
+  measured model latency; profile again before adding caches or shortcuts.
+- Vector databases, new agent frameworks/dependencies, formulation parsers,
+  broad async conversion, model training, extra languages and order OTP flows
+  would expand this bounded fix round. They are not prerequisites for these fixes.
+- Other audit notes in the handoff are not silently added to this queue. In
+  particular, do not deduplicate a helper by importing one pipeline step into
+  another; the architecture rules still apply.
+
+## Next action
+
+Finish and verify issue 23's documentation only, then stop. No queued code fix,
+model run, Git synchronization or deployment starts from this planning request.
+When the user later requests implementation, create the E1 issue and branch
+first, unless they explicitly select another queued item.
