@@ -74,6 +74,12 @@ def test_each_example_is_a_valid_reply_of_its_type(path):
 
 
 @pytest.mark.parametrize("path", REPLIES, ids=lambda path: path.stem)
+def test_only_examples_with_a_pharmacist_card_have_an_offer_identity(path):
+    example = reply(path)
+    assert (example.offer_id is not None) is example.handoff_offered
+
+
+@pytest.mark.parametrize("path", REPLIES, ids=lambda path: path.stem)
 def test_every_fact_shown_is_its_cited_sources_text(path):
     example = reply(path)
     sources = {source.id: source for source in example.sources}

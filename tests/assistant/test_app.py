@@ -254,6 +254,7 @@ def test_every_order_form_failure_has_the_identical_generic_reply(number, contac
         "sources": [],
         "handoff_offered": False,
         "emergency": False,
+        "offer_id": None,
     }
 
 

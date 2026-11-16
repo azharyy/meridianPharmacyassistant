@@ -16,6 +16,20 @@ from contracts.chat import (
 )
 
 SESSION = "session-0001"
+OFFER_ID = "4a9be9da-e6f6-4bda-a66f-6fa7aa514a3f"
+OFFER_BOUNDARIES = [
+    (
+        ChatReply,
+        {
+            "reply_type": "fallback",
+            "blocks": [],
+            "sources": [],
+            "handoff_offered": True,
+            "emergency": False,
+        },
+    ),
+    (HandoffRequest, {"session_id": SESSION, "confirmed": True}),
+]
 DIRECTIONS = "Synthetic directions text."
 BLOCKS = [
     {"type": "text", "text": "Fixture text."},
@@ -138,6 +152,7 @@ def test_reply_round_trip_and_source_metadata():
         "sources",
         "handoff_offered",
         "emergency",
+        "offer_id",
     }
 
 
@@ -193,6 +208,40 @@ def test_handoff_reply_says_whether_the_ticket_was_created():
     assert (created.ticket_id, failed.ticket_id) == ("TCK-1042", None)
     with pytest.raises(ValidationError, match="text"):
         HandoffReply(ticket_id="TCK-1042")
+
+
+@pytest.mark.parametrize("model,payload", OFFER_BOUNDARIES)
+@pytest.mark.parametrize("offer_id", [OFFER_ID, None])
+def test_offer_identity_round_trips_on_both_http_boundaries(model, payload, offer_id):
+    value = model(**payload, offer_id=offer_id)
+    assert value.offer_id == offer_id
+    assert value.model_dump(mode="json")["offer_id"] == offer_id
+    assert model.model_validate_json(value.model_dump_json()) == value
+
+
+@pytest.mark.parametrize("model,payload", OFFER_BOUNDARIES)
+def test_omitted_offer_identity_remains_backward_compatible(model, payload):
+    assert model(**payload).offer_id is None
+
+
+@pytest.mark.parametrize("model,payload", OFFER_BOUNDARIES)
+@pytest.mark.parametrize(
+    "offer_id",
+    [
+        "",
+        "card-1",
+        OFFER_ID.upper(),
+        OFFER_ID.replace("-4bda-", "-3bda-"),
+        OFFER_ID.replace("-a66f-", "-766f-"),
+        1,
+        True,
+        {},
+        [],
+    ],
+)
+def test_offer_identity_rejects_noncanonical_uuid4_and_wrong_types(model, payload, offer_id):
+    with pytest.raises(ValidationError):
+        model(**payload, offer_id=offer_id)
 
 
 @pytest.mark.parametrize("session_id", ["s1", "sample@example.com", "a" * 65, "with spaces"])

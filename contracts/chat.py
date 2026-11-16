@@ -26,6 +26,10 @@ SourceId = Annotated[str, Field(pattern=SOURCE_ID_PATTERN)]
 StoreId = Annotated[str, Field(pattern=r"^[a-z0-9-]{1,32}$")]
 # Logs carry the session ID, and the client chooses it, so it can't hold an email address.
 SessionId = Annotated[str, Field(pattern=r"^[A-Za-z0-9_-]{8,64}$")]
+OfferId = Annotated[
+    str,
+    Field(pattern=r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"),
+]
 
 
 class ChatRequest(Contract):
@@ -44,6 +48,9 @@ class OrderFormRequest(Contract):
 class HandoffRequest(Contract):
     session_id: SessionId
     confirmed: Literal[True]
+    # A card targets this offer; null is the header's current-conversation action.
+    # The server rejects unknown/superseded IDs with 409 and no ticket creation.
+    offer_id: OfferId | None = None
 
 
 class HandoffReply(Contract):
@@ -168,3 +175,5 @@ class ChatReply(Contract):
     sources: list[Source]
     handoff_offered: bool
     emergency: bool
+    # Set by code when recording a handoff offer, never by a model.
+    offer_id: OfferId | None = None
