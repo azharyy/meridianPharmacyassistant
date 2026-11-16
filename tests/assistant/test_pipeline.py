@@ -1,8 +1,10 @@
 """A turn runs its steps in order; risk labels get the policy's reply; failures get the fallback."""
 
 import logging
+from concurrent.futures import ThreadPoolExecutor
 from functools import partial
 from hashlib import sha256
+from threading import Event
 
 import httpx
 import pytest
@@ -246,6 +248,33 @@ def test_offers_are_recorded_from_the_card_and_kept_until_a_newer_card():
     fallback = turn(QUESTION, FakeSender(), session=session)
     assert session.handoff_offer.reason == "fallback"
     assert fallback.reply.offer_id == session.handoff_offer.id != offer.id
+
+
+def test_an_emergency_finishes_while_a_turn_waits_on_the_model_and_their_cards_stay_apart():
+    entered, release, session = Event(), Event(), Session()
+    script = FakeSender([routed(RiskLabel.MEDICAL_ADVICE)])
+
+    def slow_model(messages, output):
+        entered.set()
+        assert release.wait(timeout=5)
+        return script(messages, output)
+
+    instant = FakeSender()
+    with ThreadPoolExecutor(max_workers=2) as pool:
+        pending = pool.submit(turn, "Can I take it?", slow_model, session=session)
+        try:
+            assert entered.wait(timeout=5)
+            emergency = pool.submit(turn, "I cannot breathe", instant, session=session)
+            emergency = emergency.result(timeout=2)  # no lock is held across the model call
+            assert emergency.reply.emergency and instant.requests == []
+            offer = session.handoff_offer
+            assert (offer.id, offer.risk_label) == (emergency.reply.offer_id, RiskLabel.EMERGENCY)
+        finally:
+            release.set()
+        medical = pending.result(timeout=5)
+    offer = session.handoff_offer
+    assert (offer.id, offer.risk_label) == (medical.reply.offer_id, RiskLabel.MEDICAL_ADVICE)
+    assert medical.reply.offer_id != emergency.reply.offer_id
 
 
 def test_a_directions_question_gets_the_label_text_and_its_source():

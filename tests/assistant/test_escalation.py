@@ -114,10 +114,12 @@ def test_simultaneous_confirmations_of_a_card_return_one_ticket():
     assert keys and set(keys) == {f"{SESSION_ID}:{card}"}  # racing requests share one key
 
 
-def test_an_emergency_does_not_wait_for_a_ticket_in_flight():
-    entered, release, session = Event(), Event(), Session()
+def test_an_emergency_does_not_wait_for_a_ticket_in_flight_and_the_ticket_keeps_its_card():
+    entered, release, session, sent = Event(), Event(), medical_session(), []
+    card = session.handoff_offer.id
 
     def slow_ticket(request):
+        sent.append(json.loads(request.content))
         entered.set()
         assert release.wait(timeout=5)
         return httpx.Response(201, json={"ticket_id": "TCK-1001"})
@@ -126,7 +128,7 @@ def test_an_emergency_does_not_wait_for_a_ticket_in_flight():
     fake = FakeSender()
     request = ChatRequest(session_id=SESSION_ID, message="I cannot breathe")
     with ThreadPoolExecutor(max_workers=2) as pool:
-        ticket = pool.submit(handoff, SESSION_ID, session, api)
+        ticket = pool.submit(handoff, SESSION_ID, session, api, card)
         try:
             assert entered.wait(timeout=5)
             emergency = pool.submit(
@@ -136,11 +138,17 @@ def test_an_emergency_does_not_wait_for_a_ticket_in_flight():
                 pipeline.Steps(),
                 ModelClient(RUNTIME, fake),
                 api,
-            ).result(timeout=2)
+            ).result(timeout=2)  # no lock is held across the ticket call
             assert emergency.reply.emergency and fake.requests == []
         finally:
             release.set()
         assert ticket.result(timeout=5).ticket_id == "TCK-1001"
+    [body] = sent  # the confirmation files the card it captured, not the newer emergency card
+    summary = body["summary"]
+    assert body["idempotency_key"] == f"{SESSION_ID}:{card}"
+    assert (summary["risk_label"], summary["urgency"]) == ("medical_advice", "urgent")
+    assert emergency.reply.offer_id == session.handoff_offer.id != card
+    assert session.handoff_offer.risk_label is RiskLabel.EMERGENCY
 
 
 def test_a_new_offer_gets_a_new_ticket():
