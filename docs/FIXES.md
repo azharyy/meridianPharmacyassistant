@@ -4,12 +4,15 @@ Updated 2026-11-16 after the user authorized implementation of the
 [issue 23](issues/23-review-fix-plan.md) plan. E1-E5 are implemented and tested
 locally in issues 24-28; [issue 29](issues/29-review-fix-documentation.md) records
 completion and remaining validation. The implementation commits are stacked on
-local issue branches, pending publication/review. No live measurements were rerun.
+local issue branches, pending publication/review. [Issue 33](issues/33-provider-results-comparison.md)
+has now completed fresh live calibration, development checks and the full held-out pair.
 
 Current evaluation policy ([issue 32](issues/32-opencode-evaluation.md)) is
 OpenCode Go only: GLM-5.3 runtime, GLM-5.3-Flash development comparison and
-Kimi K3.1 Pro judge. The newly requested held-out pair is pending credentials
-and user-run commands from the README, using a fresh experiment/results directory.
+Kimi K3.1 Pro judge. The new held-out pair scored 46/60 baseline and 49/60 improved,
+with improved p95 13.118s; accuracy, escalation precision and latency miss targets.
+The [measured comparison](../eval/experiments/opencode-2026-11-16/PROVIDER_COMPARISON.md)
+preserves historical evidence and identifies changed code/judge as confounders.
 
 The earlier A-D queue has been addressed through issues 14-22: offer binding,
 README completion, the named-product fix, the default-model decision and the
@@ -35,7 +38,7 @@ from that record without needing the chat.
 | 3 | Ingredient matching attaches oral-tablet directions to a topical-spray question, or selects the wrong strength. | E3: omit labels when exact product identity remains ambiguous. |
 | 4 | All 40 normal HTTP worker slots can be waiting on model calls, delaying even a recognized emergency. | E4: keep the immediate emergency path outside the normal blocking-work queue. |
 | 5 | Evaluation fingerprints omit API/contract code and the real policy directory. | E5: hash the actual runtime inputs so incompatible runs cannot be compared as one configuration. |
-| Submission | The video is missing; human label review and current-default held-out quality remain pending. | E6: finish the video and review checklist; preserve historical evidence and require a separate measurement decision. |
+| Submission | Video, human label review and browser acceptance remain pending. The current held-out pair is measured and misses accuracy, precision and latency targets. | E6: finish external deliverables; preserve the completed experiment and investigate quality with development/synthetic cases. |
 
 The brief does not mandate 90% accuracy or four-second p95; those are this
 project's targets. Missing them must be disclosed. Documentation alone does not
@@ -480,12 +483,11 @@ Acceptance:
   refusal and confirmed ticket summary. Keep video status pending until it exists.
 - Human review of safety/calibration labels and live widget/keyboard acceptance
   remain explicit validation tasks. Do not present AI labels as human-reviewed.
-- Keep the historical 60-case comparison, original-label artifacts and
-  matching calibration intact. GLM-5.3's 12-case development result does not
-  establish current held-out quality. The user has requested a new OpenCode
-  held-out pair; it remains pending credentials, compatible calibration and
-  separate output paths. Codex does
-  not run `make run`, `make eval*` or `make judge*` under the repo rules.
+- Keep the historical 60-case comparison, original-label artifacts and matching
+  calibration intact. The newly completed OpenCode pair uses separate output
+  paths and matching current metadata. The user's explicit issue33 authorization
+  permitted credential loading/live evaluation for this experiment; future live
+  work still follows AGENTS.md unless the user authorizes it.
 - Preserve the disclosed historical metrics and one-net-case improvement. The
   90% accuracy/four-second p95 targets are project goals, not submission thresholds
   from the brief. No metric improvement is claimed for this planning update.

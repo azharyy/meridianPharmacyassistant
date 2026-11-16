@@ -1,33 +1,39 @@
 # System verification, 2026-11-16
 
-Code tested: `1c6e27b`, including the local E1-E5 fixes. All model responses were
+Original system verification code: `1c6e27b`, including the local E1-E5 fixes. In
+that backend verification, all model responses were
 scripted or supplied through a fake SDK HTTP transport. No external model call,
 key file, held-out case inspection or saved evaluation update was used.
 
-Evaluation policy update, 2026-11-16 ([issue 32](issues/32-opencode-evaluation.md)):
-future live evaluations and calibration use OpenCode Go only. Runtime: GLM-5.3;
-development comparison: GLM-5.3-Flash; judge: Kimi K3.1 Pro. The requested fresh
-60-case baseline/improved pair is pending: `OPENCODE_API_KEY` is unavailable in
-the agent's process, and no key file was read. The README provides isolated
-user-run `--output-dir` commands. This does not turn the fake checks below into
-live measurements; historical provider results remain archived under their actual
-configuration. The cancelled alternate-provider rerun made no calls. After this
-policy change, the full offline suite passes 1,461 tests; live-provider and isolated
-output-directory regression tests are included. The original HTTP/browser status
-below is unchanged.
+Live follow-up, 2026-11-16 ([issue 33](issues/33-provider-results-comparison.md)):
+completed with GLM-5.3, GLM-5.3-Flash and Kimi K3.1 Pro on OpenCode. The user
+explicitly authorized project credential loading and live calls. The existing
+key worked through `uv --env-file`; the earlier missing-key conclusion had only
+checked the inherited environment. No key value was displayed or copied.
+
+Kimi calibration scored 20/20; GLM development 12/12; Flash development 10/12.
+The full60 pair scored 46/60 baseline and 49/60 improved. Improved groundedness
+was 38/38, escalation precision 23/28, recall 23/23, emergency recall 6/6, leaks
+0/60, p95 13.118 seconds. Accuracy, precision and latency miss project targets.
+The [provider results comparison](../eval/experiments/opencode-2026-11-16/PROVIDER_COMPARISON.md)
+compares these to archived Groq scores without attributing differences solely
+to provider: code and judge also differ. The actual cases and judge prompt match.
+No successful run was restarted after continuation because fingerprints matched.
+The full offline suite now passes 1,461 tests; original browser acceptance is
+still blocked. Offline checks and these separate live measurements are distinct.
 
 ## Results
 
 | Check | Result | Evidence and scope |
 | --- | --- | --- |
-| Ruff lint and format | PASS | Repository check commands; 192 files checked for formatting. |
-| Full offline suite | PASS | 1,456 tests, including contracts, architecture, catalog/data, API, assistant, SDK boundaries and evaluation harness. |
+| Ruff lint and format | PASS | Full repository checks; exact commands/outcomes recorded in HANDOFF. |
+| Full offline suite | PASS | Latest 1,461 tests, including contracts, architecture, catalog/data, API, assistant, SDK boundaries and evaluation harness. Original system checkpoint had 1,456. |
 | Installed dependencies | PASS | `uv --cache-dir .uv-system-check pip check --python .venv/Scripts/python.exe`: 31 packages compatible. No install. |
 | Catalog integration matrix | PASS | 302 in-process HTTP turns through real default retrieval/tool wiring and mock API, with scripted models. |
 | Separate assistant/API over TCP | PASS | 12 flow groups against two ephemeral loopback uvicorn services; actual HTTP client between services. |
 | Widget JavaScript syntax | PASS | `node --check widget/meridian-chat.js` and Node syntax checks for both inline HTML scripts; external script paths exist. |
 | Browser interaction/rendering | BLOCKED | Browser host unavailable; native Chrome fallback stopped because Computer Use could not confidently determine the current URL. No bypass or alternative browser automation attempted. |
-| Live model routing, accuracy and latency | NOT RUN | AGENTS.md reserves live run/eval/judge commands for the user. Offline results cannot establish these. |
+| Live model evaluation | COMPLETED, TARGETS MISSED | User-authorized OpenCode calibration, two12-case development runs and two60-case held-out runs; see linked raw results/report. Offline checks remain fake. |
 
 ## Catalog integration matrix
 

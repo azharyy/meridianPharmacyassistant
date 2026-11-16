@@ -11,7 +11,8 @@ change, check result and unfinished step must be documented so the next agent
 can resume without the chat, with no separate ownership. Preserve issue 9's
 historical evaluation results. Current and future evaluations use OpenCode Go
 only: GLM-5.3 runtime, GLM-5.3-Flash comparison and Kimi K3.1 Pro judge.
-The README gives a fresh output directory for the pending held-out comparison.
+The README links the completed current held-out pair and its historical comparison,
+with separate output paths, actual target misses and configuration differences.
 
 ## What this is
 
@@ -36,7 +37,7 @@ The scope is the six core requirements, finished and documented. There are no st
 | 2 | Tools that call a mock API for order status (order number plus a verified email or phone), availability and store information; never reveal one customer's order to another | A FastAPI mock API; the model requests a tool in its structured output and code runs it; the order lookup needs the order number and the matching contact and returns status only | API tests of every wrong-contact path; zero cross-customer leaks in the eval |
 | 3 | A policy layer for diagnosis, dosing beyond the label, prescription questions, emergencies (911) and prompt injection, with a pharmacist escalation that creates a ticket with a summary | Emergency rules before any model call; a risk label on every turn; a policy table that fixes the reply and the handoff for each label; a safety reviewer in code; a ticket with a summary built by code | A test per rule; escalation precision and recall; emergency recall |
 | 4 | Cooperating components, with the reasons for the split | Router, catalog agent, order agent, tool executor, safety reviewer, renderer and escalation | The README's architecture section; unit tests per component |
-| 5 | At least 60 labeled conversations; accuracy, groundedness, escalation precision and recall, latency; one change that improved the scores | 60 test cases and 12 development cases; deterministic checks plus a different model family on OpenCode Go; keyword search alone compared with exact-and-alias matching first | Calibrated judge and isolated baseline/improved reports; labels are AI judgments pending human review; current-code held-out measurement is pending |
+| 5 | At least 60 labeled conversations; accuracy, groundedness, escalation precision and recall, latency; one change that improved the scores | 60 test cases and 12 development cases; deterministic checks plus a different model family on OpenCode Go; keyword search alone compared with exact-and-alias matching first | Calibrated judge; current paired result46/60 to49/60 with separate raw results/reports; accuracy, precision and latency miss targets; labels remain AI judgments pending human review |
 | 6 | An embeddable chat widget that shows sources and the escalation flow | One script tag; a source chip under every answer; an order form; the pharmacist card; an emergency banner | The four demo flows run by hand; a static preview page of every reply type |
 
 ## Architecture
@@ -305,7 +306,7 @@ tests/       mirrors the tree, plus test_architecture.py
 | `make eval-compare` | GLM-5.3-Flash development run against a compatible GLM-5.3 reference | `OPENCODE_API_KEY` |
 | `make eval-baseline`, `make eval` | OpenCode held-out baseline/improved runs using default result paths; preserve archives before using these targets | `OPENCODE_API_KEY` |
 
-The user's gitignored `.env` supplies `OPENCODE_API_KEY` to Makefile commands; the agent never reads the file. Eval targets pin OpenCode/model settings and the retrieval flag. For the newly requested full comparison, follow the README's explicit `--output-dir` commands into a fresh experiment/results tree so archived evidence remains intact. The generated report is written beside that results directory. Live commands remain user-run under AGENTS.md; offline checks need no key. The SDK package name does not require an OpenAI account or key.
+The user's gitignored `.env` supplies `OPENCODE_API_KEY` through the normal project loader; never display or copy key values. Eval targets pin OpenCode/model settings and the retrieval flag. The completed full comparison used a fresh experiment/results tree; README commands reproduce that layout without replacing archives. Reports write beside results. Live work follows AGENTS.md unless explicitly authorized by the user, as this issue33 experiment was; offline tests always use fakes and need no key. The SDK package name does not require an OpenAI account or key.
 
 ## Build order
 
@@ -349,7 +350,7 @@ If time runs short, cut in this order and say so in the README: the model compar
 | Tool calls | Fields in the structured plan, run by code | Code validates intent, evidence and arguments before executing a request | Native tool calling |
 | Eval checks | Deterministic wherever a check can be exact, with a judge for one question: does the text shown answer what was asked | An open question can have several right answers, which an exact match can't score | All deterministic: free to re-run, but too strict for open questions |
 | Eval judge | Kimi K3.1 Pro on OpenCode Go, calibrated on AI labels pending human review | A different model family and explicit calibration, with label limitations disclosed | The runtime model judging itself |
-| Runtime model | GLM-5.3 on OpenCode Go | Selected from the measured development comparison; current held-out reliability remains unmeasured | GLM-5.3-Flash, selectable for development comparison |
+| Runtime model | GLM-5.3 on OpenCode Go | Selected from development comparisons; current held-out accuracy49/60 and p95 13.118s are measured and miss targets | GLM-5.3-Flash, selectable for development comparison |
 | Widget | Plain JavaScript web component | No build step to explain or break | A framework and a bundler |
 | Policy table | A typed table in code | One file to read, no loader to test | A YAML file with a validator |
 
