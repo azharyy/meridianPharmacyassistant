@@ -24,7 +24,7 @@ from assistant import orders
 from assistant.catalog_agent import plan as make_plan
 from assistant.llm import CONVERSATION, ModelClient, ModelUnavailable
 from assistant.policy import POLICY, most_restrictive
-from assistant.redaction import redact
+from assistant.redaction import NUMBER, ORDER_NUMBER, redact
 from assistant.render import render as render_reply
 from assistant.render import render_fallback, render_fixed, render_risk
 from assistant.router import route
@@ -138,10 +138,13 @@ def answer(
     if risk is not RiskLabel.NONE:
         return risk_reply(routed, risk, steps, timings)
     if routed.intent is Intent.ORDER_STATUS:
-        reply_type = ReplyType.ORDER_STATUS if session.verified_order else ReplyType.ORDER_FORM
+        # A typed number may name another order than the verified one, so it gets the form.
+        typed = ORDER_NUMBER in message or NUMBER in message
+        verified = None if typed else session.verified_order
+        reply_type = ReplyType.ORDER_STATUS if verified else ReplyType.ORDER_FORM
         plan = CatalogPlan(reply_type=reply_type, records=[], tool=None)
         with stage(timings, "render"):
-            reply = steps.render(plan, [], risk, session.verified_order)
+            reply = steps.render(plan, [], risk, verified)
         return TurnResult(reply, routed, plan=plan)
     if routed.intent is Intent.STORE_INFO:
         plan = CatalogPlan(

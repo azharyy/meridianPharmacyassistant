@@ -340,7 +340,9 @@ def test_form_and_chat_order_data_never_reaches_a_model_or_the_logs(caplog):
         private_message = (
             "Where is order MRD-ORD-48213? maria.garcia@example.com, phone (217) 555-0110"
         )
-        assert client.post("/chat", json={**CHAT, "message": private_message}).json() == verified
+        # A typed order number may name another order, so it gets the form, not the status.
+        typed = client.post("/chat", json={**CHAT, "message": private_message}).json()
+        assert typed["reply_type"] == "order_form"
         assert client.post("/chat", json=CHAT).json()["reply_type"] == "label_sections"
         assert client.post("/chat", json={**CHAT, "message": "And my order?"}).json() == verified
     sent, logs = str(fake.requests), caplog.text

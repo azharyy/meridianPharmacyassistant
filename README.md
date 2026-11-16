@@ -146,6 +146,7 @@ Shorter paths, all in `assistant/pipeline.py`:
   or dosing beyond the label it adds the named product's warnings or directions, word for
   word. The catalog agent doesn't run.
 - An order question gets the order form, or the status already verified in this session.
+  A question that types an order number gets the form, since it may name another order.
   No model sees order data.
 - A store question skips retrieval and the catalog agent: its plan goes to the reviewer
   and then to the store lookup.

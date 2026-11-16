@@ -482,3 +482,25 @@ def test_order_chat_uses_session_verification_and_never_calls_catalog_or_tools(v
     assert result.reply.reply_type == ("order_status" if verified else "order_form")
     assert len(fake.requests) == 1 and result.retrieved == [] and result.tool is None
     assert set(result.timings) == {"emergency", "redaction", "router", "render"}
+
+
+@pytest.mark.parametrize(
+    ("message", "reply_type"),
+    [
+        ("What about MRD-ORD-37551?", "order_form"),
+        ("And my other order, 37551?", "order_form"),
+        ("Where is my order now?", "order_status"),
+    ],
+)
+def test_an_order_question_naming_a_number_gets_the_form_not_the_saved_status(message, reply_type):
+    from datetime import UTC, datetime
+
+    session = Session()
+    session.verified_order = VerifiedOrder(
+        OrderStatus(status="shipped", delivery_estimate="2026-11-17", item_count=2),
+        datetime.now(UTC),
+    )
+    fake = FakeSender([ROUTED.model_copy(update={"intent": Intent.ORDER_STATUS})])
+    result = turn(message, fake, session=session)
+    assert result.reply.reply_type == reply_type
+    assert session.verified_order is not None  # kept for a later plain follow-up
