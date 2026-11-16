@@ -37,7 +37,7 @@ def default_steps(settings: Settings) -> tuple[pipeline.Steps, SearchIndex]:
         skus={product.sku for product in index.products},
         store_ids={store["store_id"] for store in stores},
     )
-    return pipeline.Steps(retrieve=index.search, execute=executor), index
+    return pipeline.Steps(retrieve=index.search, find_product=index.named, execute=executor), index
 
 
 def create_app(

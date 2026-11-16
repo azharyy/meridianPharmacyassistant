@@ -51,6 +51,11 @@ def retrieve_nothing(query: str, k: int) -> list[Record]:
     return []
 
 
+def find_nothing(name: str) -> ProductRecord | None:
+    """No catalog bound: nothing is named."""
+    return None
+
+
 @dataclass(frozen=True)
 class Steps:
     emergency: Callable[[str], bool] = is_emergency
@@ -58,6 +63,7 @@ class Steps:
     route: Callable[[ModelClient, list[str]], RouterOutput] = route
     injection: Callable[[str], bool] = looks_like_injection
     retrieve: Callable[[str, int], list[Record]] = retrieve_nothing
+    find_product: Callable[[str], ProductRecord | None] = find_nothing
     plan: Callable[[ModelClient, str, list[Record]], CatalogPlan] = make_plan
     review: Callable[[CatalogPlan, list[Record], RiskLabel], CatalogPlan | None] = review
     execute: Callable[[httpx.Client, ToolRequest | None], ToolResult] = execute
@@ -95,12 +101,12 @@ def record_id(record: Record) -> str:
 
 
 def named_product(routed: RouterOutput, steps: Steps, timings) -> ProductRecord | None:
-    """The first product the customer named, as retrieval finds it."""
+    """The first product the customer named, matched exactly: a keyword hit could be another
+    product whose label merely mentions a medicine outside the catalog."""
     if not routed.product_mentions:
         return None
     with stage(timings, "retrieval"):
-        found = steps.retrieve(routed.product_mentions[0], 1)
-    return next((record for record in found if isinstance(record, ProductRecord)), None)
+        return steps.find_product(routed.product_mentions[0])
 
 
 def risk_reply(routed: RouterOutput | None, risk: RiskLabel, steps: Steps, timings) -> TurnResult:

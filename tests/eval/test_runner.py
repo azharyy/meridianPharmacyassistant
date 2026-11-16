@@ -18,7 +18,7 @@ from contracts.plan import CatalogPlan
 from contracts.taxonomy import Intent, RiskLabel
 from eval.loader import Case, Document
 from eval.runner import RecordedCase, run_cases, with_documents
-from tests.assistant.fixtures import PLAN, PRODUCTS, QUESTION, ROUTED, search
+from tests.assistant.fixtures import PLAN, PRODUCTS, QUESTION, ROUTED, find, search
 
 SETTINGS = load_settings({})
 DATA = Path(__file__).resolve().parents[2] / "data"
@@ -143,6 +143,18 @@ def test_order_form_cached_status_handoff_and_timeout_actions_use_actual_api_cal
     assert api.app.state.desks.tickets.count() == 1 and len(fake.requests) == 3
     assert form["order_number"] not in str(fake.requests)
     assert form["contact"] not in str(fake.requests)
+
+
+def test_a_risk_reply_records_the_named_products_text_for_groundedness():
+    medical = ROUTED.model_copy(update={"risk_label": RiskLabel.MEDICAL_ADVICE})
+    llm, _ = model(medical)
+    turn = chat("Can I take it while pregnant?", reply_type="medical_advice", handoff_offered=True)
+    turn["expect"]["risk_label"] = "medical_advice"
+    steps = pipeline.Steps(retrieve=search, find_product=find)
+    [record] = run_cases([case(turn)], SETTINGS, llm, no_api(), steps)
+    [recorded] = record.turns
+    assert recorded.record_evidence == {"MRD-ALG-012#warnings": PRODUCTS[0].warnings}
+    assert recorded.product_names == {"MRD-ALG-012": PRODUCTS[0].name}
 
 
 def test_a_scripted_handoff_confirms_the_latest_card_by_its_id(monkeypatch):

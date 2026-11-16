@@ -47,3 +47,8 @@ PLAN = CatalogPlan(
 def search(query: str, k: int) -> list[ProductRecord]:
     """The fixture retriever: both products, whatever the query."""
     return PRODUCTS[:k]
+
+
+def find(name: str) -> ProductRecord | None:
+    """The fixture's strict product lookup: a product only by its exact name."""
+    return next((product for product in PRODUCTS if product.name == name), None)

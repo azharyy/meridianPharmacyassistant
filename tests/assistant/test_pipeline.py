@@ -23,7 +23,7 @@ from contracts.catalog import PolicyRecord
 from contracts.chat import ChatReply, ChatRequest, OrderFormRequest
 from contracts.plan import CatalogPlan
 from contracts.taxonomy import Intent, LabelSection, RiskLabel
-from tests.assistant.fixtures import PLAN, PRODUCTS, QUESTION, ROUTED, search
+from tests.assistant.fixtures import PLAN, PRODUCTS, QUESTION, ROUTED, find, search
 
 RUNTIME = load_settings({}).runtime
 HTTP = httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Response(500)))
@@ -42,7 +42,7 @@ STAGES = {
 
 def turn(message: str, fake: FakeSender, steps=None, session=None) -> pipeline.TurnResult:
     request = ChatRequest(session_id=SESSION_ID, message=message)
-    steps = steps or pipeline.Steps(retrieve=search)
+    steps = steps or pipeline.Steps(retrieve=search, find_product=find)
     llm = ModelClient(RUNTIME, fake)
     return pipeline.run_turn(request, session or Session(), steps, llm, HTTP)
 
@@ -183,6 +183,17 @@ def test_without_a_named_product_the_risk_reply_is_its_text_and_the_card(risk):
     result = turn("Is this right for me?", FakeSender([routed(risk)]))
     assert rendered(result) == render_risk(risk, None)
     assert len(result.reply.blocks) == 1 and result.reply.handoff_offered
+
+
+@pytest.mark.parametrize("risk", [RiskLabel.MEDICAL_ADVICE, RiskLabel.DOSING_BEYOND_LABEL])
+def test_a_medicine_outside_the_catalog_shows_no_other_products_label(risk):
+    # The fixture retriever returns products for any query; only the strict lookup decides.
+    steps = pipeline.Steps(retrieve=search, find_product=lambda name: None)
+    result = turn(
+        "Should I change my warfarin dose?", FakeSender([routed(risk, "warfarin")]), steps
+    )
+    assert rendered(result) == render_risk(risk, None)
+    assert result.retrieved == []
 
 
 def test_injection_patterns_back_up_the_router_and_the_conversation_carries_on(caplog):

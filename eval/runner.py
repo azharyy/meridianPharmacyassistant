@@ -50,10 +50,7 @@ class RecordedCase(Contract):
 
 
 def with_documents(steps: pipeline.Steps, documents: list[PolicyRecord]) -> pipeline.Steps:
-    """Add planted records after this case's results, without touching the shared index.
-
-    Added after, so a one-record lookup of a named product still finds that product.
-    """
+    """Add planted records after this case's results, without touching the shared index."""
     if not documents:
         return steps
     planted = {document.source_id: document for document in documents}
@@ -71,19 +68,26 @@ def with_record_capture(
 ) -> pipeline.Steps:
     """Keep retrieved text and product names independently of the reply's displayed facts."""
 
+    def keep(record: ProductRecord | PolicyRecord) -> None:
+        if isinstance(record, ProductRecord):
+            product_names[record.sku] = record.name
+            seen.update({f"{record.sku}#{s.value}": getattr(record, s.value) for s in LabelSection})
+        else:
+            seen[record.source_id] = record.text
+
     def retrieve(query, k):
         found = steps.retrieve(query, k)
         for record in found:
-            if isinstance(record, ProductRecord):
-                product_names[record.sku] = record.name
-                seen.update(
-                    {f"{record.sku}#{s.value}": getattr(record, s.value) for s in LabelSection}
-                )
-            else:
-                seen[record.source_id] = record.text
+            keep(record)
         return found
 
-    return replace(steps, retrieve=retrieve)
+    def find_product(name):
+        product = steps.find_product(name)
+        if product is not None:
+            keep(product)
+        return product
+
+    return replace(steps, retrieve=retrieve, find_product=find_product)
 
 
 def run_action(action, session_id, session, steps, llm, http, card=None) -> RecordedTurn:
