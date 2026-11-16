@@ -563,8 +563,8 @@ waits Groq's free-tier rate limits imposed, which count as runtime. The report l
 every failed case with its reasons, and the one remaining safety miss: an unwanted
 pharmacist offer on test-043.
 
-After both runs, an independent AI review found that one gold label (test-057)
-contradicted the plan's safety policy: a planted instruction must have no effect, so a
+After both runs, I had an independent AI agent review the labels, and it found that one
+gold label (test-057) contradicted the plan's safety policy: a planted instruction must have no effect, so a
 benign reply needs no refusal. Only that case's expectations were corrected, and the
 same recorded replies were rescored with no new model calls. Accuracy didn't change;
 required-offer recall went from 23/24 to 23/23. The original-label results are kept
@@ -607,24 +607,26 @@ the alias table had been written locally, not before it.
 
 ## AI usage
 
-I built this with two AI coding agents, Claude Code and Codex, and directed both. An AI
-drafted the plan (`docs/PLAN.md`) and the issue files (`docs/issues/`). I edited them,
-chose between the options the agents raised, and made the calls the code couldn't: which
+I built this with two AI coding agents, Claude Code and Codex, and directed both. I made
+the design decisions, and an AI drafted the plan (`docs/PLAN.md`) and the issue files
+(`docs/issues/`) from them. I edited them, chose between the options the agents raised,
+and made the calls the code couldn't: which
 model providers to use (Groq only at first, then OpenCode Go for every role), how the
 pharmacist card behaves, keeping the Groq held-out runs instead of spending the test set
 again, and when the agents could run live commands or assign labels.
 
 | Work | Built by | Reviewed and fixed by | Pull requests |
 | --- | --- | --- | --- |
-| Issues 1-4, 7 and 8: contracts, pipeline, catalog and data, mock API, safety and escalation, widget | Claude Code | Codex, after merge; its seven findings became issue 11 | #1-#6 |
-| Issues 11, 12, 5 and 6: review fixes, preflight, retrieval, answering | Codex | Claude Code, with read-only reviewers over four rounds; every confirmed defect fixed with a regression test | #7-#9 |
-| Issue 9: evaluation | Codex (loader, runner, metrics, CLI, live runs) and Claude Code (judge, calibration, results, the move to OpenCode Go) | Each checked the other's work when taking over | #10 |
-| Issues 14 and 15: the stale-card fix | Codex (contract) and Claude Code (binding and widget) | Claude Code reviewed the contract | #11, #12 |
-| Issue 10: this README | Claude Code drafted it; I checked and reworded it | | #13 |
-| Issues 17 and 18: the quality follow-up | Claude Code, after a read-only diagnosis of the saved development runs | I chose the fix and, after re-running the development set, the default model | #14, #15 |
-| Issues 19-22: links from `make run` that open pages, the judge's follow-up gap (measured and left as is), the order form for a typed order number, and the brief's terms in this README | Claude Code | | #16-#19 |
-| Issues 23-34: the review fixes (redaction, emergency rules, risk labels, emergency scheduling, evaluation fingerprints, empty completions), the OpenCode evaluation and comparison, and a repository cleanup | Codex; Claude Code finished issue 34 | Codex checked case and configuration fingerprints and the paired results, with no tuning against test questions; Claude Code audited the stack for dead code and stale docs before merge | #20 |
-| Issues 35-37: typo-tolerant search, the future improvements below, and an audit of this README against the code | Claude Code | | #21-#23 |
+| Issues 1-4, 7 and 8: contracts, pipeline, catalog and data, mock API, safety and escalation, widget | Claude Code | Me, before merging. After merge I had Codex review them; its seven findings became issue 11 | #1-#6 |
+| Issues 11, 12, 5 and 6: review fixes, preflight, retrieval, answering | Codex | Me, before merging. First I had Claude Code review them, with read-only reviewers over four rounds; every confirmed defect was fixed with a regression test | #7-#9 |
+| Issue 9: evaluation | Codex (loader, runner, metrics, CLI, live runs) and Claude Code (judge, calibration, results, the move to OpenCode Go) | Me, before merging. I had each agent check the other's work when taking over | #10 |
+| Issues 14 and 15: the stale-card fix | Codex (contract) and Claude Code (binding and widget) | Me, before merging. I had Claude Code review the contract | #11, #12 |
+| Issue 10: this README | Claude Code drafted it; I checked and reworded it | Me, before merging | #13 |
+| Issues 17 and 18: the quality follow-up | Claude Code, after a read-only diagnosis of the saved development runs | Me, before merging: I chose the fix and, after re-running the development set, the default model | #14, #15 |
+| Issues 19-22: links from `make run` that open pages, the judge's follow-up gap (measured and left as is), the order form for a typed order number, and the brief's terms in this README | Claude Code | Me, before merging | #16-#19 |
+| Issues 23-34: the review fixes (redaction, emergency rules, risk labels, emergency scheduling, evaluation fingerprints, empty completions), the OpenCode evaluation and comparison, and a repository cleanup | Codex; Claude Code finished issue 34 | Me, before merging. I had Codex check the case and configuration fingerprints and the paired results, with no tuning against test questions, and Claude Code audit the stack for dead code and stale docs | #20 |
+| Issues 35 and 36: typo-tolerant search and the future improvements below | Claude Code | Me, before merging | #21, #22 |
+| Issues 37 and 38: an audit of this README against the code, and these review credits | Claude Code | Me: #23 after merging, #24 before merging | #23, #24 |
 
 Most issues were merged one pull request each; issues 23-34 were built as local
 checkpoints and merged together in one pull request. Acceptance criteria name the tests proving them. Both agents followed the same rules in `AGENTS.md`: module
@@ -653,8 +655,8 @@ What the reviews and checks caught:
 - **Rate limits scored as answers.** Groq's free-tier limits turned development runs into
   fallback replies ([4/12 at worst](eval/results/dev-quota-limited.md)). The evaluation now waits out short limits, and stops
   without saving anything when a limit is too long to wait out.
-- **A stale pharmacist card.** Codex's whole-project review found that an old emergency
-  card, clicked after a newer fallback card, filed a routine ticket. Issue 15 binds every
+- **A stale pharmacist card.** A whole-project review I had Codex run found that an old
+  emergency card, clicked after a newer fallback card, filed a routine ticket. Issue 15 binds every
   card to its own offer, with regression tests and a browser check.
 - **Another product's label.** Diagnosing GLM-5.3-Flash's one development failure showed
   that a medicine outside the catalog could bring up another product's label: a warfarin
