@@ -7,7 +7,7 @@ from collections.abc import Mapping
 from pathlib import Path
 
 from assistant.retrieval.aliases import load_aliases
-from assistant.retrieval.exact import alias_terms, exact_products, normalize, phrase
+from assistant.retrieval.exact import alias_terms, exact_products, named_products, normalize, phrase
 from contracts.catalog import PolicyRecord, ProductRecord
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -90,10 +90,11 @@ class SearchIndex:
         return [self.records[key] for key in dict.fromkeys(ids)][:k]
 
     def named(self, query: str) -> ProductRecord | None:
-        """The product the words name by SKU, name, ingredient or brand alias, never a keyword
-        hit: a label that merely mentions a medicine is not that medicine."""
-        skus = exact_products(query, self.products, self.aliases)
-        return self.records[skus[0]] if skus else None
+        """One explicit product, or an unambiguous ingredient/alias; never guess a variant."""
+        skus = set(named_products(normalize(query), self.products))
+        if not skus:
+            skus = set(exact_products(query, self.products, self.aliases))
+        return self.records[next(iter(skus))] if len(skus) == 1 else None
 
     def keyword_ids(self, query: str) -> list[str]:
         tokens = list(dict.fromkeys(re.findall(r"\w+", query.casefold(), flags=re.UNICODE)))

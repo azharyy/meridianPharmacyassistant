@@ -194,7 +194,15 @@ def test_store_questions_use_the_widget_store_or_list_both_without_a_catalog_cal
 
 
 @pytest.mark.parametrize(
-    ("mention", "sources"), [("warfarin", []), ("Advil", ["MRD-PAN-001#directions"])]
+    ("mention", "sources"),
+    [
+        ("warfarin", []),
+        ("Advil", []),
+        ("diphenhydramine 2% spray", []),
+        ("famotidine 10 mg", []),
+        ("guaifenesin 400 mg", []),
+        ("MRD-PAN-001", ["MRD-PAN-001#directions"]),
+    ],
 )
 def test_a_risk_reply_shows_a_label_only_for_a_product_the_customer_named(mention, sources):
     dosing = ROUTED.model_copy(
@@ -204,6 +212,9 @@ def test_a_risk_reply_shows_a_label_only_for_a_product_the_customer_named(mentio
         reply = client.post("/chat", json={**CHAT, "message": "Can I take a double dose?"}).json()
     assert reply["reply_type"] == "dosing_beyond_label"
     assert [source["id"] for source in reply["sources"]] == sources
+    assert reply["handoff_offered"] and reply["offer_id"]
+    if not sources:
+        assert all(block["type"] == "text" for block in reply["blocks"])
 
 
 def test_default_app_retrieves_real_records_and_executes_the_models_stock_request():

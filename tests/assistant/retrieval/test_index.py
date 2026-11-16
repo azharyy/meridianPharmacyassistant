@@ -80,7 +80,7 @@ def test_a_named_product_is_found_only_by_its_sku_name_ingredient_or_alias():
         assert index.named("warfarin") is None
         assert index.named("Meridian All Day Allergy").sku == "MRD-ALG-012"
         assert index.named("Can I take MRD-ALG-012 twice?").sku == "MRD-ALG-012"
-        assert index.named("Advil").sku == "MRD-PAN-001"
+        assert index.named("Advil") is None
         assert "Acetaminophen" in index.named("acetaminophen").active_ingredients
     finally:
         index.close()
