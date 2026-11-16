@@ -122,3 +122,28 @@ def test_nonpositive_limit_returns_no_records(catalog, exact_match, k):
         assert index.search("Meridian First", k) == []
     finally:
         index.close()
+
+
+@pytest.mark.parametrize("flag", [False, True])
+@pytest.mark.parametrize(
+    ("query", "sku"),
+    [
+        ("MRD-ALG-012", "MRD-ALG-012"),
+        ("Meridian All Day Allergy", "MRD-ALG-012"),
+        ("MRD-ALG-012 MRD-ALG-012", "MRD-ALG-012"),
+        ("oxymetazoline", "MRD-CLD-006"),
+        ("Afrin", "MRD-CLD-006"),
+        ("MRD-ALG-012 MRD-ALG-014", None),
+        ("Meridian All Day Allergy and Meridian 24-Hour Allergy", None),
+        ("diphenhydramine 2% spray", None),
+        ("famotidine 10 mg", None),
+        ("Advil", None),
+    ],
+)
+def test_named_lookup_requires_one_identity_independent_of_search_flag(flag, query, sku):
+    index = SearchIndex(exact_match=flag)
+    try:
+        found = index.named(query)
+        assert (found.sku if found else None) == sku
+    finally:
+        index.close()

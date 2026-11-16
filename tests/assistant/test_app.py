@@ -430,3 +430,21 @@ def test_a_product_followup_retrieves_the_name_resolved_from_earlier_messages():
     assert first.json()["reply_type"] == followup.json()["reply_type"] == "label_sections"
     assert followup.json()["blocks"][0]["text"] == product.directions
     assert product.sku in str(fake.requests[3])
+
+
+@pytest.mark.parametrize(
+    ("mentions", "source"),
+    [
+        (["MRD-ALG-012", "MRD-ALG-014"], None),
+        (["MRD-ALG-012", "MRD-ALG-012"], "MRD-ALG-012#directions"),
+        (["Afrin"], "MRD-CLD-006#directions"),
+    ],
+)
+def test_risk_labels_resolve_all_router_mentions(mentions, source):
+    routed = ROUTED.model_copy(
+        update={"risk_label": RiskLabel.DOSING_BEYOND_LABEL, "product_mentions": mentions}
+    )
+    with TestClient(create_app(SETTINGS, None, FakeSender([routed]), NO_API, NO_WIDGET)) as client:
+        reply = client.post("/chat", json={**CHAT, "message": "Can I double the dose?"}).json()
+    assert reply["handoff_offered"] and reply["offer_id"]
+    assert [s["id"] for s in reply["sources"]] == ([source] if source else [])

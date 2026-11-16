@@ -101,12 +101,12 @@ def record_id(record: Record) -> str:
 
 
 def named_product(routed: RouterOutput, steps: Steps, timings) -> ProductRecord | None:
-    """The first product the customer named, matched exactly: a keyword hit could be another
+    """One product the customer named, matched exactly: a keyword hit could be another
     product whose label merely mentions a medicine outside the catalog."""
     if not routed.product_mentions:
         return None
     with stage(timings, "retrieval"):
-        return steps.find_product(routed.product_mentions[0])
+        return steps.find_product(" ".join(routed.product_mentions))
 
 
 def risk_reply(routed: RouterOutput | None, risk: RiskLabel, steps: Steps, timings) -> TurnResult:
