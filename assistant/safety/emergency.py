@@ -16,8 +16,11 @@ PATTERNS = {
         r"|\b(took|taken|swallowed|swallowing|ate|drank)\b[^.?!]{0,40}?"
         r"\b(?:too many|too much|handful"
         r"|(?:a whole|the whole|an entire|all of) (?:bottle|pack|packet|box)"
-        r"|(?:bottle|pack|packet|box) of (?:pills?|tablets?|capsules?|caplets?|medicine|medication)"
-        r"|\d{2,} (?:[a-z]+ ){0,3}(?:pills?|tablets?|capsules?|caplets?))\b"
+        r"|(?:bottle|pack|packet|box) of (?:[a-z]+ ){0,2}"
+        r"(?:pills?|tablets?|capsules?|caplets?|medicine|medication|syrup"
+        r"|ibuprofen|aspirin|acetaminophen|cetirizine)"
+        r"|\d{2,}(?!\d|\s*(?:mg|mcg|g|ml|iu|units?)\b) "
+        r"(?:[a-z]+ ){0,3}(?:pills?|tablets?|capsules?|caplets?))\b"
         r"|\b(toddler|baby|child|kid|son|daughter|grandchild)\b[^.?!]{0,30}"
         r"\b(ate|swallowed|drank|got into|chewed)\b"
     ),
