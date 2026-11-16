@@ -152,6 +152,54 @@ example payloads in `contracts/examples/` and snapshots in `contracts/schemas.js
 
 ## Where things live
 
+| Path | Its one job |
+| --- | --- |
+| `contracts/` | Typed requests, replies, plans and router output, with example payloads and schema snapshots. No logic |
+| `api/` | The mock Meridian API: `orders.py` (the lookup and its lockout), `products.py` (stock), `stores.py`, `tickets.py`, and `app.py` (the routes) |
+| `assistant/app.py` | The assistant's HTTP routes and static files, nothing else |
+| `assistant/pipeline.py` | The only module that wires the steps together |
+| `assistant/safety/` | `emergency.py` (step 1), `injection.py` (pattern rules that back up the router), `reviewer.py` (step 6) |
+| `assistant/redaction.py` | Step 2 |
+| `assistant/router.py` | Step 3, with its prompt in `assistant/prompts/router.txt` |
+| `assistant/retrieval/` | Step 4: `exact.py` (SKU, name, ingredient and alias matching), `aliases.py`, `index.py` (the SQLite index) |
+| `assistant/catalog_agent.py` | Step 5, with its prompt in `assistant/prompts/catalog_agent.txt` |
+| `assistant/tools.py` | Step 7 |
+| `assistant/render.py` | Step 8: the only module that builds what the customer reads |
+| `assistant/orders.py` | The order agent: verifies the form through the API and keeps only the status |
+| `assistant/escalation.py` | The handoff and the ticket summary |
+| `assistant/policy.py`, `assistant/templates.py` | The policy table and every sentence a customer can read |
+| `assistant/session.py` | Conversation state, in memory: redacted turns, the verified order status, the current pharmacist card |
+| `assistant/llm.py` | The model client (strict structured outputs, no tools) and the scripted fake the tests use |
+| `assistant/api_client.py` | The only code that calls the mock API |
+| `assistant/settings.py` | Every environment variable, read once |
+| `assistant/launcher.py` | What `make run` starts |
+| `widget/` | `meridian-chat.js` (the widget), `demo.html` (a storefront with the widget on it), `preview.html` (every example reply, no server), `handoff-test.html` (the card checks) |
+| `catalog/` | `products.json` (52 products with four label sections each, from public openFDA label samples under fictional brands) and `aliases.yaml` |
+| `data/` | `stores.yaml`, `orders.json`, `stock.json` and the policy pages in `data/policies/` |
+| `scripts/` | The one-off data scripts: `fetch_labels.py`, `label_text.py`, `seed_data.py` |
+| `eval/` | Cases, harness, metrics, judge and report (see [Evaluation](#evaluation)) |
+| `tests/` | Mirrors the tree: `assistant/x.py` is tested by `tests/assistant/test_x.py` |
+
+`tests/test_architecture.py` runs with every `make check`. It fails the build if
+`contracts/` imports anything from the project; if `api/`, `assistant/` or `scripts/`
+imports anything but `contracts/` (and `eval/` anything but `contracts/` and
+`assistant/`); if a step imports another step; or if a module in `assistant/` or `api/`
+has no test file at the mirrored path. Ruff fails any function with a complexity above
+10. Tests never call a real model: they script the fake client in `assistant/llm.py`.
+
+### Where to change things
+
+| To change | Edit |
+| --- | --- |
+| A fixed reply, or what a risk label allows | `assistant/policy.py` |
+| The wording of an answer | `assistant/templates.py` |
+| What counts as an emergency | The pattern list at the top of `assistant/safety/emergency.py` |
+| A prompt | `assistant/prompts/` |
+| The model, the provider or a flag | `assistant/settings.py` |
+| How products are found | `assistant/retrieval/` and `catalog/aliases.yaml` |
+| The order of the pipeline | `assistant/pipeline.py` |
+| An API shape | `contracts/`, in a pull request of its own; `make contracts` regenerates the snapshots |
+
 ## Guardrail design
 
 ## Evaluation
