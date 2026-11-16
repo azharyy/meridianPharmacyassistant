@@ -88,7 +88,13 @@ records from `data/orders.json`.
    assistant says it can't diagnose or say whether a medicine is right for you, shows the
    label's warnings word for word and offers the pharmacist card.
 6. **A pharmacist ticket.** Click "Ask a pharmacist" on that card. The reply shows the
-   request number (`TCK-...`), and the button stays disabled: one ticket per card.
+   request number (`TCK-...`), and the button stays disabled: one ticket per card. To
+   show what the pharmacist receives, open <http://localhost:8001/docs> and run
+   `GET /v1/tickets/{ticket_id}` with that number and the `X-Staff-Key` header set to
+   `dev-staff-key` (or your `MERIDIAN_STAFF_KEY`); without the key the answer is 401.
+   The ticket's summary, built by code, holds the risk label, the urgency, the last five
+   customer messages as redacted, the products mentioned, the assistant's reply types
+   and sources, and the reason.
 7. **An emergency.** Send "My son swallowed a bottle of pills". A red banner with the 911
    text appears at once, before any model call, with a pharmacist card under it.
 8. **The keyboard.** Tab moves through the launcher, the input, the source chips and the
@@ -139,6 +145,14 @@ flowchart TD
 | 6. Safety reviewer | `assistant/safety/reviewer.py` | No | Rejects a plan that names a record that wasn't retrieved, a section the record doesn't have, or a reply type or section the risk label doesn't allow. A rejected plan becomes the fallback reply |
 | 7. Tool executor | `assistant/tools.py` | No | Runs the requested lookup only when the turn's intent allows that tool (stock for an availability question, store details for a store question) and the SKU or store exists. Reads time out after 3 s and are retried once |
 | 8. Renderer | `assistant/render.py` | No | Builds the reply from templates, record text copied word for word and API results, attaches the sources, and sets `handoff_offered` from the policy table |
+
+Steps 4, 5 and 8 are the RAG pipeline: retrieval finds the records, the catalog agent
+picks the records and sections that answer, and the renderer copies their text and cites
+it. Tool use goes through the plan as well, not native function calling: a stock or store
+lookup is a field in the plan, which the tool executor checks before anything runs. Groq,
+the first runtime, couldn't combine function calling with strict structured outputs in
+one request, and a plan field is easier for code to check. The order lookup is not a
+model tool at all: the form sends the number and the contact straight to code.
 
 Shorter paths, all in `assistant/pipeline.py`:
 
