@@ -36,7 +36,8 @@ def main(
     if settings.llm == "live":
         settings.api_key(settings.runtime)  # stops here, naming the key, when it's missing
     servers = [start(command) for command in commands()]
-    print("Assistant: http://localhost:8000 (demo at /demo), API: http://localhost:8001")
+    print("Demo: http://localhost:8000/demo")
+    print("Mock API docs: http://localhost:8001/docs")
     print("Ctrl+C stops both servers.", flush=True)
     try:
         while all(server.poll() is None for server in servers):
