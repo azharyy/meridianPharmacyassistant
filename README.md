@@ -134,7 +134,7 @@ flowchart TD
 | 1. Emergency rules | `assistant/safety/emergency.py` | No | Patterns for a current emergency, the customer's or someone else's: an overdose, trouble breathing, chest pain, unconsciousness, a seizure, throat swelling, self-harm. Guards let a past event or a question about a label warning through. A match returns the fixed 911 reply at once, with the pharmacist card |
 | 2. Redaction | `assistant/redaction.py` | No | Emails, phone numbers and order numbers typed into the chat become `[email]`, `[phone]` and `[order number]` before the model, the session or the logs see them |
 | 3. Router | `assistant/router.py` | Yes | One structured-output call over the redacted conversation: intent, risk label, products mentioned, label sections asked about, store topic. It never sees retrieved text. Pattern rules in `assistant/safety/injection.py` back up its prompt-injection label, and the more restrictive label wins |
-| 4. Retrieval | `assistant/retrieval/` | No | Exact SKU, name, ingredient and alias matching first (`catalog/aliases.yaml`), then keyword search over an in-memory SQLite FTS5 index of label sections and policy pages. Returns up to five whole records |
+| 4. Retrieval | `assistant/retrieval/` | No | Exact SKU, name, ingredient and alias matching first (`catalog/aliases.yaml`), with one-typo misspellings of a drug or brand name respelled ("ibuprufen" finds ibuprofen), then keyword search over an in-memory SQLite FTS5 index of label sections and policy pages. Returns up to five whole records |
 | 5. Catalog agent | `assistant/catalog_agent.py` | Yes | Reads the question and the retrieved records, marked as data, and returns a plan: which records and sections answer it, and at most one tool request. Never text |
 | 6. Safety reviewer | `assistant/safety/reviewer.py` | No | Rejects a plan that names a record that wasn't retrieved, a section the record doesn't have, or a reply type or section the risk label doesn't allow. A rejected plan becomes the fallback reply |
 | 7. Tool executor | `assistant/tools.py` | No | Runs the requested lookup only when the turn's intent allows that tool (stock for an availability question, store details for a store question) and the SKU or store exists. Reads time out after 3 s and are retried once |
@@ -202,7 +202,7 @@ example payloads in `contracts/examples/` and snapshots in `contracts/schemas.js
 | `assistant/safety/` | `emergency.py` (step 1), `injection.py` (pattern rules that back up the router), `reviewer.py` (step 6) |
 | `assistant/redaction.py` | Step 2 |
 | `assistant/router.py` | Step 3, with its prompt in `assistant/prompts/router.txt` |
-| `assistant/retrieval/` | Step 4: `exact.py` (SKU, name, ingredient and alias matching), `aliases.py`, `index.py` (the SQLite index) |
+| `assistant/retrieval/` | Step 4: `exact.py` (SKU, name, ingredient and alias matching, typo respelling), `aliases.py`, `index.py` (the SQLite index) |
 | `assistant/catalog_agent.py` | Step 5, with its prompt in `assistant/prompts/catalog_agent.txt` |
 | `assistant/tools.py` | Step 7 |
 | `assistant/render.py` | Step 8: the only module that builds what the customer reads |
@@ -619,13 +619,19 @@ Evaluation fingerprints now include API/contract code and actual policy document
 The issue 33 runs have matching fingerprints for their measured code. Issue 34's
 cleanup removed unreachable code and the catalog prompt's store-lookup option, which
 always ended in a failed lookup. It changes that fingerprint and was checked offline
-only; saved runs cannot be mixed with new code in a same-code comparison.
+only; saved runs cannot be mixed with new code in a same-code comparison. Issue 35's
+typo respelling in the exact stage is likewise unmeasured.
 
 ### Product
 
 - The alias table maps one brand per ingredient, so a bare "Prilosec", "Imodium",
   "Pepto" or "Motrin" finds nothing. Search is exact matching plus keywords, with no
   embeddings.
+- Typos are respelled only toward catalog drug and brand names of six or more letters:
+  one typo away, or two for names of nine or more letters, never between two
+  candidates, and never for the label a safety reply shows. Look-alike drugs outside
+  the catalog (desloratadine, chlorpromazine) stay as typed, but an ordinary word one
+  typo from a brand ("unison", Unisom) also brings that brand into the candidates.
 - Sessions live in memory: a restart forgets every conversation, and its old cards then
   get the "out of date" reply.
 - If a ticket is created but its reply is lost, and a newer card appears before the
@@ -643,8 +649,8 @@ only; saved runs cannot be mixed with new code in a same-code comparison.
 - Give the judge a conversation's earlier messages if follow-ups become a bigger share of
   the cases; each historical Groq held-out run had 2 among its 30 judged turns.
 - Fixes for the open safety and privacy gaps above.
-- Holiday hours, typo tolerance in search, clarifying questions with buttons, and turns
-  that ask two things at once.
+- Holiday hours, clarifying questions with buttons (such as "Did you mean ibuprofen?"),
+  and turns that ask two things at once.
 - Embedding search, if keyword misses show up in the evaluation.
 - Browser tests of the widget and a type checker in CI.
 - A local open-weight model compared with the hosted one; Arabic or Spanish; staff

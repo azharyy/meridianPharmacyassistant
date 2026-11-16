@@ -32,7 +32,7 @@ policy text, dependencies, cases or saved results.
   words, short words, words two typos from a shorter name, words near two catalog words
   and look-alike drugs outside the catalog stay as typed. Prove it in
   `tests/assistant/retrieval/test_exact.py`.
-- [ ] 2. With the real index, "i want to ask about meridian ibuprufen" returns the three
+- [x] 2. With the real index, "i want to ask about meridian ibuprufen" returns the three
   ibuprofen products first; the keyword-only baseline and the strict `named` lookup do
   not respell. Prove it in `tests/assistant/retrieval/test_index.py`. The README
   describes the behavior and `make check` is green.
