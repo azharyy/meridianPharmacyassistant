@@ -7,6 +7,11 @@ from eval.results import score_all
 from tests.eval.fixtures import recorded_case, recorded_turn
 
 EMERGENCY = {"reply_type": "emergency", "risk_label": "emergency", "handoff_offered": True}
+CALIBRATION = {
+    "agreed": 19,
+    "total": 20,
+    "disagreements": [{"id": "cal-07", "label": True, "judge": False}],
+}
 
 
 def run(*cases):
@@ -33,7 +38,7 @@ def section(text, title):
 
 
 def test_headline_and_metric_table_put_both_runs_side_by_side_with_targets():
-    text = build(*runs(), None, "sha")
+    text = build(*runs(), CALIBRATION)
     headline = section(text, "## Headline")
     assert "| Answer accuracy | 0/2 (0.0%) | 2/2 (100.0%) | at least 90% |" in headline
     assert "| Retrieval success |" in headline
@@ -44,7 +49,7 @@ def test_headline_and_metric_table_put_both_runs_side_by_side_with_targets():
 
 
 def test_changed_and_failed_cases_and_safety_misses_are_listed_by_case():
-    text = build(*runs(), None, "sha")
+    text = build(*runs(), CALIBRATION)
     assert section(text, "## Cases that changed").strip().splitlines()[2:] == [
         "- case-001: accuracy now passes",
         "- case-002: accuracy now passes",
@@ -62,24 +67,15 @@ def test_changed_and_failed_cases_and_safety_misses_are_listed_by_case():
     assert "case-001" not in safety
 
 
-def test_calibration_shows_agreement_disagreements_and_a_changed_prompt():
-    calibration = {
-        "agreed": 19,
-        "total": 20,
-        "disagreements": [{"id": "cal-07", "label": True, "judge": False}],
-        "prompt_sha256": "sha",
-    }
-    same = section(build(*runs(), calibration, "sha"), "## Judge calibration")
-    assert "Agreement with the supplied labels: 19/20 (95.0%)." in same
-    assert "- cal-07: labeled True, the judge said False" in same
-    assert "unchanged since the calibration" in same
-    moved = build(*runs(), calibration, "other")
-    assert "changed after the calibration" in section(moved, "## Judge calibration")
-    assert "Not run yet" in build(*runs(), None, "sha")
+def test_calibration_shows_agreement_and_disagreements():
+    text = section(build(*runs(), CALIBRATION), "## Judge calibration")
+    assert "Agreement with the supplied labels: 19/20 (95.0%)." in text
+    assert "- cal-07: labeled True, the judge said False" in text
+    assert "unchanged since the calibration" in text
 
 
 def test_method_notes_state_the_counting_and_the_questions_provenance():
-    notes = section(build(*runs(), None, "sha"), "## Method notes")
+    notes = section(build(*runs(), CALIBRATION), "## Method notes")
     assert "count cases" in notes and "not the user's own" in notes
     assert "Runtime backoff is included" in notes and "judge backoff remains outside" in notes
     assert "AI agents to assign" in notes and "human validation remains pending" in notes
@@ -93,7 +89,7 @@ def test_changed_cases_include_a_safety_fix_even_when_accuracy_stays_the_same():
     fixed.reply.handoff_offered = True
     before = run(recorded_case(turn))
     after = run(recorded_case(fixed))
-    changes = section(build(before, after, None, "sha"), "## Cases that changed")
+    changes = section(build(before, after, CALIBRATION), "## Cases that changed")
     assert "case-001: escalation now passes" in changes
     assert "accuracy" not in changes and "retrieval" not in changes
 
@@ -101,5 +97,5 @@ def test_changed_cases_include_a_safety_fix_even_when_accuracy_stays_the_same():
 def test_changed_cases_include_changed_failure_reasons():
     before, after = runs()
     after["metrics"]["accuracy"]["failed_cases"]["case-001"] = ["different failure"]
-    changes = section(build(before, after, None, "sha"), "## Cases that changed")
+    changes = section(build(before, after, CALIBRATION), "## Cases that changed")
     assert "case-001: accuracy failure reasons changed" in changes

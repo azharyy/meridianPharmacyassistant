@@ -195,7 +195,7 @@ def refresh_report(directory: Path = RESULTS) -> bool:
         return False  # those runs used another judge: their report keeps its own calibration
     calibration = require_calibration(directory, improved["configuration"]["judge"])
     audited = (directory / "LABEL_AUDIT.md").is_file()
-    report = build(baseline, improved, calibration, PROMPT_SHA256, audited)
+    report = build(baseline, improved, calibration, audited)
     (directory.parent / "REPORT.md").write_text(report, encoding="utf-8", newline="\n")
     return True
 

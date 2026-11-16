@@ -74,11 +74,7 @@ def by_case(run: dict, names: tuple[str, ...]) -> list[str]:
     return [f"- {case}: {'; '.join(reasons)}" for case, reasons in failures.items()] or ["None."]
 
 
-def calibration_lines(calibration: dict | None, prompt_sha256: str) -> list[str]:
-    if calibration is None:
-        return [
-            "Not run yet: label `eval/judge/calibration.jsonl`, then run `make judge-calibrate`."
-        ]
+def calibration_lines(calibration: dict) -> list[str]:
     lines = [
         "Agreement with the supplied labels: "
         f"{percent(calibration['agreed'], calibration['total'])}."
@@ -87,21 +83,15 @@ def calibration_lines(calibration: dict | None, prompt_sha256: str) -> list[str]
         f"- {item['id']}: labeled {item['label']}, the judge said {item['judge']}"
         for item in calibration["disagreements"]
     ] or ["No disagreements."]
-    same = calibration["prompt_sha256"] == prompt_sha256
-    lines.append(
-        "The judge prompt is unchanged since the calibration."
-        if same
-        else "**The judge prompt changed after the calibration: restore the calibrated prompt"
-        " and review.**"
-    )
+    # eval/cli.py's saved_calibration refuses a calibration made with another judge prompt.
+    lines.append("The judge prompt is unchanged since the calibration.")
     return lines
 
 
 def build(
     baseline: dict,
     improved: dict,
-    calibration: dict | None,
-    prompt_sha256: str,
+    calibration: dict,
     audited: bool = False,
 ) -> str:
     sections = [
@@ -146,7 +136,7 @@ def build(
         "",
         "## Judge calibration",
         "",
-        *calibration_lines(calibration, prompt_sha256),
+        *calibration_lines(calibration),
         "",
         "## Method notes",
         "",

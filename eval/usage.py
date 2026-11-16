@@ -23,20 +23,6 @@ PRICES = {
         "output": 4.40,
         "source": "https://opencode.ai/docs/go/",
     },
-    ("groq", "openai/gpt-oss-120b"): {
-        "input": 0.15,
-        "cached_input": 0.075,
-        "cache_write": None,
-        "output": 0.60,
-        "source": "https://console.groq.com/docs/model/openai/gpt-oss-120b",
-    },
-    ("groq", "openai/gpt-oss-20b"): {
-        "input": 0.075,
-        "cached_input": 0.037,
-        "cache_write": None,
-        "output": 0.30,
-        "source": "https://console.groq.com/docs/model/openai/gpt-oss-20b",
-    },
 }
 
 

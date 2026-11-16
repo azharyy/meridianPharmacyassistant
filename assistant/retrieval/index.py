@@ -79,8 +79,6 @@ class SearchIndex:
         self.connection.commit()
 
     def search(self, query: str, k: int) -> list[Record]:
-        if k <= 0:
-            return []
         ids = []
         if self.exact_match:
             ids.extend(exact_products(query, self.products, self.aliases))

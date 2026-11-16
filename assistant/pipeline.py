@@ -82,7 +82,6 @@ class TurnResult:
     routed: RouterOutput | None = None
     retrieved: list[str] = field(default_factory=list)  # record IDs, in retrieval order
     plan: CatalogPlan | None = None
-    tool: str | None = None
     risk: RiskLabel = RiskLabel.NONE
     timings: dict[str, float] = field(default_factory=dict)  # milliseconds per stage
 
@@ -176,8 +175,7 @@ def fulfill(routed, plan: CatalogPlan, records: list[Record], steps: Steps, http
         tool_result = steps.execute(http, reviewed.tool)
     with stage(timings, "render"):
         reply = steps.render(reviewed, records, risk, tool_result)
-    tool = reviewed.tool.name.value if reviewed.tool else None
-    return TurnResult(reply, routed, found, reviewed, tool, risk)
+    return TurnResult(reply, routed, found, reviewed, risk)
 
 
 def record_offer(session: Session, reply: ChatReply, risk: RiskLabel) -> ChatReply:

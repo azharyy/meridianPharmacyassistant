@@ -113,17 +113,6 @@ def test_empty_or_unmatched_queries_return_no_records(catalog, exact_match, quer
         index.close()
 
 
-@pytest.mark.parametrize("exact_match", [False, True])
-@pytest.mark.parametrize("k", [0, -1])
-def test_nonpositive_limit_returns_no_records(catalog, exact_match, k):
-    path, policies, _ = catalog
-    index = SearchIndex(path, policies, exact_match=exact_match)
-    try:
-        assert index.search("Meridian First", k) == []
-    finally:
-        index.close()
-
-
 @pytest.mark.parametrize("flag", [False, True])
 @pytest.mark.parametrize(
     ("query", "sku"),

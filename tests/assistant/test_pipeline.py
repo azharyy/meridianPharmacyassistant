@@ -298,7 +298,7 @@ def test_a_directions_question_gets_the_label_text_and_its_source():
     assert block.text == PRODUCTS[0].directions
     assert [source.id for source in result.reply.sources] == ["MRD-ALG-012#directions"]
     assert result.retrieved == ["MRD-ALG-012", "MRD-ALG-014"]
-    assert (result.routed, result.plan, result.tool) == (ROUTED, PLAN, None)
+    assert (result.routed, result.plan) == (ROUTED, PLAN)
 
 
 def test_the_model_sees_only_the_redacted_message():
@@ -419,7 +419,7 @@ def test_a_tool_for_another_intent_is_rejected_before_execution():
     steps = pipeline.Steps(retrieve=search, execute=lambda *args: calls.append(args))
     result = turn(QUESTION, FakeSender([ROUTED, plan]), steps)
     assert result.reply.reply_type == "lookup_failed"
-    assert calls == [] and result.tool is None and result.reply.sources == []
+    assert calls == [] and result.reply.sources == []
 
 
 def test_a_failed_availability_tool_gets_the_fixed_lookup_failure():
@@ -466,7 +466,7 @@ def test_the_models_stock_request_is_executed_and_traced_or_times_out_safely(tim
         ModelClient(RUNTIME, fake),
         http,
     )
-    assert result.tool == "check_availability" and result.plan == plan
+    assert result.plan == plan
     assert seen == [f"/v1/products/{PRODUCTS[0].sku}/availability"] * (2 if timeout else 1)
     assert result.reply.reply_type == ("lookup_failed" if timeout else "availability")
     assert len(fake.requests) == 2
@@ -495,7 +495,7 @@ def test_order_chat_uses_session_verification_and_never_calls_catalog_or_tools(v
     fake = FakeSender([ROUTED.model_copy(update={"intent": Intent.ORDER_STATUS})])
     result = turn("Where is my order?", fake, session=session)
     assert result.reply.reply_type == ("order_status" if verified else "order_form")
-    assert len(fake.requests) == 1 and result.retrieved == [] and result.tool is None
+    assert len(fake.requests) == 1 and result.retrieved == []
     assert set(result.timings) == {"emergency", "redaction", "router", "render"}
 
 

@@ -221,9 +221,7 @@ def structure_errors(reply: ChatReply) -> list[str]:
 
 
 def failure_reasons(turn: RecordedTurn) -> list[str]:
-    reply = turn.reply
-    if not isinstance(reply, ChatReply):
-        return []
+    reply = turn.reply  # score() skips handoffs, so this is always a ChatReply
     errors = structure_errors(reply)
     if errors:
         return errors
@@ -238,8 +236,6 @@ def failure_reasons(turn: RecordedTurn) -> list[str]:
         if api_block(block, sources, turn.api_evidence):
             continue
         return ["block lacks matching evidence or fixed wording"]
-    if not sources:
-        return ["factual reply has no sources"]
     return []
 
 

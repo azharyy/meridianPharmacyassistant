@@ -9,11 +9,10 @@ import httpx
 from pydantic import Field
 
 from assistant import escalation, pipeline
-from assistant.api_client import connect
 from assistant.app import default_steps
-from assistant.llm import ModelClient, make_client
+from assistant.llm import ModelClient
 from assistant.session import Session
-from assistant.settings import Settings, load_settings
+from assistant.settings import Settings
 from contracts.base import Contract
 from contracts.catalog import PolicyRecord, ProductRecord
 from contracts.chat import ChatReply, ChatRequest, HandoffReply, OrderFormRequest
@@ -202,20 +201,15 @@ def validate_cases(cases: list[Case]) -> None:
 
 def run_cases(
     cases: list[Case],
-    settings: Settings | None = None,
-    llm: ModelClient | None = None,
-    http: httpx.Client | None = None,
+    settings: Settings,
+    llm: ModelClient,
+    http: httpx.Client,
     steps: pipeline.Steps | None = None,
 ) -> list[RecordedCase]:
     """Run labeled cases; close resources created here, never injected ones."""
     validate_cases(cases)
-    settings = settings or load_settings()
-    llm = llm or make_client(settings, settings.runtime)
     with ExitStack() as resources:
         if steps is None:
             steps, index = default_steps(settings)
             resources.callback(index.close)
-        if http is None:
-            http = connect(settings)
-            resources.callback(http.close)
         return [_run_case(case, steps, llm, http) for case in cases]

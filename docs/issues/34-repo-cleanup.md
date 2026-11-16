@@ -26,6 +26,22 @@ Acceptance criteria (full offline checks and a commit after each):
   instructions, issue history and evaluation evidence. Record the audit's scope
   and exclusions; local documentation links and full offline checks pass.
 
+Second pass, requested after criterion 2: "delete everything that does not work
+with this current version ... and publish it. fix the things you mentioned were
+easy fixes". Same scope and rules; the runtime prompts in `assistant/prompts/`
+are in scope. Safety, privacy and validation checks stay even where today's
+callers cannot trigger them.
+- [x] 3. Remove what no current caller reaches: `run_cases`'s unused client
+  fallbacks; the report's "not calibrated" and "prompt changed" branches (the CLI
+  rejects both first); two unreachable groundedness checks; the Groq rows of the
+  eval price table (live evaluation accepts OpenCode roles only);
+  `TurnResult.tool` (only tests read it); `search`'s `k <= 0` guard (k is always
+  5); the catalog prompt's store-lookup option (refused for every intent that
+  reaches the catalog agent). Update the tests that only exercised them.
+- [ ] 4. Trim documentation that repeats another file or no longer matches the
+  current version, and fix stale facts and typos. Keep every file a kept
+  document cites; local links resolve.
+
 Validation: the Makefile check target's ruff lint, ruff format check and complete
 offline pytest suite (run directly with the existing virtualenv if make is
 unavailable); targeted caller/reference searches; local Markdown link checks;
