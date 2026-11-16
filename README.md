@@ -40,11 +40,19 @@ OPENCODE_API_KEY=your_opencode_key_here
 | Variable | Needed for | What it is |
 | --- | --- | --- |
 | `OPENCODE_API_KEY` | `make run` and all eval targets | An API key from [opencode.ai/auth](https://opencode.ai/auth), used with an OpenCode Go subscription. It serves the assistant and the judge |
-| `MERIDIAN_RUNTIME_MODEL` | Optional | `glm-5.3` (default) or `glm-5.3-flash` |
-| `MERIDIAN_RUNTIME_PROVIDER` | Optional | Use `opencode` for the active plan; live evaluation and calibration reject other providers |
-| `MERIDIAN_STAFF_KEY` | Optional | The header value for reading a ticket back in the demo. Default: `dev-staff-key` |
+| `MERIDIAN_RUNTIME_MODEL` | Optional | `glm-5.3` (default) or `glm-5.3-flash`; on Groq, `openai/gpt-oss-120b` (default) or `openai/gpt-oss-20b` |
+| `MERIDIAN_RUNTIME_PROVIDER` | Optional | `opencode` (default) or `groq`. Groq runs `make run` on GPT-OSS 120B, the runtime [eval/REPORT.md](eval/REPORT.md) measured; the eval targets accept only `opencode` |
+| `GROQ_API_KEY` | `make run` on Groq only | A Groq API key (`gsk_...`) |
+| `MERIDIAN_STAFF_KEY` | Optional | The header value for reading a ticket back in the demo. Default: `dev-staff-key`. Only the mock API reads it |
 
 Format: one `NAME=value` per line, with no quotes, no spaces around `=` and no `export`.
+
+Three more have defaults that rarely need changing: `MERIDIAN_LLM` (`fake` unless set,
+which calls no model: the tests script the fake, and an unscripted turn gets the fallback
+reply; `make run` and the eval targets set `live`), `MERIDIAN_EXACT_MATCH` (`1`; `0` turns off the exact-match stage, as the baseline
+run does) and `MERIDIAN_API_URL` (where the assistant finds the mock API, by default
+`http://127.0.0.1:8001`). Only `assistant/settings.py` and, for the staff key,
+`api/settings.py` read the environment.
 
 All active evaluation roles use OpenCode Go and models from the Go plan: the
 assistant runs on GLM-5.3, the development comparison on its smaller sibling GLM-5.3-Flash,
@@ -59,6 +67,18 @@ make run          # then open http://localhost:8000/demo
 ```
 
 If a key is missing, `make run` stops and names the variable it needs.
+
+### Make targets
+
+| Target | What it does | Needs |
+| --- | --- | --- |
+| `make check` | Ruff lint, the format check and every offline test. CI (`.github/workflows/ci.yml`) runs it on every pull request and every push to `main` | Nothing |
+| `make fmt` | Formats the code and applies safe lint fixes | Nothing |
+| `make run` | Starts the mock API on port 8001 and the assistant on port 8000 | The runtime's key |
+| `make contracts` | Regenerates the contract snapshots in `contracts/` | Nothing |
+| `make fetch-labels` | Fetches the openFDA label samples into `catalog/raw/` | The network |
+| `make seed-data` | Regenerates `data/orders.json` and `data/stock.json` from a fixed seed | Nothing |
+| `make judge-calibrate`, `make eval-dev`, `make eval-compare`, `make eval-baseline`, `make eval` | The evaluation ([how to run it](#how-to-run-it)) | `OPENCODE_API_KEY` |
 
 ## Demo
 
@@ -97,7 +117,8 @@ records from `data/orders.json`.
 Demo video: not recorded yet. Its link goes here once it is.
 
 To see every reply type without a server, serve the repo root with
-`python -m http.server` and open `/widget/preview.html`.
+`python -m http.server` and open `/widget/preview.html`. Screenshots of that page, one per
+group of reply types, are in [artifacts/widget-preview/](artifacts/widget-preview/README.md).
 
 ## Architecture
 
@@ -114,14 +135,15 @@ step is plain code.
 
 ```mermaid
 flowchart TD
-    message([Customer message]) --> emergency{"1 Emergency rules (code)"}
-    emergency -- current emergency --> e911["Fixed 911 reply, then the pharmacist card"]
-    emergency -- no --> redact["2 Redaction (code)"]
-    redact --> router["3 Router (model)"]
+    message([Customer message]) --> emergency["1 Emergency rules (code), on the raw message"]
+    emergency --> redact["2 Redaction (code)"]
+    redact --> matched{"Current emergency?"}
+    matched -- yes --> e911["Fixed 911 reply, then the pharmacist card"]
+    matched -- no --> router["3 Router (model)"]
     router -- risk label other than none --> risk["The policy table's fixed reply and the card"]
     router -- order question --> order["The order form, or the status verified earlier"]
     router -- store question --> review
-    router -- product or policy question --> retrieve["4 Retrieval (code)"]
+    router -- any other question --> retrieve["4 Retrieval (code)"]
     retrieve --> agent["5 Catalog agent (model)"]
     agent --> review{"6 Safety reviewer (code)"}
     review -- rejected --> fallback["The fallback reply and the card"]
@@ -132,12 +154,12 @@ flowchart TD
 | Step | Module | Model | What it does |
 | --- | --- | --- | --- |
 | 1. Emergency rules | `assistant/safety/emergency.py` | No | Patterns for a current emergency, the customer's or someone else's: an overdose, trouble breathing, chest pain, unconsciousness, a seizure, throat swelling, self-harm. Guards let a past event or a question about a label warning through. A match returns the fixed 911 reply at once, with the pharmacist card |
-| 2. Redaction | `assistant/redaction.py` | No | Emails, phone numbers and order numbers typed into the chat become `[email]`, `[phone]` and `[order number]` before the model, the session or the logs see them |
-| 3. Router | `assistant/router.py` | Yes | One structured-output call over the redacted conversation: intent, risk label, products mentioned, label sections asked about, store topic. It never sees retrieved text. Pattern rules in `assistant/safety/injection.py` back up its prompt-injection label, and the more restrictive label wins |
-| 4. Retrieval | `assistant/retrieval/` | No | Exact SKU, name, ingredient and alias matching first (`catalog/aliases.yaml`), with one-typo misspellings of a drug or brand name respelled ("ibuprufen" finds ibuprofen), then keyword search over an in-memory SQLite FTS5 index of label sections and policy pages. Returns up to five whole records |
-| 5. Catalog agent | `assistant/catalog_agent.py` | Yes | Reads the question and the retrieved records, marked as data, and returns a plan: which records and sections answer it, and at most one tool request. Never text |
+| 2. Redaction | `assistant/redaction.py` | No | Emails, phone numbers and order numbers typed into the chat become `[email]`, `[phone]` and `[order number]`, and a standalone five-digit number that isn't a dose (a lot number, say) becomes `[number]`, before the model, the session or the logs see them. It runs on every message, the emergency one included |
+| 3. Router | `assistant/router.py` | Yes | One structured-output call over the redacted conversation: intent, risk label, products mentioned, label sections asked about, store topic (no code reads these last two yet). It never sees retrieved text. Pattern rules in `assistant/safety/injection.py` back up its prompt-injection label, and the more restrictive label wins |
+| 4. Retrieval | `assistant/retrieval/` | No | Exact SKU, name, ingredient and alias matching first (`catalog/aliases.yaml`), with a misspelled drug or brand name respelled ("ibuprufen" finds ibuprofen), then keyword search, ranked by BM25, over an in-memory SQLite FTS5 index of label sections and policy-page sections. Returns up to five whole records |
+| 5. Catalog agent | `assistant/catalog_agent.py` | Yes | Reads the question and the retrieved records, marked as data, and returns a plan: which records and sections answer it, and at most one stock lookup. Never text |
 | 6. Safety reviewer | `assistant/safety/reviewer.py` | No | Rejects a plan that names a record that wasn't retrieved, a section the record doesn't have, or a reply type or section the risk label doesn't allow. A rejected plan becomes the fallback reply |
-| 7. Tool executor | `assistant/tools.py` | No | Runs the requested lookup only when the turn's intent allows that tool (stock for an availability question, store details for a store question) and the SKU or store exists. Reads time out after 3 s and are retried once |
+| 7. Tool executor | `assistant/tools.py` | No | Runs the requested lookup only when the turn's intent allows that tool (stock for an availability question, store details for a store question) and the SKU or store exists, and keeps the answer only when it matches the request; anything else gets the fixed lookup-failed reply. Reads time out after 3 s and are retried once |
 | 8. Renderer | `assistant/render.py` | No | Builds the reply from templates, record text copied word for word and API results, attaches the sources, and sets `handoff_offered` from the policy table |
 
 Steps 4, 5 and 8 are the RAG pipeline: retrieval finds the records, the catalog agent
@@ -166,7 +188,7 @@ offer and stamps the offer's ID on the reply.
 
 | Service | Route | What it does |
 | --- | --- | --- |
-| Assistant | `POST /chat` | One customer message; returns the reply's blocks, its sources, `handoff_offered`, `emergency` and `offer_id` |
+| Assistant | `POST /chat` | One customer message, with the widget's store; returns the reply's type, blocks and sources, `handoff_offered`, `emergency` and `offer_id` |
 | Assistant | `POST /orders/verify` | The order form: an order number and an email or phone. Plain code, no model |
 | Assistant | `POST /handoff` | Confirms a pharmacist card by its `offer_id`, or the header button with `null`. HTTP 409 for an out-of-date card |
 | Assistant | `GET /widget/...`, `GET /demo` | The widget's files and the demo storefront |
@@ -176,7 +198,31 @@ offer and stamps the offer's ID on the reply.
 
 The shapes are frozen in `contracts/` (`contracts/chat.py`, `contracts/api.py`), with
 example payloads in `contracts/examples/` and snapshots in `contracts/schemas.json` and
-`contracts/meridian-api.json`.
+`contracts/meridian-api.json`. Both services serve their OpenAPI docs at `/docs`. Every mock
+API route also takes a test-only header, `X-Meridian-Test: timeout`, which makes it answer
+504 at once; the tests use it to check the timeout paths.
+
+### The widget
+
+`widget/meridian-chat.js` is a plain JavaScript web component with no build step. One tag
+adds it to a page:
+
+```html
+<script src="http://localhost:8000/widget/meridian-chat.js"
+        data-api="http://localhost:8000" data-store="store-001" defer></script>
+```
+
+`data-api` is the assistant's address (empty means the page's own origin, as on the demo
+page), and `data-store` is the store the customer shops at, which store questions use. The
+assistant accepts cross-origin `POST`s from any page, without cookies or credentials, so the
+widget works on another site's domain. It renders inside Shadow DOM, so the store's CSS and
+the widget's can't break each other, and a host page sets its colors through CSS custom
+properties (`--meridian-accent`, `--meridian-surface`, `--meridian-text`, `--meridian-muted`,
+`--meridian-danger`, `--meridian-danger-bg`). It draws the nine block types in
+`contracts/chat.py` as the server sends them, through `textContent`, never `innerHTML`, and
+adds no words to a reply. Its own text is only its chrome, including the line it shows when
+the assistant can't be reached: "Sorry, the assistant can't be reached right now. If this is
+an emergency, call 911." The conversation's ID lives in the tab's `sessionStorage`.
 
 ### Why the parts are separate
 
@@ -184,7 +230,7 @@ example payloads in `contracts/examples/` and snapshots in `contracts/schemas.js
 | --- | --- | --- | --- |
 | Emergency rules | No | The raw message | Instant, and it still works when the model is down |
 | Router | Yes | The redacted conversation | It decides intent and risk without reading retrieved text, so an instruction planted in a document can't change a safety decision |
-| Catalog agent | Yes | Retrieved records; may request the stock or store lookup | It reads untrusted text but has no path to orders |
+| Catalog agent | Yes | Retrieved records; may request the stock lookup | It reads untrusted text but has no path to orders |
 | Order agent (`assistant/orders.py`) | No | The order API, with the form's details | The model never sees order data and can't choose an order |
 | Safety reviewer | No | The plan | A check the model can't argue with |
 | Tool executor | No | The public lookups | Only the tool the turn's intent allows runs, and only for a real SKU or store |
@@ -196,7 +242,7 @@ example payloads in `contracts/examples/` and snapshots in `contracts/schemas.js
 | Path | Its one job |
 | --- | --- |
 | `contracts/` | Typed requests, replies, plans and router output, with example payloads and schema snapshots. No logic |
-| `api/` | The mock Meridian API: `orders.py` (the lookup and its lockout), `products.py` (stock), `stores.py`, `tickets.py`, and `app.py` (the routes) |
+| `api/` | The mock Meridian API: `orders.py` (the lookup and its lockout), `products.py` (stock), `stores.py`, `tickets.py`, `settings.py` (the staff key and the data folder) and `app.py` (the routes) |
 | `assistant/app.py` | The assistant's HTTP routes and static files, nothing else |
 | `assistant/pipeline.py` | The only module that wires the steps together |
 | `assistant/safety/` | `emergency.py` (step 1), `injection.py` (pattern rules that back up the router), `reviewer.py` (step 6) |
@@ -209,24 +255,30 @@ example payloads in `contracts/examples/` and snapshots in `contracts/schemas.js
 | `assistant/orders.py` | The order agent: verifies the form through the API and keeps only the status |
 | `assistant/escalation.py` | The handoff and the ticket summary |
 | `assistant/policy.py`, `assistant/templates.py` | The policy table and every sentence a customer can read |
-| `assistant/session.py` | Conversation state, in memory: redacted turns, the verified order status, the current pharmacist card |
+| `assistant/session.py` | Conversation state, in memory: the last 20 redacted turns, the verified order status, the current pharmacist card |
 | `assistant/llm.py` | The model client (strict structured outputs, no tools) and the scripted fake the tests use |
 | `assistant/api_client.py` | The only code that calls the mock API |
-| `assistant/settings.py` | Every environment variable, read once |
+| `assistant/settings.py` | Every environment variable the assistant reads, once |
 | `assistant/launcher.py` | What `make run` starts |
-| `widget/` | `meridian-chat.js` (the widget), `demo.html` (a storefront with the widget on it), `preview.html` (every example reply, no server), `handoff-test.html` (the card checks) |
-| `catalog/` | `products.json` (52 products with four label sections each, from public openFDA label samples under fictional brands) and `aliases.yaml` |
-| `data/` | `stores.yaml`, `orders.json`, `stock.json` and the policy pages in `data/policies/` |
-| `scripts/` | The one-off data scripts: `fetch_labels.py`, `label_text.py`, `seed_data.py` |
-| `eval/` | Cases, harness, metrics, judge and report (see [Evaluation](#evaluation)) |
+| `widget/` | `meridian-chat.js` (the widget, see [The widget](#the-widget)), `demo.html` (a storefront with the widget on it), `preview.html` (every example reply, no server), `handoff-test.html` (the card checks) |
+| `catalog/` | `products.json` (52 products with four label sections each, from public openFDA label samples under fictional brands), `aliases.yaml` (33 brand and everyday-word aliases) and `raw/` (the 106 openFDA labels as fetched; `tests/catalog/test_products.py` checks every product's text against its raw label, word for word) |
+| `data/` | `stores.yaml` (two stores), `orders.json` (20 synthetic orders), `stock.json` and the four policy pages in `data/policies/` (delivery, pharmacist services, privacy, returns) |
+| `scripts/` | The one-off data scripts: `fetch_labels.py` (`make fetch-labels`), `label_text.py` (cuts a raw label into the four sections without rewording them), `seed_data.py` (`make seed-data`) |
+| `eval/` | Cases, harness, metrics, judge, saved results and reports (see [Evaluation](#evaluation) and [The harness](#the-harness)) |
 | `tests/` | Mirrors the tree: `assistant/safety/reviewer.py` is tested by `tests/assistant/safety/test_reviewer.py` |
+| `artifacts/widget-preview/` | Screenshots of every reply type as `widget/preview.html` draws them, with an inspection note |
+| `docs/` | `PLAN.md` (the build plan), `FIXES.md` (the review fixes), `TEST_REPORT.md` (the system verification), `issues/` (one file per change) and `HANDOFF_TEMPLATE.md` (the template for the agents' shared note) |
+| `.github/` | The CI workflow and the issue and pull request templates |
+| `AGENTS.md`, `CLAUDE.md` | The rules both coding agents followed (see [AI usage](#ai-usage)) |
 
 `tests/test_architecture.py` runs with every `make check`. It fails the build if
 `contracts/` imports anything from the project; if `api/`, `assistant/` or `scripts/`
 imports anything but `contracts/` (and `eval/` anything but `contracts/` and
-`assistant/`); if a step imports another step; or if a module in `assistant/` or `api/`
-has no test file at the mirrored path. Ruff fails any function with a complexity above
-10. Tests never call a real model: they script the fake client in `assistant/llm.py`.
+`assistant/`); if a step imports another step (a step may import only the shared
+`settings`, `llm`, `api_client`, `session`, `policy` and `templates`); or if a module in
+`assistant/` or `api/` has no test file at the mirrored path. Ruff fails any function with
+a complexity above 10. Tests never call a real model: they script the fake client in
+`assistant/llm.py`.
 
 ### Where to change things
 
@@ -264,11 +316,13 @@ not-found, lookup-failed and order-not-verified replies (without it).
 ### The order of the layers
 
 1. The emergency rules run first, on every raw message, in any state, before redaction
-   and before any model call.
+   and before any model call. The app answers a matched message on its event loop, so it
+   never waits behind the worker threads that hold model calls.
 2. Redaction runs before the router, the session and the logs see the message.
-3. The router labels every turn from the whole redacted conversation, so "I'm pregnant"
-   said three turns earlier still counts, and the injection patterns back it up. If the
-   router labels an emergency the rules missed, the turn gets the same 911 reply.
+3. The router labels every turn from the redacted conversation (the session keeps the last
+   20 turns), so "I'm pregnant" said three turns earlier still counts, and the injection
+   patterns back it up. If the router labels an emergency the rules missed, the turn gets
+   the same 911 reply.
 4. The policy table turns the label into a reply type; the most restrictive label wins.
 5. The safety reviewer checks the catalog agent's plan before anything is shown.
 6. The renderer writes the reply, and only code sets `handoff_offered`.
@@ -334,9 +388,12 @@ with its time.
   unaffected.
 - **A lookup.** Stock and store reads time out after 3 s and are retried once; after
   that the reply is the fixed "couldn't check that right now".
-- **The order check.** A timeout gets the same generic failure as a wrong contact.
+- **The order check.** A timeout gets the same generic failure as a wrong contact. It is
+  never retried, because every failed lookup counts toward the lockout.
 - **A ticket.** The reply says the request didn't go through and offers a retry, which
   reuses the same idempotency key.
+- **The assistant itself.** If the widget can't reach it, the widget shows its own fixed
+  line, which ends "If this is an emergency, call 911."
 
 ## Evaluation
 
@@ -356,8 +413,8 @@ Each run writes its raw results as JSON and a short Markdown summary to `eval/re
 `make eval-compare` refuses a development run made on different code, so run
 `make eval-dev` first. These Make targets write to the default paths; for a new held-out
 run, use the isolated procedure below so the historical files stay unchanged.
-Live client construction, evaluation and calibration reject non-OpenCode roles.
-`make check` tests the harness offline, with both models faked.
+Evaluation and calibration accept only OpenCode roles, so `MERIDIAN_RUNTIME_PROVIDER=groq`
+works for `make run` alone. `make check` tests the harness offline, with both models faked.
 
 ### Fresh OpenCode held-out comparison
 
@@ -455,6 +512,30 @@ not changed since the first calibration.
 The calibration labels are AI labels too, so 20/20 is agreement with them, not with a
 human.
 
+### The harness
+
+Every evaluation target runs `eval/cli.py`, which plays the cases through the real
+pipeline with live models.
+
+| Module | Its one job |
+| --- | --- |
+| `eval/loader.py` | Validates the JSONL cases; an error names the line, never the case text |
+| `eval/local_api.py` | Starts a fresh mock API on a free localhost port for each run, so lockouts and tickets never carry over |
+| `eval/runner.py` | Plays each conversation through the pipeline and keeps the replies, retrieved records, plans and stage timings |
+| `eval/tracing.py` | Records the API lookups each turn actually made, never the order form's inputs |
+| `eval/display.py` | Extracts the text a reply's blocks show, for the checks and the judge |
+| `eval/metrics/` | One module per metric in the table above |
+| `eval/judge/` | The judge (`judge.py`, `prompt.txt`) and its calibration (`calibrate.py`, `calibration.jsonl`) |
+| `eval/rate_limit.py` | Waits out a rate limit that asks for 60 s or less, up to twice per call; a longer one stops the run, so fallbacks are never scored as answers |
+| `eval/usage.py` | Records token usage and estimates each run's cost |
+| `eval/results.py`, `eval/report.py`, `eval/compare.py` | Score a run and write its JSON and Markdown; build the baseline-against-improved report; compare a GLM-5.3-Flash development run with the saved GLM-5.3 one |
+
+Each run's JSON records the runtime and judge models, a fingerprint of the cases and one of
+the implementation (the code and prompts in `assistant/`, `api/`, `contracts/` and `eval/`,
+and the catalog and data files), so runs on different code are never compared as a pair.
+The held-out targets refuse to start without a saved calibration for the same judge and
+judge prompt.
+
 ### The historical measured change
 
 The baseline retrieves with keyword search alone (`MERIDIAN_EXACT_MATCH=0`); the
@@ -541,7 +622,9 @@ again, and when the agents could run live commands or assign labels.
 | Issues 14 and 15: the stale-card fix | Codex (contract) and Claude Code (binding and widget) | Claude Code reviewed the contract | #11, #12 |
 | Issue 10: this README | Claude Code drafted it; I checked and reworded it | | #13 |
 | Issues 17 and 18: the quality follow-up | Claude Code, after a read-only diagnosis of the saved development runs | I chose the fix and, after re-running the development set, the default model | #14, #15 |
-| Issues 23-34: the review fixes (redaction, emergency rules, risk labels, emergency scheduling, evaluation fingerprints, empty completions), the OpenCode evaluation and comparison, and this cleanup | Codex; Claude Code finished issue 34 | Codex checked case and configuration fingerprints and the paired results, with no tuning against test questions; Claude Code audited the stack for dead code and stale docs before merge | #20 |
+| Issues 19-22: links from `make run` that open pages, the judge's follow-up gap (measured and left as is), the order form for a typed order number, and the brief's terms in this README | Claude Code | | #16-#19 |
+| Issues 23-34: the review fixes (redaction, emergency rules, risk labels, emergency scheduling, evaluation fingerprints, empty completions), the OpenCode evaluation and comparison, and a repository cleanup | Codex; Claude Code finished issue 34 | Codex checked case and configuration fingerprints and the paired results, with no tuning against test questions; Claude Code audited the stack for dead code and stale docs before merge | #20 |
+| Issues 35-37: typo-tolerant search, the future improvements below, and an audit of this README against the code | Claude Code | | #21-#23 |
 
 Most issues were merged one pull request each; issues 23-34 were built as local
 checkpoints and merged together in one pull request. Acceptance criteria name the tests proving them. Both agents followed the same rules in `AGENTS.md`: module
@@ -633,7 +716,9 @@ typo respelling in the exact stage is likewise unmeasured.
   the catalog (desloratadine, chlorpromazine) stay as typed, but an ordinary word one
   typo from a brand ("unison", Unisom) also brings that brand into the candidates.
 - Sessions live in memory: a restart forgets every conversation, and its old cards then
-  get the "out of date" reply.
+  get the "out of date" reply. The store keeps at most 10,000 sessions, dropping the
+  oldest first, and each keeps its last 20 turns, so the router forgets anything said
+  earlier.
 - If a ticket is created but its reply is lost, and a newer card appears before the
   retry, the retry is refused as out of date although the first attempt's ticket exists.
 - The widget's browser check (`widget/handoff-test.html`) runs by hand, not in CI, and
