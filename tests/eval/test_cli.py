@@ -10,6 +10,7 @@ import pytest
 from assistant.llm import FakeSender, ModelClient
 from assistant.pipeline import Steps
 from assistant.settings import MissingKey, load_settings
+from eval import cli
 from eval.cli import EvaluationInputError, evaluate, input_cases, metadata, refresh_report, run_live
 from eval.judge.calibrate import PROMPT_SHA256
 from eval.loader import Case
@@ -207,3 +208,24 @@ def test_make_targets_set_live_models_and_matching_flags_without_shell_commands(
     assert "eval-baseline: export MERIDIAN_EXACT_MATCH := 0" in makefile
     for name in ("dev", "baseline", "improved"):
         assert f"\t$(PY) -m eval.cli {name}\n" in makefile
+
+
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "api/orders.py",
+        "contracts/catalog.py",
+        "data/policies/delivery.md",
+    ],
+)
+def test_implementation_digest_tracks_runtime_inputs(tmp_path, monkeypatch, relative):
+    monkeypatch.setattr(cli, "ROOT", tmp_path)
+    source = tmp_path / relative
+    source.parent.mkdir(parents=True)
+    source.write_text("synthetic initial content", encoding="utf-8")
+    original = cli.implementation_digest()
+    assert cli.implementation_digest() == original
+    source.write_text("synthetic changed content", encoding="utf-8")
+    assert cli.implementation_digest() != original
+    source.write_text("synthetic initial content", encoding="utf-8")
+    assert cli.implementation_digest() == original

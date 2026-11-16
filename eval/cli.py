@@ -125,11 +125,12 @@ def implementation_digest() -> str:
     digest = sha256()
     files = [
         path
-        for package in ("assistant", "eval")
+        for package in ("assistant", "eval", "api", "contracts")
         for path in (ROOT / package).rglob("*")
         if path.suffix in {".py", ".txt"}
+        and not {"cases", "results", "__pycache__"}.intersection(path.relative_to(ROOT).parts)
     ]
-    for folder in ("catalog", "data", "policies"):
+    for folder in ("catalog", "data", "data/policies"):
         files.extend((ROOT / folder).glob("*.json"))
         files.extend((ROOT / folder).glob("*.yaml"))
         files.extend((ROOT / folder).glob("*.md"))
