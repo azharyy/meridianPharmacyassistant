@@ -143,6 +143,14 @@ def test_invalid_output_is_retried_once():
     assert len(seen) == 2
 
 
+def test_empty_choices_then_a_valid_completion_recovers():
+    client, seen = live_client(
+        httpx.Response(200, json={"choices": []}), completion(json.dumps(ROUTED))
+    )
+    assert client.complete(MESSAGES, RouterOutput) == RouterOutput(**ROUTED)
+    assert len(seen) == 2
+
+
 def test_output_still_invalid_after_the_retry_means_unavailable():
     client, seen = live_client(completion("not json"), completion('{"intent": "invented"}'))
     with pytest.raises(ModelUnavailable):

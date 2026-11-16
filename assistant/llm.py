@@ -88,6 +88,8 @@ def sdk_sender(role: Role, api_key: str, http_client: httpx.Client | None = None
         except openai.APIError as error:
             status = getattr(error, "status_code", "")  # the HTTP status, never the body
             raise TransportError(f"{type(error).__name__} {status}".strip()) from error
+        if not completion.choices:
+            raise TransportError("empty completion choices")
         return completion.choices[0].message.content or ""
 
     return send

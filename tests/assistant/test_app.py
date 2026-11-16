@@ -20,6 +20,7 @@ from contracts.chat import ChatReply
 from contracts.plan import CatalogPlan
 from contracts.taxonomy import Intent, RiskLabel
 from tests.assistant.fixtures import PLAN, PRODUCTS, QUESTION, ROUTED, search
+from tests.assistant.test_llm import live_client
 
 SETTINGS = load_settings({})
 NO_API = httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Response(500)))
@@ -48,6 +49,18 @@ def test_chat_returns_one_cited_answer_on_the_fake_model():
 def test_without_a_model_the_chat_gets_the_fallback():
     reply = web(FakeSender()).post("/chat", json=CHAT).json()
     assert (reply["reply_type"], reply["handoff_offered"]) == ("fallback", True)
+
+
+def test_repeated_empty_sdk_choices_get_the_fixed_fallback_after_one_retry():
+    empty = httpx.Response(200, json={"choices": []})
+    sdk, seen = live_client(empty, empty)
+    client = TestClient(create_app(SETTINGS, pipeline.Steps(), sdk.send, NO_API, NO_WIDGET))
+    response = client.post("/chat", json=CHAT)
+    assert response.status_code == 200 and len(seen) == 2
+    reply = response.json()
+    assert reply["reply_type"] == "fallback" and reply["handoff_offered"] and reply["offer_id"]
+    assert reply["sources"] == []
+    assert reply["blocks"] == [{"type": "text", "text": policy.FALLBACK_TEXT}]
 
 
 def test_a_malformed_request_is_rejected():
