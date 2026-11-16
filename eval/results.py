@@ -68,7 +68,6 @@ def write_run(
     cases: list[RecordedCase],
     metrics: dict,
     extra: dict | None = None,
-    markdown: str | None = None,
     directory: Path = RESULTS,
 ) -> dict:
     """Write <name>.json (every recorded turn) and <name>.md; return the raw results."""
@@ -77,6 +76,5 @@ def write_run(
     directory.mkdir(parents=True, exist_ok=True)
     text = json.dumps(raw, indent=2, ensure_ascii=False) + "\n"
     (directory / f"{name}.json").write_text(text, encoding="utf-8", newline="\n")
-    summary_text = markdown or summary(name, metrics)
-    (directory / f"{name}.md").write_text(summary_text, encoding="utf-8", newline="\n")
+    (directory / f"{name}.md").write_text(summary(name, metrics), encoding="utf-8", newline="\n")
     return raw
