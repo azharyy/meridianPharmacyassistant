@@ -33,6 +33,11 @@ DOES_NOT_FIRE = {
     "ordinary_strength": "I took 10 mg of cetirizine this morning",
     "whole_tablet": "I swallowed a whole tablet of aspirin",
     "water": "I drank a bottle of water",
+    "unrelated_now": "I had a seizure last year. Are you open now?",
+    "negative_recurrence": "I had a seizure last year. I am not having one now.",
+    "unrelated_recurrence": "I had a cold last year. I am having one again now.",
+    "old_throat_tightness": "My throat felt tight last year. Are you open now?",
+    "throat_label": "What does the label mean by throat tightness?",
     "an_ordinary_question": "Do you have something for a stuffy nose?",
 }
 HAPPENING_NOW = {
