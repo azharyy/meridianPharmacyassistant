@@ -1,7 +1,7 @@
 """Match product identifiers, ingredient names and aliases before keyword search."""
 
 import re
-from collections.abc import Mapping
+from collections.abc import Iterable, Mapping
 
 from contracts.catalog import ProductRecord
 
@@ -67,6 +67,41 @@ def product_terms(
             if phrase(normalize(product.active_ingredients), target)
         ]
     return terms
+
+
+def typos(a: str, b: str) -> int:
+    """Letters inserted, deleted or replaced, or neighbors swapped, to turn a into b."""
+    before, previous = [], list(range(len(b) + 1))
+    for i, x in enumerate(a, 1):
+        row = [i]
+        for j, y in enumerate(b, 1):
+            cost = min(previous[j] + 1, row[j - 1] + 1, previous[j - 1] + (x != y))
+            if i > 1 and j > 1 and x == b[j - 2] and a[i - 2] == y:
+                cost = min(cost, before[j - 2] + 1)
+            row.append(cost)
+        before, previous = previous, row
+    return previous[-1]
+
+
+def respell(query: str, terms: Iterable[str]) -> str:
+    """Respell a word one typo from exactly one catalog word of six or more letters (two
+    typos from nine or more). Lengths stay within one letter, so look-alike drugs outside
+    the catalog, such as desloratadine for loratadine, stay as typed."""
+    # shortcut: an English word one typo from a brand ("unison", Unisom) also adds that
+    # brand's products to the candidates; check a dictionary first if the eval shows misses.
+    known = {word for term in terms for word in term.split() if len(word) >= 6}
+    words = query.split()
+    for n, word in enumerate(words):
+        if word in known:
+            continue
+        close = [
+            term
+            for term in known
+            if abs(len(word) - len(term)) <= 1 and typos(word, term) <= (2 if len(term) >= 9 else 1)
+        ]
+        if len(close) == 1:
+            words[n] = close[0]
+    return " ".join(words)
 
 
 def exact_products(
