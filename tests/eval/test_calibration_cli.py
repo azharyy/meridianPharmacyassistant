@@ -235,3 +235,12 @@ def test_the_calibration_make_target_selects_live_mode_and_the_cli_command():
     assert "judge-calibrate: export MERIDIAN_LLM := live" in makefile
     assert "judge-calibrate: export MERIDIAN_RUNTIME_PROVIDER := opencode" in makefile
     assert "\t$(PY) -m eval.cli calibrate\n" in makefile
+
+
+def test_calibration_rejects_non_opencode_judge_before_models(tmp_path):
+    judge = load_settings({"MERIDIAN_RUNTIME_PROVIDER": "groq"}).runtime
+    setting = replace(LIVE, judge=judge)
+    started = []
+    with pytest.raises(EvaluationInputError, match="OpenCode judge"):
+        run_calibration(pairs(), setting, models=started.append, directory=tmp_path)
+    assert started == [] and not list(tmp_path.iterdir())

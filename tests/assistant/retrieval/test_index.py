@@ -80,7 +80,7 @@ def test_a_named_product_is_found_only_by_its_sku_name_ingredient_or_alias():
         assert index.named("warfarin") is None
         assert index.named("Meridian All Day Allergy").sku == "MRD-ALG-012"
         assert index.named("Can I take MRD-ALG-012 twice?").sku == "MRD-ALG-012"
-        assert index.named("Advil").sku == "MRD-PAN-001"
+        assert index.named("Advil") is None
         assert "Acetaminophen" in index.named("acetaminophen").active_ingredients
     finally:
         index.close()
@@ -113,12 +113,26 @@ def test_empty_or_unmatched_queries_return_no_records(catalog, exact_match, quer
         index.close()
 
 
-@pytest.mark.parametrize("exact_match", [False, True])
-@pytest.mark.parametrize("k", [0, -1])
-def test_nonpositive_limit_returns_no_records(catalog, exact_match, k):
-    path, policies, _ = catalog
-    index = SearchIndex(path, policies, exact_match=exact_match)
+@pytest.mark.parametrize("flag", [False, True])
+@pytest.mark.parametrize(
+    ("query", "sku"),
+    [
+        ("MRD-ALG-012", "MRD-ALG-012"),
+        ("Meridian All Day Allergy", "MRD-ALG-012"),
+        ("MRD-ALG-012 MRD-ALG-012", "MRD-ALG-012"),
+        ("oxymetazoline", "MRD-CLD-006"),
+        ("Afrin", "MRD-CLD-006"),
+        ("MRD-ALG-012 MRD-ALG-014", None),
+        ("Meridian All Day Allergy and Meridian 24-Hour Allergy", None),
+        ("diphenhydramine 2% spray", None),
+        ("famotidine 10 mg", None),
+        ("Advil", None),
+    ],
+)
+def test_named_lookup_requires_one_identity_independent_of_search_flag(flag, query, sku):
+    index = SearchIndex(exact_match=flag)
     try:
-        assert index.search("Meridian First", k) == []
+        found = index.named(query)
+        assert (found.sku if found else None) == sku
     finally:
         index.close()

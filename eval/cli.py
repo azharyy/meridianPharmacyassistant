@@ -19,6 +19,7 @@ from assistant.settings import (
     DEFAULT_RUNTIME_MODEL,
     PROVIDERS,
     MissingKey,
+    Role,
     Settings,
     load_settings,
 )
@@ -52,6 +53,11 @@ def known_endpoint(role: dict) -> bool:
     """A role that sends to its own provider's API: the only endpoints the eval may call."""
     provider = PROVIDERS.get(role.get("provider"))
     return provider is not None and role.get("base_url") == provider[0]
+
+
+def opencode_role(role: Role) -> bool:
+    """Live evaluations use OpenCode; archived evidence may describe older providers."""
+    return role.provider == "opencode" and known_endpoint(asdict(role))
 
 
 def validate_calibration(pairs: list[Pair]) -> None:
@@ -125,11 +131,12 @@ def implementation_digest() -> str:
     digest = sha256()
     files = [
         path
-        for package in ("assistant", "eval")
+        for package in ("assistant", "eval", "api", "contracts")
         for path in (ROOT / package).rglob("*")
         if path.suffix in {".py", ".txt"}
+        and not {"cases", "results", "__pycache__"}.intersection(path.relative_to(ROOT).parts)
     ]
-    for folder in ("catalog", "data", "policies"):
+    for folder in ("catalog", "data", "data/policies"):
         files.extend((ROOT / folder).glob("*.json"))
         files.extend((ROOT / folder).glob("*.yaml"))
         files.extend((ROOT / folder).glob("*.md"))
@@ -188,7 +195,7 @@ def refresh_report(directory: Path = RESULTS) -> bool:
         return False  # those runs used another judge: their report keeps its own calibration
     calibration = require_calibration(directory, improved["configuration"]["judge"])
     audited = (directory / "LABEL_AUDIT.md").is_file()
-    report = build(baseline, improved, calibration, PROMPT_SHA256, audited)
+    report = build(baseline, improved, calibration, audited)
     (directory.parent / "REPORT.md").write_text(report, encoding="utf-8", newline="\n")
     return True
 
@@ -197,12 +204,12 @@ def refresh_report(directory: Path = RESULTS) -> bool:
 def live_models(
     settings: Settings, *, judge_only: bool = False
 ) -> Iterator[tuple[ModelClient, ...]]:
+    roles = (settings.judge,) if judge_only else (settings.runtime, settings.judge)
+    if not all(opencode_role(role) for role in roles):
+        raise EvaluationInputError("Live evaluation uses configured OpenCode roles only.")
     with ExitStack() as resources:
         models = []
-        roles = (settings.judge,) if judge_only else (settings.runtime, settings.judge)
         for role in roles:
-            if not known_endpoint(asdict(role)):
-                raise EvaluationInputError("Evaluation requests must use a configured provider.")
             usage = UsageCapture()
             http = resources.enter_context(
                 httpx.Client(
@@ -220,8 +227,8 @@ def run_calibration(
 ) -> dict:
     validate_calibration(pairs)
     saved_calibration(directory)  # A saved prompt stays frozen before any new request.
-    if settings.llm != "live" or not known_endpoint(asdict(settings.judge)):
-        raise EvaluationInputError("Judge calibration requires live mode and a configured judge.")
+    if settings.llm != "live" or not opencode_role(settings.judge):
+        raise EvaluationInputError("Judge calibration requires live mode and an OpenCode judge.")
     settings.api_key(settings.judge)
     with models(settings, judge_only=True) as (judge,):
         result = calibrate(judge, pairs)
@@ -261,7 +268,7 @@ def run_live(
         settings.llm != "live"
         or settings.runtime.model != expected_model
         or settings.runtime.model == settings.judge.model
-        or not all(known_endpoint(asdict(role)) for role in (settings.runtime, settings.judge))
+        or not all(opencode_role(role) for role in (settings.runtime, settings.judge))
     ):
         raise ValueError("evaluation requires its selected runtime and a different judge")
     if settings.exact_match is not MATCH[name]:
@@ -291,13 +298,16 @@ def run_live(
 def main(argv: list[str] | None = None, settings: Settings | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("run", choices=(*CASE_FILES, "calibrate"))
+    parser.add_argument("--output-dir", type=Path, default=RESULTS)
     args = parser.parse_args(argv)
     if args.run == "calibrate":
-        result = run_calibration(input_pairs(), settings or load_settings())
+        result = run_calibration(
+            input_pairs(), settings or load_settings(), directory=args.output_dir
+        )
         print(calibration_summary(result))
         return
     cases = input_cases(ROOT / "eval" / "cases" / CASE_FILES[args.run])
-    result = run_live(args.run, cases, settings or load_settings())
+    result = run_live(args.run, cases, settings or load_settings(), directory=args.output_dir)
     print(summary(args.run, result["metrics"]))
 
 

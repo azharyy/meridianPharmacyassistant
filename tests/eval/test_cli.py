@@ -10,7 +10,16 @@ import pytest
 from assistant.llm import FakeSender, ModelClient
 from assistant.pipeline import Steps
 from assistant.settings import MissingKey, load_settings
-from eval.cli import EvaluationInputError, evaluate, input_cases, metadata, refresh_report, run_live
+from eval import cli
+from eval.cli import (
+    EvaluationInputError,
+    evaluate,
+    input_cases,
+    live_models,
+    metadata,
+    refresh_report,
+    run_live,
+)
 from eval.judge.calibrate import PROMPT_SHA256
 from eval.loader import Case
 from tests.assistant.fixtures import PLAN, QUESTION, ROUTED, search
@@ -174,7 +183,9 @@ def test_report_is_written_only_after_both_compatible_variants_exist(tmp_path):
     assert "[the label audit](results/LABEL_AUDIT.md)" in (tmp_path / "REPORT.md").read_text()
 
 
-@pytest.mark.parametrize("changed", ["case_sha256", "runtime", "judge_prompt_sha256"])
+@pytest.mark.parametrize(
+    "changed", ["case_sha256", "runtime", "judge_prompt_sha256", "implementation_sha256"]
+)
 def test_report_rejects_mismatched_cases_models_or_prompts(tmp_path, changed):
     directory = tmp_path / "results"
     evaluate_fake(directory, "baseline", replace(SETTINGS, exact_match=False))
@@ -207,3 +218,80 @@ def test_make_targets_set_live_models_and_matching_flags_without_shell_commands(
     assert "eval-baseline: export MERIDIAN_EXACT_MATCH := 0" in makefile
     for name in ("dev", "baseline", "improved"):
         assert f"\t$(PY) -m eval.cli {name}\n" in makefile
+
+
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "api/orders.py",
+        "contracts/catalog.py",
+        "data/policies/delivery.md",
+    ],
+)
+def test_implementation_digest_tracks_runtime_inputs(tmp_path, monkeypatch, relative):
+    monkeypatch.setattr(cli, "ROOT", tmp_path)
+    source = tmp_path / relative
+    source.parent.mkdir(parents=True)
+    source.write_text("synthetic initial content", encoding="utf-8")
+    original = cli.implementation_digest()
+    assert cli.implementation_digest() == original
+    source.write_text("synthetic changed content", encoding="utf-8")
+    assert cli.implementation_digest() != original
+    source.write_text("synthetic initial content", encoding="utf-8")
+    assert cli.implementation_digest() == original
+
+
+@pytest.mark.parametrize(
+    "relative",
+    [
+        "notes.md",
+        "eval/results/notes.txt",
+        "eval/results/synthetic.py",
+        "eval/cases/synthetic.txt",
+        "assistant/__pycache__/synthetic.py",
+    ],
+)
+def test_implementation_digest_ignores_nonruntime_artifacts(tmp_path, monkeypatch, relative):
+    monkeypatch.setattr(cli, "ROOT", tmp_path)
+    before = cli.implementation_digest()
+    artifact = tmp_path / relative
+    artifact.parent.mkdir(parents=True, exist_ok=True)
+    artifact.write_text("synthetic excluded content", encoding="utf-8")
+    assert cli.implementation_digest() == before
+
+
+@pytest.mark.parametrize("role_name", ["runtime", "judge"])
+def test_live_evaluation_rejects_non_opencode_roles_before_startup(role_name):
+    setting = load_settings({"MERIDIAN_LLM": "live", "OPENCODE_API_KEY": "synthetic-key"})
+    other = load_settings({"MERIDIAN_RUNTIME_PROVIDER": "groq"}).runtime
+    if role_name == "runtime":
+        other = replace(other, model=setting.runtime.model)
+    setting = replace(setting, **{role_name: other})
+    started = []
+    with pytest.raises(ValueError, match="selected runtime"):
+        run_live("dev", cases(), setting, models=started.append, serve=started.append)
+    assert started == []
+    with pytest.raises(EvaluationInputError, match="OpenCode roles only"):
+        with live_models(setting):
+            pytest.fail("non-OpenCode client construction must not succeed")
+
+
+@pytest.mark.parametrize("run", ["dev", "calibrate"])
+def test_cli_routes_a_new_experiment_directory_without_touching_archives(
+    tmp_path, monkeypatch, run
+):
+    destination = tmp_path / "experiment" / "results"
+    seen = []
+    monkeypatch.setattr(cli, "input_cases", lambda path: cases())
+    monkeypatch.setattr(cli, "input_pairs", lambda: [])
+
+    def capture(*args, directory):
+        seen.append(directory)
+        return {"metrics": {}}
+
+    monkeypatch.setattr(cli, "run_live", capture)
+    monkeypatch.setattr(cli, "run_calibration", capture)
+    monkeypatch.setattr(cli, "summary", lambda *args: "synthetic summary")
+    monkeypatch.setattr(cli, "calibration_summary", lambda *args: "synthetic calibration")
+    cli.main([run, "--output-dir", str(destination)], settings=SETTINGS)
+    assert seen == [destination] and not destination.exists()

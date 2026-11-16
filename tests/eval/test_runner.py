@@ -11,6 +11,7 @@ from fastapi.testclient import TestClient
 from api.app import create_app as create_api
 from assistant import escalation, pipeline
 from assistant.llm import FakeSender, ModelClient
+from assistant.retrieval.index import SearchIndex
 from assistant.settings import load_settings
 from assistant.tools import execute
 from contracts.catalog import PolicyRecord
@@ -267,3 +268,32 @@ def test_a_case_with_only_timeout_actions_is_rejected_before_any_request():
     with pytest.raises(ValueError, match="must contain a scored response"):
         run_cases([source], SETTINGS, llm, http, pipeline.Steps(retrieve=search))
     assert fake.requests == [] and seen == [] and "X-Meridian-Test" not in http.headers
+
+
+@pytest.mark.parametrize(
+    ("mention", "sku"), [("diphenhydramine 2% spray", None), ("MRD-ALG-012", "MRD-ALG-012")]
+)
+def test_risk_label_evidence_capture_respects_ambiguous_omission(mention, sku):
+    routed = ROUTED.model_copy(
+        update={"risk_label": RiskLabel.DOSING_BEYOND_LABEL, "product_mentions": [mention]}
+    )
+    llm, _ = model(routed)
+    index = SearchIndex()
+    try:
+        steps = pipeline.Steps(retrieve=index.search, find_product=index.named)
+        source = case(
+            chat(
+                "Can I double the dose?",
+                reply_type="dosing_beyond_label",
+                risk_label="dosing_beyond_label",
+                handoff_offered=True,
+            )
+        )
+        [record] = run_cases([source], SETTINGS, llm, no_api(), steps)
+        [turn] = record.turns
+        expected = {f"{sku}#directions": index.records[sku].directions} if sku else {}
+        assert turn.record_evidence == expected
+        assert turn.product_names == ({sku: index.records[sku].name} if sku else {})
+        assert [s.id for s in turn.reply.sources] == list(expected)
+    finally:
+        index.close()

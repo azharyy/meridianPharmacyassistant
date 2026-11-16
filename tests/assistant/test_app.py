@@ -1,8 +1,12 @@
 """POST /chat returns a cited answer on the fake model; the widget is served when it exists."""
 
+import asyncio
+import logging
 from datetime import UTC, datetime
 from pathlib import Path
+from threading import Event
 
+import anyio.to_thread
 import httpx
 import pytest
 from fastapi.testclient import TestClient
@@ -16,6 +20,7 @@ from contracts.chat import ChatReply
 from contracts.plan import CatalogPlan
 from contracts.taxonomy import Intent, RiskLabel
 from tests.assistant.fixtures import PLAN, PRODUCTS, QUESTION, ROUTED, search
+from tests.assistant.test_llm import live_client
 
 SETTINGS = load_settings({})
 NO_API = httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Response(500)))
@@ -44,6 +49,18 @@ def test_chat_returns_one_cited_answer_on_the_fake_model():
 def test_without_a_model_the_chat_gets_the_fallback():
     reply = web(FakeSender()).post("/chat", json=CHAT).json()
     assert (reply["reply_type"], reply["handoff_offered"]) == ("fallback", True)
+
+
+def test_repeated_empty_sdk_choices_get_the_fixed_fallback_after_one_retry():
+    empty = httpx.Response(200, json={"choices": []})
+    sdk, seen = live_client(empty, empty)
+    client = TestClient(create_app(SETTINGS, pipeline.Steps(), sdk.send, NO_API, NO_WIDGET))
+    response = client.post("/chat", json=CHAT)
+    assert response.status_code == 200 and len(seen) == 2
+    reply = response.json()
+    assert reply["reply_type"] == "fallback" and reply["handoff_offered"] and reply["offer_id"]
+    assert reply["sources"] == []
+    assert reply["blocks"] == [{"type": "text", "text": policy.FALLBACK_TEXT}]
 
 
 def test_a_malformed_request_is_rejected():
@@ -194,7 +211,15 @@ def test_store_questions_use_the_widget_store_or_list_both_without_a_catalog_cal
 
 
 @pytest.mark.parametrize(
-    ("mention", "sources"), [("warfarin", []), ("Advil", ["MRD-PAN-001#directions"])]
+    ("mention", "sources"),
+    [
+        ("warfarin", []),
+        ("Advil", []),
+        ("diphenhydramine 2% spray", []),
+        ("famotidine 10 mg", []),
+        ("guaifenesin 400 mg", []),
+        ("MRD-PAN-001", ["MRD-PAN-001#directions"]),
+    ],
 )
 def test_a_risk_reply_shows_a_label_only_for_a_product_the_customer_named(mention, sources):
     dosing = ROUTED.model_copy(
@@ -204,6 +229,9 @@ def test_a_risk_reply_shows_a_label_only_for_a_product_the_customer_named(mentio
         reply = client.post("/chat", json={**CHAT, "message": "Can I take a double dose?"}).json()
     assert reply["reply_type"] == "dosing_beyond_label"
     assert [source["id"] for source in reply["sources"]] == sources
+    assert reply["handoff_offered"] and reply["offer_id"]
+    if not sources:
+        assert all(block["type"] == "text" for block in reply["blocks"])
 
 
 def test_default_app_retrieves_real_records_and_executes_the_models_stock_request():
@@ -419,3 +447,98 @@ def test_a_product_followup_retrieves_the_name_resolved_from_earlier_messages():
     assert first.json()["reply_type"] == followup.json()["reply_type"] == "label_sections"
     assert followup.json()["blocks"][0]["text"] == product.directions
     assert product.sku in str(fake.requests[3])
+
+
+@pytest.mark.parametrize(
+    ("mentions", "source"),
+    [
+        (["MRD-ALG-012", "MRD-ALG-014"], None),
+        (["MRD-ALG-012", "MRD-ALG-012"], "MRD-ALG-012#directions"),
+        (["Afrin"], "MRD-CLD-006#directions"),
+    ],
+)
+def test_risk_labels_resolve_all_router_mentions(mentions, source):
+    routed = ROUTED.model_copy(
+        update={"risk_label": RiskLabel.DOSING_BEYOND_LABEL, "product_mentions": mentions}
+    )
+    with TestClient(create_app(SETTINGS, None, FakeSender([routed]), NO_API, NO_WIDGET)) as client:
+        reply = client.post("/chat", json={**CHAT, "message": "Can I double the dose?"}).json()
+    assert reply["handoff_offered"] and reply["offer_id"]
+    assert [s["id"] for s in reply["sources"]] == ([source] if source else [])
+
+
+async def saturated_emergency_reply():
+    loop, entered, release = asyncio.get_running_loop(), asyncio.Queue(), Event()
+
+    def blocked_route(llm, messages):
+        loop.call_soon_threadsafe(entered.put_nowait, True)
+        assert release.wait(timeout=10)
+        return ROUTED.model_copy(update={"risk_label": RiskLabel.MEDICAL_ADVICE})
+
+    limiter = anyio.to_thread.current_default_thread_limiter()
+    original, limiter.total_tokens = limiter.total_tokens, 2
+    fake, api_calls = FakeSender(), []
+    api = httpx.Client(
+        transport=httpx.MockTransport(lambda r: api_calls.append(r) or httpx.Response(500))
+    )
+    steps = pipeline.Steps(route=blocked_route)
+    app = create_app(SETTINGS, steps, fake, api, NO_WIDGET)
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app), base_url="http://local"
+    ) as client:
+        normal = [
+            asyncio.create_task(client.post("/chat", json=CHAT))
+            for _ in range(limiter.total_tokens)
+        ]
+        try:
+            for _ in normal:
+                await asyncio.wait_for(entered.get(), timeout=5)
+            emergency = await asyncio.wait_for(
+                client.post("/chat", json={**CHAT, "message": "I cannot breathe"}), timeout=2
+            )
+            assert emergency.status_code == 200
+            reply = emergency.json()
+            assert reply["emergency"] and reply["handoff_offered"] and reply["offer_id"]
+            assert reply["blocks"][0]["text"] == policy.EMERGENCY_TEXT
+            assert not release.is_set() and fake.requests == [] and api_calls == []
+        finally:
+            release.set()
+            await asyncio.gather(*normal)
+            limiter.total_tokens = original
+            api.close()
+
+
+def test_emergency_http_reply_bypasses_saturated_normal_workers():
+    asyncio.run(saturated_emergency_reply())
+
+
+def test_immediate_http_emergency_keeps_redacted_history_offer_and_logs(caplog):
+    caplog.set_level(logging.INFO)
+    api = TestClient(create_api(DATA, staff_key="test-staff-key"))
+    calls = []
+    api.event_hooks["request"].append(calls.append)
+    fake = FakeSender([ROUTED, PLAN])
+    steps = pipeline.Steps(retrieve=search)
+    client = TestClient(create_app(SETTINGS, steps, fake, api, NO_WIDGET))
+    message = "I cannot breathe. Call me at +44 20 7946 0958."
+    card = client.post("/chat", json={**CHAT, "message": message}).json()
+    assert card["emergency"] and card["offer_id"]
+    assert fake.requests == [] and calls == []
+    assert client.post("/chat", json=CHAT).json()["reply_type"] == "label_sections"
+    assert "I cannot breathe. Call me at [phone]." in str(fake.requests)
+    ticket = client.post(
+        "/handoff",
+        json={
+            "session_id": CHAT["session_id"],
+            "confirmed": True,
+            "offer_id": card["offer_id"],
+        },
+    ).json()
+    assert ticket["ticket_id"]
+    summary = api.get(
+        f"/v1/tickets/{ticket['ticket_id']}", headers={"X-Staff-Key": "test-staff-key"}
+    ).json()["summary"]
+    assert summary["risk_label"] == summary["urgency"] == "emergency"
+    assert summary["customer_messages"][0] == "I cannot breathe. Call me at [phone]."
+    assert "+44 20 7946 0958" not in str(fake.requests) + str(summary) + caplog.text
+    assert "reply=emergency" in caplog.text

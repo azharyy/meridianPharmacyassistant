@@ -43,6 +43,29 @@ def test_a_message_with_all_three():
 
 
 @pytest.mark.parametrize(
+    "phone",
+    ["+44 20 7946 0958", "+44 (0)20 7946 0958", "0044 20 7946 0958", "+49 30 12345 6789"],
+)
+def test_explicit_international_phones_are_hidden_before_numeric_groups(phone):
+    assert redact(f"Call me at {phone} please") == "Call me at [phone] please"
+    assert redact(redact(phone)) == "[phone]"
+
+
+@pytest.mark.parametrize("context", ["call me at", "text me on", "Phone:", "telephone number is"])
+def test_local_phones_need_contact_context(context):
+    assert redact(f"{context} 555-0142") == f"{context} [phone]"
+
+
+@pytest.mark.parametrize("suffix", [". 10 mg", ". 34 years old.", " / 555-0142", "; 500 mg"])
+def test_international_phones_stop_before_adjacent_numeric_fields(suffix):
+    assert redact(f"Call +44 20 7946 0958{suffix}") == f"Call [phone]{suffix}"
+
+
+def test_international_internal_dots_are_phone_separators():
+    assert redact("Call +44.20.7946.0958.") == "Call [phone]."
+
+
+@pytest.mark.parametrize(
     "message",
     [
         "I'm 34 and pregnant. Can I take 10 mg of cetirizine?",
@@ -53,6 +76,9 @@ def test_a_message_with_all_three():
         "I took 250 / 500 / 1000 mg, between 400 - 800 - 1200mg a day.",
         "Doses 100  200  1000 mg, or 10000 IU of vitamin D for $12.99?",
         "Can I ord 2 tablets? Is 250 500 1000 milligrams too much?",
+        "Use +10000000 mg? Phone 400-1200 mg is a dose range, not a contact.",
+        "Compare MRD-ALG-012 and MRD-SKN-008 for a 34 year old.",
+        "The 555-0142 code is not marked as a phone. Take 10 mg at 08:00.",
     ],
 )
 def test_ages_doses_medicine_names_and_skus_stay_intact(message):

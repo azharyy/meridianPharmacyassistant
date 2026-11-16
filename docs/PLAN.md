@@ -9,8 +9,10 @@ the active agent monitors available limit signals and reserves capacity for
 checks and a complete `HANDOFF.md`, then stops before its hard limit. Every
 change, check result and unfinished step must be documented so the next agent
 can resume without the chat, with no separate ownership. Preserve issue 9's
-recorded model amendments and historical evaluation results; the fix plan
-explains their scope.
+historical evaluation results. Current and future evaluations use OpenCode Go
+only: GLM-5.3 runtime, GLM-5.3-Flash comparison and Kimi K3.1 Pro judge.
+The README links the completed current held-out pair and its historical comparison,
+with separate output paths, actual target misses and configuration differences.
 
 ## What this is
 
@@ -35,7 +37,7 @@ The scope is the six core requirements, finished and documented. There are no st
 | 2 | Tools that call a mock API for order status (order number plus a verified email or phone), availability and store information; never reveal one customer's order to another | A FastAPI mock API; the model requests a tool in its structured output and code runs it; the order lookup needs the order number and the matching contact and returns status only | API tests of every wrong-contact path; zero cross-customer leaks in the eval |
 | 3 | A policy layer for diagnosis, dosing beyond the label, prescription questions, emergencies (911) and prompt injection, with a pharmacist escalation that creates a ticket with a summary | Emergency rules before any model call; a risk label on every turn; a policy table that fixes the reply and the handoff for each label; a safety reviewer in code; a ticket with a summary built by code | A test per rule; escalation precision and recall; emergency recall |
 | 4 | Cooperating components, with the reasons for the split | Router, catalog agent, order agent, tool executor, safety reviewer, renderer and escalation | The README's architecture section; unit tests per component |
-| 5 | At least 60 labeled conversations; accuracy, groundedness, escalation precision and recall, latency; one change that improved the scores | 60 test cases and 12 development cases; deterministic checks plus a judge model from a second provider; keyword search alone compared with exact-and-alias matching first | `make eval` regenerates the report; the judge is calibrated on hand labels |
+| 5 | At least 60 labeled conversations; accuracy, groundedness, escalation precision and recall, latency; one change that improved the scores | 60 test cases and 12 development cases; deterministic checks plus a different model family on OpenCode Go; keyword search alone compared with exact-and-alias matching first | Calibrated judge; current paired result46/60 to49/60 with separate raw results/reports; accuracy, precision and latency miss targets; labels remain AI judgments pending human review |
 | 6 | An embeddable chat widget that shows sources and the escalation flow | One script tag; a source chip under every answer; an order form; the pharmacist card; an emergency banner | The four demo flows run by hand; a static preview page of every reply type |
 
 ## Architecture
@@ -67,10 +69,11 @@ Shorter paths: a store question goes from the router straight to the tool execut
 
 ### Model calls
 
-- The runtime model is gpt-oss-120b on Groq, called through the OpenAI Python SDK with Groq's base URL.
-- The eval judge is GPT-6 Luna on OpenAI, on Standard processing. It runs only in the eval, never in the assistant.
-- One small client class holds the settings for each role (provider, base URL, model, reasoning effort, timeout). The runtime and the judge share it, and running the assistant on GPT-6 Luna instead is a config change.
-- Every call uses strict structured outputs and no request carries `tools`, because Groq can't combine the two in one request. A tool request is a field in the plan that code checks and runs. That is still tool use: the model chooses the tool and its arguments.
+- The runtime is GLM-5.3 on OpenCode Go, through the OpenAI-compatible SDK endpoint `https://opencode.ai/inference/go/openai/v1`.
+- The eval judge is Kimi K3.1 Pro on OpenCode Go. It runs only in evaluation, never in the assistant. GLM-5.3-Flash is the development comparison runtime.
+- One small client class holds each role's provider, base URL, model, reasoning effort and timeout. Evaluation and calibration reject other providers before requests. Every active role uses `OPENCODE_API_KEY`.
+- Every call uses strict structured outputs and no request carries `tools`. Tool requests are plan fields so code can validate intent, evidence and arguments before execution. The model chooses availability requests; private order handling stays in code.
+- OpenCode calls carry an opaque conversation/session header and a named client User-Agent. No order/contact data enters model requests.
 - Strict mode needs every field listed as required and `additionalProperties: false` on every object, so an optional value is written as nullable.
 - Reasoning effort starts at low. Each call has a timeout.
 - Tests and `make check` use a fake client with scripted responses. The real client is used only when `MERIDIAN_LLM=live`.
@@ -246,11 +249,11 @@ At least ten test cases are multi-turn. Each case holds the turns (customer mess
 
 ### The judge
 
-The judge is GPT-6 Luna on OpenAI, a different provider from the runtime, so it doesn't share the runtime model's blind spots. It has one job: given the customer's question and the reply as displayed, say whether the records and sections shown answer the question. It returns a structured verdict. Every other check is deterministic.
+The judge is Kimi K3.1 Pro on OpenCode Go, a different model family from the GLM runtimes. This reduces reliance on the runtime's own judgment; it does not guarantee independent errors. It has one job: given the customer's question and the reply as displayed, say whether the records and sections shown answer the question. It returns a structured verdict. Every other check is deterministic.
 
-The judge is checked before it is trusted. It is calibrated against 20 question-and-reply pairs labeled by hand, about half of them showing deliberately wrong evidence. The pairs live in `eval/judge/calibration.jsonl`, apart from both case sets. The report gives the agreement and each disagreement as raw counts, and the judge's prompt is frozen after the calibration.
+The judge is checked before it is trusted. It is calibrated against 20 AI-labeled question-and-reply pairs, about half showing deliberately wrong evidence; independent human review remains pending. The pairs live in `eval/judge/calibration.jsonl`, apart from both case sets. The report gives agreement and disagreements as raw counts, and the judge's prompt is frozen after calibration. Agreement with these labels is not human validation.
 
-One development run uses GPT-6 Luna as the runtime in place of gpt-oss-120b, so the README can compare the two on accuracy, latency and cost.
+The development comparison uses GLM-5.3-Flash against GLM-5.3, keeping the same Kimi judge. Fresh comparisons require matching code, cases, prompts and usage metadata.
 
 ### The measured change
 
@@ -276,7 +279,7 @@ The baseline retrieves with keyword search alone (`MERIDIAN_EXACT_MATCH=0`). The
 
 ## Stack, layout and commands
 
-Python 3.11 with uv; FastAPI and Pydantic for both services; SQLite FTS5 for search; the OpenAI SDK for both model providers; pytest and ruff; GitHub Actions. No agent framework, no vector database.
+Python 3.11 with uv; FastAPI and Pydantic for both services; SQLite FTS5 for search; the OpenAI-compatible SDK for OpenCode Go; pytest and ruff; GitHub Actions. No agent framework, no vector database.
 
 ```
 assistant/   the assistant service (see the module map)
@@ -297,13 +300,13 @@ tests/       mirrors the tree, plus test_architecture.py
 | `make contracts` | Regenerate the contract snapshots | Nothing |
 | `make fetch-labels` | Fetch label samples from openFDA into `catalog/raw/` | Network |
 | `make seed-data` | Regenerate orders and stock from the fixed seed | Nothing |
-| `make run` | Start the API on port 8001 and the assistant on port 8000; the demo is at `/demo` | `GROQ_API_KEY` |
-| `make eval-dev` | Run the development set and write `eval/results/dev.md` | Both keys |
-| `make judge-calibrate` | Run the judge on the 20 hand-labeled pairs and print the agreement | `OPENAI_API_KEY` |
-| `make eval-compare` | Run the development set with GPT-6 Luna as the runtime | `OPENAI_API_KEY` |
-| `make eval-baseline`, `make eval` | Run the test set with keyword search alone, then with exact-and-alias matching, and write `eval/REPORT.md` | Both keys |
+| `make run` | Start the API on port 8001 and the assistant on port 8000 with GLM-5.3; demo at `/demo` | `OPENCODE_API_KEY` |
+| `make eval-dev` | GLM-5.3 development run with Kimi judge; writes `eval/results/dev.md` | `OPENCODE_API_KEY` |
+| `make judge-calibrate` | Kimi judge against 20 AI-labeled pairs; print agreement | `OPENCODE_API_KEY` |
+| `make eval-compare` | GLM-5.3-Flash development run against a compatible GLM-5.3 reference | `OPENCODE_API_KEY` |
+| `make eval-baseline`, `make eval` | OpenCode held-out baseline/improved runs using default result paths; preserve archives before using these targets | `OPENCODE_API_KEY` |
 
-Keys are read from a gitignored `.env` file at the repo root, which the Makefile loads; `.env.example` lists the variables and their format, and the README repeats them. The make targets set `MERIDIAN_LLM` and `MERIDIAN_EXACT_MATCH` themselves, so `.env` holds only keys. `GROQ_API_KEY` runs the assistant, and Groq's free plan is enough to try the demo. `OPENAI_API_KEY` is needed only by the eval targets, and it must be a paid key, because GPT-6 Luna isn't on OpenAI's free tier. A reviewer who doesn't want to spend anything can read the committed report.
+The user's gitignored `.env` supplies `OPENCODE_API_KEY` through the normal project loader; never display or copy key values. Eval targets pin OpenCode/model settings and the retrieval flag. The completed full comparison used a fresh experiment/results tree; README commands reproduce that layout without replacing archives. Reports write beside results. Live work follows AGENTS.md unless explicitly authorized by the user, as this issue33 experiment was; offline tests always use fakes and need no key. The SDK package name does not require an OpenAI account or key.
 
 ## Build order
 
@@ -344,10 +347,10 @@ If time runs short, cut in this order and say so in the README: the model compar
 | Emergency detection | Rules first, router as backup | Instant, and independent of the model | Router only: slower, and silent if the model fails |
 | Safety reviewer | Code | Deterministic, free and testable | A second model call: slower, and one more thing that can be wrong |
 | Tickets | Created when the customer confirms | No unwanted or duplicate tickets; better for privacy | Automatic on every escalation |
-| Tool calls | Fields in the structured plan, run by code | Groq can't combine tools with structured outputs; the plan is also easier to review | Native tool calling |
+| Tool calls | Fields in the structured plan, run by code | Code validates intent, evidence and arguments before executing a request | Native tool calling |
 | Eval checks | Deterministic wherever a check can be exact, with a judge for one question: does the text shown answer what was asked | An open question can have several right answers, which an exact match can't score | All deterministic: free to re-run, but too strict for open questions |
-| Eval judge | GPT-6 Luna on OpenAI, calibrated on hand labels | A second provider doesn't share the runtime model's blind spots, and a judge nobody checked proves nothing | The runtime model judging itself |
-| Runtime model | gpt-oss-120b on Groq | Fast, open-weight, and a free plan is enough to try the demo | A hosted closed model: a config change |
+| Eval judge | Kimi K3.1 Pro on OpenCode Go, calibrated on AI labels pending human review | A different model family and explicit calibration, with label limitations disclosed | The runtime model judging itself |
+| Runtime model | GLM-5.3 on OpenCode Go | Selected from development comparisons; current held-out accuracy49/60 and p95 13.118s are measured and miss targets | GLM-5.3-Flash, selectable for development comparison |
 | Widget | Plain JavaScript web component | No build step to explain or break | A framework and a bundler |
 | Policy table | A typed table in code | One file to read, no loader to test | A YAML file with a validator |
 

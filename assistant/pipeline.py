@@ -47,7 +47,7 @@ Record = ProductRecord | PolicyRecord
 
 
 def retrieve_nothing(query: str, k: int) -> list[Record]:
-    """Step 4 until issue 5: nothing is found. A retriever returns at most k whole records."""
+    """No catalog bound: return no records."""
     return []
 
 
@@ -82,7 +82,6 @@ class TurnResult:
     routed: RouterOutput | None = None
     retrieved: list[str] = field(default_factory=list)  # record IDs, in retrieval order
     plan: CatalogPlan | None = None
-    tool: str | None = None
     risk: RiskLabel = RiskLabel.NONE
     timings: dict[str, float] = field(default_factory=dict)  # milliseconds per stage
 
@@ -101,12 +100,12 @@ def record_id(record: Record) -> str:
 
 
 def named_product(routed: RouterOutput, steps: Steps, timings) -> ProductRecord | None:
-    """The first product the customer named, matched exactly: a keyword hit could be another
+    """One product the customer named, matched exactly: a keyword hit could be another
     product whose label merely mentions a medicine outside the catalog."""
     if not routed.product_mentions:
         return None
     with stage(timings, "retrieval"):
-        return steps.find_product(routed.product_mentions[0])
+        return steps.find_product(" ".join(routed.product_mentions))
 
 
 def risk_reply(routed: RouterOutput | None, risk: RiskLabel, steps: Steps, timings) -> TurnResult:
@@ -176,8 +175,7 @@ def fulfill(routed, plan: CatalogPlan, records: list[Record], steps: Steps, http
         tool_result = steps.execute(http, reviewed.tool)
     with stage(timings, "render"):
         reply = steps.render(reviewed, records, risk, tool_result)
-    tool = reviewed.tool.name.value if reviewed.tool else None
-    return TurnResult(reply, routed, found, reviewed, tool, risk)
+    return TurnResult(reply, routed, found, reviewed, risk)
 
 
 def record_offer(session: Session, reply: ChatReply, risk: RiskLabel) -> ChatReply:

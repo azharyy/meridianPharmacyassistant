@@ -41,24 +41,18 @@ OPENCODE_API_KEY=your_opencode_key_here
 | --- | --- | --- |
 | `OPENCODE_API_KEY` | `make run` and all eval targets | An API key from [opencode.ai/auth](https://opencode.ai/auth), used with an OpenCode Go subscription. It serves the assistant and the judge |
 | `MERIDIAN_RUNTIME_MODEL` | Optional | `glm-5.3` (default) or `glm-5.3-flash` |
-| `MERIDIAN_RUNTIME_PROVIDER` | Optional | `opencode` (default) or `groq`, for `make run` only; the eval targets always use OpenCode Go |
-| `GROQ_API_KEY` | Only with `MERIDIAN_RUNTIME_PROVIDER=groq` | A Groq API key, starting with `gsk_`. With `groq` the runtime is GPT-OSS 120B (or `openai/gpt-oss-20b`) |
+| `MERIDIAN_RUNTIME_PROVIDER` | Optional | Use `opencode` for the active plan; live evaluation and calibration reject other providers |
 | `MERIDIAN_STAFF_KEY` | Optional | The header value for reading a ticket back in the demo. Default: `dev-staff-key` |
 
 Format: one `NAME=value` per line, with no quotes, no spaces around `=` and no `export`.
 
-Every model call goes to OpenCode Go and uses only models included in the Go plan: the
+All active evaluation roles use OpenCode Go and models from the Go plan: the
 assistant runs on GLM-5.3, the development comparison on its smaller sibling GLM-5.3-Flash,
 and the eval judge is Kimi K3.1 Pro, from a different model family than both. They are Go
 models OpenCode lists with structured output on its chat-completions API; every call uses
 strict structured outputs. DeepSeek V4.1 Flash is listed the same way but rejected every
 such request with HTTP 400, so it is not offered. OpenCode describes Go as built for coding agents and
 monitors its traffic. An OpenAI API key is unused.
-
-The held-out results in [`eval/REPORT.md`](eval/REPORT.md) were measured before this
-change, on Groq-hosted GPT-OSS 120B with a Groq Qwen 3.8 27B judge (its calibration is
-kept in `eval/results/calibration-groq-qwen.md`). The test set was not run again on the
-new default, so those numbers describe the Groq configuration.
 
 ```bash
 make run          # then open http://localhost:8000/demo
@@ -149,9 +143,9 @@ flowchart TD
 Steps 4, 5 and 8 are the RAG pipeline: retrieval finds the records, the catalog agent
 picks the records and sections that answer, and the renderer copies their text and cites
 it. Tool use goes through the plan as well, not native function calling: a stock or store
-lookup is a field in the plan, which the tool executor checks before anything runs. Groq,
-the first runtime, couldn't combine function calling with strict structured outputs in
-one request, and a plan field is easier for code to check. The order lookup is not a
+lookup is a field in the plan, which the tool executor checks before anything runs.
+This gives code a structured request whose intent, evidence and arguments can be
+validated before execution. The order lookup is not a
 model tool at all: the form sends the number and the contact straight to code.
 
 Shorter paths, all in `assistant/pipeline.py`:
@@ -360,10 +354,61 @@ make eval              # the 60 test cases with exact matching first; then write
 
 Each run writes its raw results as JSON and a short Markdown summary to `eval/results/`.
 `make eval-compare` refuses a development run made on different code, so run
-`make eval-dev` first. The saved held-out runs were measured on Groq (see below);
-running `make eval-baseline` and `make eval` again replaces them with runs of the
-current default, and git keeps the originals. `make check` tests the harness offline,
-with the runtime and the judge both faked.
+`make eval-dev` first. These Make targets write to the default paths; for a new held-out
+run, use the isolated procedure below so the historical files stay unchanged.
+Live client construction, evaluation and calibration reject non-OpenCode roles.
+`make check` tests the harness offline, with both models faked.
+
+### Fresh OpenCode held-out comparison
+
+Run on 2026-11-16 with GLM-5.3 for both runtime variants and Kimi K3.1 Pro as judge.
+The Groq comparison reuses its preserved results, with no new Groq calls.
+
+| Metric | OpenCode baseline | OpenCode improved |
+| --- | --- | --- |
+| Answer accuracy | 46/60 (76.7%) | 49/60 (81.7%) |
+| Retrieval success | 26/30 (86.7%) | 27/30 (90.0%) |
+| Groundedness | 35/35 (100%), 38 fact-free apart | 38/38 (100%), 35 fact-free apart |
+| Escalation precision | 23/30 (76.7%) | 23/28 (82.1%) |
+| Escalation recall | 23/23 (100%) | 23/23 (100%) |
+| Emergency recall | 6/6 (100%) | 6/6 (100%) |
+| Cross-customer leaks | 0/60 | 0/60 |
+| Latency p50 / p95 | 4.971 s / 16.859 s | 5.123 s / 13.118 s |
+
+The [new paired report](eval/experiments/opencode-2026-11-16/REPORT.md) lists every
+failure. Exact matching gained three net cases in this sequential pair. The current
+improved accuracy is below historical Groq's 51/60 (85%), while p95 is lower than its
+17.226 s. This is a historical-versus-current comparison: cases and judge prompt match,
+but runtime, judge and implementation differ, so it cannot isolate a provider effect.
+Timeout fallbacks are retained. Accuracy, escalation precision and latency miss their
+targets; no test was resampled or tuned to hide that result.
+
+For a subsequent experiment, run the following in PowerShell with the configured key. The
+`uv --env-file` option loads it locally; never paste a key into chat. Choose a
+new experiment directory for each run, stop if any command fails, and retain
+incomplete outputs as incomplete rather than describing them as a paired result.
+
+```powershell
+$env:MERIDIAN_LLM = "live"
+$env:MERIDIAN_RUNTIME_PROVIDER = "opencode"
+$env:MERIDIAN_RUNTIME_MODEL = "glm-5.3"
+$runResults = "eval/experiments/opencode-current/results"
+if (Test-Path $runResults) { throw "Choose a fresh experiment directory." }
+uv run --no-sync --env-file .env python -m eval.cli calibrate --output-dir $runResults
+if ($LASTEXITCODE -ne 0) { throw "Calibration failed; stop here." }
+$env:MERIDIAN_EXACT_MATCH = "0"
+uv run --no-sync --env-file .env python -m eval.cli baseline --output-dir $runResults
+if ($LASTEXITCODE -ne 0) { throw "Baseline failed; stop here." }
+$env:MERIDIAN_EXACT_MATCH = "1"
+uv run --no-sync --env-file .env python -m eval.cli improved --output-dir $runResults
+if ($LASTEXITCODE -ne 0) { throw "Improved run failed; stop here." }
+```
+
+This writes a new `eval/experiments/opencode-current/REPORT.md` and raw results
+under its `results/` directory. Calibration, cases, prompts, implementation and
+model settings must match across the pair; the retrieval flag is the intended
+difference. Report measured scores only after both runs finish. Historical
+`eval/REPORT.md` and `eval/results/` remain evidence of their original configuration.
 
 ### The cases
 
@@ -405,12 +450,12 @@ not changed since the first calibration.
 | Judge | Used for | Agreement with the labels |
 | --- | --- | --- |
 | Qwen 3.8 27B on Groq | The held-out runs in `eval/REPORT.md` | 20/20 ([calibration](eval/results/calibration-groq-qwen.md)) |
-| Kimi K3.1 Pro on OpenCode Go | The development runs of the current models | 20/20 ([calibration](eval/results/calibration.md)) |
+| Kimi K3.1 Pro on OpenCode Go | The new development and held-out runs | 20/20 ([fresh calibration](eval/experiments/opencode-2026-11-16/results/calibration.md)) |
 
 The calibration labels are AI labels too, so 20/20 is agreement with them, not with a
 human.
 
-### The measured change
+### The historical measured change
 
 The baseline retrieves with keyword search alone (`MERIDIAN_EXACT_MATCH=0`); the
 improved run adds exact SKU, name, ingredient and alias matching before keyword search
@@ -448,23 +493,28 @@ beside the corrected ones ([eval/results/LABEL_AUDIT.md](eval/results/LABEL_AUDI
 
 | Configuration | Evidence | Accuracy | p95 |
 | --- | --- | --- | --- |
+| OpenCode GLM-5.3 + Kimi judge, issue 33 code | New 60-case [held-out pair](eval/experiments/opencode-2026-11-16/REPORT.md) | 46/60 -> 49/60 (76.7% -> 81.7%) | 16.859 s -> 13.118 s |
+| OpenCode GLM-5.3 + Kimi judge, issue 33 code | New 12-case [development run](eval/experiments/opencode-2026-11-16/results/dev.md) | 12/12 (100%) | 12.400 s |
+| OpenCode GLM-5.3-Flash + Kimi judge, issue 33 code | New 12-case [development comparison](eval/experiments/opencode-2026-11-16/results/dev-compare.md) | 10/12 (83.3%) | 13.534 s |
 | Groq GPT-OSS 120B + Qwen judge | Historical 60-case [held-out comparison](eval/REPORT.md) | 50/60 -> 51/60 (83.3% -> 85.0%) | 25.545 s -> 17.226 s |
 | OpenCode GLM-5.3 + Kimi judge | 12-case [development comparison](eval/results/dev-compare.md) after issue 17; the default model | 12/12 (100%) | 1.928 s |
 | OpenCode GLM-5.3-Flash + Kimi judge | 12-case [development run](eval/results/dev.md) after issue 17 | 12/12 (100%) | 10.209 s |
 | OpenCode GLM-5.3 + Kimi judge | Earlier 12-case [development comparison](eval/results/dev-compare-before-17.md) | 12/12 (100%) | 2.083 s |
 | OpenCode GLM-5.3-Flash + Kimi judge | Earlier 12-case [development run](eval/results/dev-before-17.md) | 11/12 (91.7%) | 8.157 s |
+| Groq GPT-OSS 120B and 20B + Qwen judge | Historical 12-case [development comparison](eval/results/dev-groq20b.md) | 9/12 and 9/12 (75.0%) | 13.342 s and 29.221 s |
+| Groq GPT-OSS 120B + Qwen judge | Historical 12-case [development run cut short by rate limits](eval/results/dev-quota-limited.md) | 4/12 (33.3%) | 1.392 s |
 
-The held-out comparison and the earlier development runs measured the code of their time.
-The two later development runs measured the code after the stale-card fix (issue 15) and
-the named-product fix (issue 17). Held-out quality has not been measured on any OpenCode
-model: the default moved to OpenCode Go after the held-out runs, which were kept rather
-than run again.
+The historical held-out and development runs measured the code of their time. The new
+OpenCode runs include the E1-E5 review fixes and empty-completion fallback fix, with
+matching implementation metadata across the measured runs. Their Kimi calibration
+scored 20/20 against AI labels. The earlier post-issue-17 measurements remain archived;
+their lower latency does not describe the latest run.
 
-After issue 17 both OpenCode models scored 12/12. GLM-5.3 was much faster, with a p95 of
-1.9 s against 10.2 s, and is the only configuration here inside the 4-second target. It
+In the earlier post-issue-17 run both OpenCode models scored 12/12. GLM-5.3 was much faster, with a p95 of
+1.9 s against 10.2 s, inside the 4-second target; on issue 33's code its p95 was 12.4 s. It
 costs about 6.3 times as much in tokens (an estimated $0.0170 per run against $0.0027), and
-it became the default; GLM-5.3-Flash stays selectable. Flash's two runs show how much a
-12-case run varies: 11/12 then 12/12, and a p95 of 8.2 s then 10.2 s. Its earlier failure,
+it became the default; GLM-5.3-Flash stays selectable. Flash's three runs show how much a
+12-case run varies: 11/12, 12/12, then 10/12, with a p95 of 8.2 s, 10.2 s, then 13.5 s. Its earlier failure,
 dev-009, is a prescription question it labeled as dosing beyond the label. The reply then
 showed another product's directions, a defect issue 17 fixed. In the later run it labeled
 the question correctly, so that 12/12 reflects the model on that run, not the fix.
@@ -491,9 +541,10 @@ again, and when the agents could run live commands or assign labels.
 | Issues 14 and 15: the stale-card fix | Codex (contract) and Claude Code (binding and widget) | Claude Code reviewed the contract | #11, #12 |
 | Issue 10: this README | Claude Code drafted it; I checked and reworded it | | #13 |
 | Issues 17 and 18: the quality follow-up | Claude Code, after a read-only diagnosis of the saved development runs | I chose the fix and, after re-running the development set, the default model | #14, #15 |
+| Issues 23-34: the review fixes (redaction, emergency rules, risk labels, emergency scheduling, evaluation fingerprints, empty completions), the OpenCode evaluation and comparison, and this cleanup | Codex; Claude Code finished issue 34 | Codex checked case and configuration fingerprints and the paired results, with no tuning against test questions; Claude Code audited the stack for dead code and stale docs before merge | #20 |
 
-Each issue was one branch and one pull request, with acceptance criteria that each
-named the test proving them. Both agents followed the same rules in `AGENTS.md`: module
+Most issues were merged one pull request each; issues 23-34 were built as local
+checkpoints and merged together in one pull request. Acceptance criteria name the tests proving them. Both agents followed the same rules in `AGENTS.md`: module
 boundaries a test enforces, no real model in any test, customer-facing text only from
 templates. They shared one note, `HANDOFF.md` (kept out of git): the issue, the ticked
 criteria and their tests, the last check result, the decisions and the next step. When
@@ -517,7 +568,7 @@ What the reviews and checks caught:
   policy. It was corrected after the live runs, the same replies were rescored, and the
   original results are kept.
 - **Rate limits scored as answers.** Groq's free-tier limits turned development runs into
-  fallback replies (4/12 at worst). The evaluation now waits out short limits, and stops
+  fallback replies ([4/12 at worst](eval/results/dev-quota-limited.md)). The evaluation now waits out short limits, and stops
   without saving anything when a limit is too long to wait out.
 - **A stale pharmacist card.** Codex's whole-project review found that an old emergency
   card, clicked after a newer fallback card, filed a routine ticket. Issue 15 binds every
@@ -531,29 +582,44 @@ What the reviews and checks caught:
 
 ### Measured quality
 
-- Held-out answer accuracy is 85% against a 90% target, and p95 latency is 17.2 s
-  against 4 s (measured on Groq, rate-limit waits included). The current default model
-  has not been measured on the held-out set, and its 12-case development run can't
-  establish reliability.
+- Current OpenCode held-out accuracy is 49/60 (81.7%) against 90%, escalation precision
+  is 23/28 (82.1%) against 85%, and p95 is 13.118 s against four seconds. The preserved
+  Groq improved run scored 51/60 (85%) with p95 17.226 s. Different judges and code,
+  service timeouts and one sequential pair limit what can be inferred from that comparison.
 - Every case and calibration label is an AI judgment. Independent human review is still
   pending, so the judge's 20/20 is agreement with AI labels.
 - The judge sees only the latest customer question, so a follow-up such as "How do I
   take it?" loses the product it refers to; two synthetic conversations reproduce this.
-  It barely touches the saved results: follow-ups are 2 of the 30 judged turns in each
-  held-out run, and the one that failed (test-043's third turn, in the baseline) also
-  failed on its reply type and risk label. The evaluator is unchanged, because changing
-  it would need a new calibration for no measured effect.
+  The earlier audit counted two follow-ups among 30 judged turns in each historical
+  Groq run; its one failing follow-up also failed type/risk checks. That historical
+  audit does not establish the effect in every future run. Context handling remains
+  unchanged in the new evaluation and is still a known limitation.
 
-### Safety and privacy gaps found in review and left open
+### Safety and privacy after the review fixes
 
-- The emergency rules miss a symptom and "now" in different sentences ("I had chest pain
-  last year. I have it again now."), and "My throat feels tight right now" matches no
-  pattern. The router is the backup while the model is up.
-- Redaction misses phone numbers outside the US format; a unit-less dose list such as
-  "250/500/1000" can read as a phone number; and "$12345", lot numbers and NDC fragments
-  become `[number]`.
+- Emergency rules now cover explicit recurrence across adjacent sentences and throat
+  tightness. Ordinary water, single-tablet and strength statements no longer independently
+  trigger overdose. These are bounded patterns, not universal emergency recognition.
+- Recognized emergencies bypass the normal HTTP worker queue; an event-controlled test
+  proves the reply completes while all normal workers remain blocked.
+- Redaction covers US phones, explicit +/00 international prefixes with 8-15 digits,
+  and seven-digit local numbers introduced by phone/call/text context. Arbitrary phone
+  spellings remain outside that coverage. A unit-less dose list such as "250/500/1000"
+  can still read as a phone; "$12345", lot numbers and NDC fragments become `[number]`.
+- Safety replies omit label sections when an ingredient or alias identifies multiple
+  products, or explicit product identifiers conflict. A unique full name/SKU or
+  unambiguous ingredient/alias still gives verbatim cited text; ordinary retrieval is
+  unchanged. This avoids choosing tablet directions for a spray or guessing a strength.
 - Order verification is the order number plus the matching email or phone, with no
   one-time code.
+
+These fixes have offline regression coverage ([fix plan](docs/FIXES.md#e-feasible-follow-ups-from-the-latest-review-completed));
+the new live pair measures the fixed code while original measurements remain intact.
+Evaluation fingerprints now include API/contract code and actual policy documents.
+The issue 33 runs have matching fingerprints for their measured code. Issue 34's
+cleanup removed unreachable code and the catalog prompt's store-lookup option, which
+always ended in a failed lookup. It changes that fingerprint and was checked offline
+only; saved runs cannot be mixed with new code in a same-code comparison.
 
 ### Product
 
@@ -567,17 +633,15 @@ What the reviews and checks caught:
 - The widget's browser check (`widget/handoff-test.html`) runs by hand, not in CI, and
   the keyboard and live checks are manual. In `widget/preview.html`, the failed-handoff
   example has no "Try again" button.
-- The plan named gpt-oss-120b on Groq as the runtime and GPT-6 Luna on OpenAI as the
-  judge. The evaluation issue's amendments (`docs/issues/09-eval.md`) moved every role to
-  Groq and then to OpenCode Go, as the Setup and Evaluation sections describe.
 
 ### Next steps
 
 - A one-time code to prove control of the email or phone before showing an order.
-- Independent human review of the labels, a hand audit of the judge on the test set,
-  and a fresh held-out run of the current default, written to separate files.
+- Independent human review of the labels and a hand audit of the judge; investigate
+  accuracy, excess handoff offers and timeout reliability using development/synthetic
+  cases. Preserve the completed held-out evidence rather than tuning against its questions.
 - Give the judge a conversation's earlier messages if follow-ups become a bigger share of
-  the cases; today they are 2 of 30 judged held-out turns.
+  the cases; each historical Groq held-out run had 2 among its 30 judged turns.
 - Fixes for the open safety and privacy gaps above.
 - Holiday hours, typo tolerance in search, clarifying questions with buttons, and turns
   that ask two things at once.

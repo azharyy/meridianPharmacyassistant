@@ -15,6 +15,7 @@ from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from starlette.concurrency import run_in_threadpool
 
 from assistant import escalation, pipeline
 from assistant.api_client import connect
@@ -26,6 +27,14 @@ from assistant.tools import execute
 from contracts.chat import ChatReply, ChatRequest, HandoffReply, HandoffRequest, OrderFormRequest
 
 WIDGET = Path(__file__).resolve().parent.parent / "widget"
+
+
+async def chat_turn(request: ChatRequest, session, steps: pipeline.Steps, llm, api) -> ChatReply:
+    """Dispatch blocking turns after the cheap emergency path has had a chance to finish."""
+    if steps.emergency(request.message):
+        return pipeline.run_turn(request, session, steps, llm, api).reply
+    result = await run_in_threadpool(pipeline.run_turn, request, session, steps, llm, api)
+    return result.reply
 
 
 def default_steps(settings: Settings) -> tuple[pipeline.Steps, SearchIndex]:
@@ -73,9 +82,8 @@ def create_app(
     )
 
     @app.post("/chat", response_model=ChatReply)
-    def chat(request: ChatRequest) -> ChatReply:
-        session = sessions.get(request.session_id)
-        return pipeline.run_turn(request, session, turn_steps, llm, api).reply
+    async def chat(request: ChatRequest) -> ChatReply:
+        return await chat_turn(request, sessions.get(request.session_id), turn_steps, llm, api)
 
     @app.post("/orders/verify", response_model=ChatReply)
     def verify_order(request: OrderFormRequest) -> ChatReply:

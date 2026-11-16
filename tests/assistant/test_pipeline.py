@@ -117,6 +117,8 @@ def test_a_turn_runs_its_steps_top_to_bottom():
     "message",
     [
         "My son swallowed a bottle of pills",
+        "I had a seizure last year. I am having one again now.",
+        "My throat feels tight right now",
         "I'm sam@example.com and I can't breathe",
         "I have a history of asthma and I cannot breathe",
         "The warning says chest pain and I have chest pain",
@@ -126,6 +128,8 @@ def test_a_turn_runs_its_steps_top_to_bottom():
     ],
     ids=[
         "third_party",
+        "adjacent_recurrence",
+        "tight_throat",
         "with_an_email",
         "history_clause",
         "label_clause",
@@ -294,7 +298,7 @@ def test_a_directions_question_gets_the_label_text_and_its_source():
     assert block.text == PRODUCTS[0].directions
     assert [source.id for source in result.reply.sources] == ["MRD-ALG-012#directions"]
     assert result.retrieved == ["MRD-ALG-012", "MRD-ALG-014"]
-    assert (result.routed, result.plan, result.tool) == (ROUTED, PLAN, None)
+    assert (result.routed, result.plan) == (ROUTED, PLAN)
 
 
 def test_the_model_sees_only_the_redacted_message():
@@ -303,6 +307,17 @@ def test_the_model_sees_only_the_redacted_message():
     sent = str(fake.requests)
     assert "sam@example.com" not in sent and "MRD-ORD-48213" not in sent
     assert "[email]" in sent and "[order number]" in sent
+
+
+@pytest.mark.parametrize("phone", ["+44 20 7946 0958", "+44 (0)20 7946 0958", "555-0142"])
+def test_new_phone_forms_never_reach_models_sessions_or_logs(phone, caplog):
+    caplog.set_level(logging.INFO, logger="meridian")
+    fake, session = FakeSender([routed(RiskLabel.MEDICAL_ADVICE)]), Session()
+    turn(f"Can I take cetirizine while pregnant? Call me at {phone}.", fake, session=session)
+    assert fake.requests
+    for recorded in (str(fake.requests), str(session.messages()), caplog.text):
+        assert phone not in recorded
+    assert session.messages() == ["Can I take cetirizine while pregnant? Call me at [phone]."]
 
 
 @pytest.mark.parametrize(
@@ -404,7 +419,7 @@ def test_a_tool_for_another_intent_is_rejected_before_execution():
     steps = pipeline.Steps(retrieve=search, execute=lambda *args: calls.append(args))
     result = turn(QUESTION, FakeSender([ROUTED, plan]), steps)
     assert result.reply.reply_type == "lookup_failed"
-    assert calls == [] and result.tool is None and result.reply.sources == []
+    assert calls == [] and result.reply.sources == []
 
 
 def test_a_failed_availability_tool_gets_the_fixed_lookup_failure():
@@ -451,7 +466,7 @@ def test_the_models_stock_request_is_executed_and_traced_or_times_out_safely(tim
         ModelClient(RUNTIME, fake),
         http,
     )
-    assert result.tool == "check_availability" and result.plan == plan
+    assert result.plan == plan
     assert seen == [f"/v1/products/{PRODUCTS[0].sku}/availability"] * (2 if timeout else 1)
     assert result.reply.reply_type == ("lookup_failed" if timeout else "availability")
     assert len(fake.requests) == 2
@@ -480,7 +495,7 @@ def test_order_chat_uses_session_verification_and_never_calls_catalog_or_tools(v
     fake = FakeSender([ROUTED.model_copy(update={"intent": Intent.ORDER_STATUS})])
     result = turn("Where is my order?", fake, session=session)
     assert result.reply.reply_type == ("order_status" if verified else "order_form")
-    assert len(fake.requests) == 1 and result.retrieved == [] and result.tool is None
+    assert len(fake.requests) == 1 and result.retrieved == []
     assert set(result.timings) == {"emergency", "redaction", "router", "render"}
 
 
