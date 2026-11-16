@@ -1,8 +1,11 @@
 """POST /chat returns a cited answer on the fake model; the widget is served when it exists."""
 
+import asyncio
 from datetime import UTC, datetime
 from pathlib import Path
+from threading import Event
 
+import anyio.to_thread
 import httpx
 import pytest
 from fastapi.testclient import TestClient
@@ -448,3 +451,48 @@ def test_risk_labels_resolve_all_router_mentions(mentions, source):
         reply = client.post("/chat", json={**CHAT, "message": "Can I double the dose?"}).json()
     assert reply["handoff_offered"] and reply["offer_id"]
     assert [s["id"] for s in reply["sources"]] == ([source] if source else [])
+
+
+async def saturated_emergency_reply():
+    loop, entered, release = asyncio.get_running_loop(), asyncio.Queue(), Event()
+
+    def blocked_route(llm, messages):
+        loop.call_soon_threadsafe(entered.put_nowait, True)
+        assert release.wait(timeout=10)
+        return ROUTED.model_copy(update={"risk_label": RiskLabel.MEDICAL_ADVICE})
+
+    limiter = anyio.to_thread.current_default_thread_limiter()
+    original, limiter.total_tokens = limiter.total_tokens, 2
+    fake, api_calls = FakeSender(), []
+    api = httpx.Client(
+        transport=httpx.MockTransport(lambda r: api_calls.append(r) or httpx.Response(500))
+    )
+    steps = pipeline.Steps(route=blocked_route)
+    app = create_app(SETTINGS, steps, fake, api, NO_WIDGET)
+    async with httpx.AsyncClient(
+        transport=httpx.ASGITransport(app), base_url="http://local"
+    ) as client:
+        normal = [
+            asyncio.create_task(client.post("/chat", json=CHAT))
+            for _ in range(limiter.total_tokens)
+        ]
+        try:
+            for _ in normal:
+                await asyncio.wait_for(entered.get(), timeout=5)
+            emergency = await asyncio.wait_for(
+                client.post("/chat", json={**CHAT, "message": "I cannot breathe"}), timeout=2
+            )
+            assert emergency.status_code == 200
+            reply = emergency.json()
+            assert reply["emergency"] and reply["handoff_offered"] and reply["offer_id"]
+            assert reply["blocks"][0]["text"] == policy.EMERGENCY_TEXT
+            assert not release.is_set() and fake.requests == [] and api_calls == []
+        finally:
+            release.set()
+            await asyncio.gather(*normal)
+            limiter.total_tokens = original
+            api.close()
+
+
+def test_emergency_http_reply_bypasses_saturated_normal_workers():
+    asyncio.run(saturated_emergency_reply())
