@@ -89,9 +89,13 @@ def test_handoff_creates_the_ticket_for_the_card_on_screen_once():
 
 
 def test_a_handoff_needs_the_customers_confirmation():
-    client = web(FakeSender())
-    response = client.post("/handoff", json={"session_id": "session-0001", "confirmed": False})
-    assert response.status_code == 422
+    api = TestClient(create_api(DATA, staff_key="test-staff-key"))
+    client = TestClient(create_app(SETTINGS, pipeline.Steps(), FakeSender(), api, NO_WIDGET))
+    card = client.post("/chat", json=CHAT).json()  # the model is down: the fallback's card
+    for offer_id in (card["offer_id"], None):
+        refused = {"session_id": CHAT["session_id"], "confirmed": False, "offer_id": offer_id}
+        assert client.post("/handoff", json=refused).status_code == 422
+    assert api.app.state.desks.tickets.count() == 0
 
 
 def test_an_old_emergency_card_after_a_fallback_files_nothing_and_a_current_one_files():
@@ -357,14 +361,20 @@ def test_an_older_card_keeps_its_urgency_after_the_order_form():
     with TestClient(
         create_app(SETTINGS, pipeline.Steps(retrieve=search), FakeSender([medical]), api, NO_WIDGET)
     ) as client:
-        assert client.post("/chat", json=CHAT).json()["handoff_offered"]
+        card = client.post("/chat", json=CHAT).json()
+        assert card["handoff_offered"]
         form = {
             "session_id": CHAT["session_id"],
             "order_number": "MRD-ORD-48213",
             "contact": "maria.garcia@example.com",
         }
-        assert not client.post("/orders/verify", json=form).json()["handoff_offered"]
-        confirm = {"session_id": CHAT["session_id"], "confirmed": True}
+        verified = client.post("/orders/verify", json=form).json()
+        assert (verified["handoff_offered"], verified["offer_id"]) == (False, None)
+        confirm = {
+            "session_id": CHAT["session_id"],
+            "confirmed": True,
+            "offer_id": card["offer_id"],
+        }
         first = client.post("/handoff", json=confirm).json()  # the older card's Confirm
         second = client.post("/handoff", json=confirm).json()
     ticket = api.get(f"/v1/tickets/{first['ticket_id']}", headers={"X-Staff-Key": "test-staff-key"})

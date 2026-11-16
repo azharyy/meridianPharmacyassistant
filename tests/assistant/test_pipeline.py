@@ -20,7 +20,7 @@ from assistant.settings import load_settings
 from assistant.tools import execute
 from contracts.api import OrderStatus
 from contracts.catalog import PolicyRecord
-from contracts.chat import ChatReply, ChatRequest
+from contracts.chat import ChatReply, ChatRequest, OrderFormRequest
 from contracts.plan import CatalogPlan
 from contracts.taxonomy import Intent, LabelSection, RiskLabel
 from tests.assistant.fixtures import PLAN, PRODUCTS, QUESTION, ROUTED, search
@@ -444,6 +444,16 @@ def test_the_models_stock_request_is_executed_and_traced_or_times_out_safely(tim
     assert seen == [f"/v1/products/{PRODUCTS[0].sku}/availability"] * (2 if timeout else 1)
     assert result.reply.reply_type == ("lookup_failed" if timeout else "availability")
     assert len(fake.requests) == 2
+
+
+def test_an_order_form_reply_with_a_card_carries_the_new_offers_id():
+    session, steps = Session(), pipeline.Steps(render=lambda *_: render_fallback())
+    form = OrderFormRequest(session_id=SESSION_ID, order_number="MRD-ORD-48213", contact="[email]")
+    down = httpx.Client(
+        base_url="http://api.test", transport=httpx.MockTransport(lambda _: httpx.Response(500))
+    )
+    reply = pipeline.verify_order(form, session, steps, down)
+    assert reply.offer_id == session.handoff_offer.id and session.handoff_offer.reason == "fallback"
 
 
 @pytest.mark.parametrize("verified", [False, True])
