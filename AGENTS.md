@@ -42,8 +42,9 @@ Start
 Checkpoint, after every acceptance criterion
 - Run `make check`. In `HANDOFF.md`, tick the criterion, name the test that proves
   it, record the check result and rewrite "Next step" as one concrete action.
-- Claude Code: then commit, `wip(<issue-slug>): <what now works>`.
-- Codex: never stage or commit; `.git` is read-only in your sandbox, so the user commits.
+- Either agent: then stage only this issue's files and commit,
+  `wip(<issue-slug>): <what now works>`. Codex may create/switch branches,
+  stage, commit and push; request tool escalation if the sandbox requires it.
 - Never hold more than one criterion of unrecorded work.
 - Never use `git stash`: stashes are shared across working folders.
 
@@ -51,7 +52,7 @@ Pause, when the user says "pause" or you see a usage or context warning
 1. Start nothing new. Finish the edit in hand or revert it, whichever is smaller.
 2. Run `make check`.
 3. Complete every section of `HANDOFF.md`, with Status "paused".
-4. Claude Code: commit, `wip(<issue-slug>): paused, green` or
+4. Either agent: commit, `wip(<issue-slug>): paused, green` or
    `wip(<issue-slug>): paused, RED: <what fails>`.
 5. Reply with the branch, the check result, criteria done and left, the next step
    and any open questions. Then stop.
@@ -62,7 +63,7 @@ Resume, in a new chat in the same folder, by either agent
 2. If the tree disagrees with the note (changes it doesn't mention, a different
    check result, another branch), stop and report. Never guess.
 3. If the other agent wrote the note, add a line to its Log saying you took over.
-   Claude Code: first commit any uncommitted work the note describes,
+   Either agent: first commit any uncommitted work the note describes,
    `wip(<issue-slug>): taken over`.
 4. Restate the next step in two lines, then continue from it.
 
@@ -122,9 +123,10 @@ map and its rules are in `docs/PLAN.md`; `tests/test_architecture.py` enforces t
   Aim for under ~600 changed lines of code (data files don't count); if an issue
   needs more, say so in `HANDOFF.md`. Run `make check` first.
 - Description: the issue file, what changed, how to test, contracts touched (none).
-- Codex never pushes: the user commits, pushes and merges its work. Claude pushes
-  its own branch when every criterion is ticked, and merges the pull request once
-  CI is green.
+- Either agent may push its issue branch when every criterion is ticked and open
+  the pull request. Merge only once CI is green. Push to `main` or rewrite a
+  remote branch only when the user explicitly requests it; use an exact
+  `--force-with-lease` for an authorized rewrite, never a blind `--force`.
 
 ## Review guidelines
 - P0: order data returned without the matching contact; an order reply with item

@@ -2,6 +2,16 @@
 
 Scoped for a take-home project and a four-day build. This file is the spec: every issue in `docs/issues/` points at sections of it.
 
+Current follow-up: [Review fixes and submission plan](FIXES.md) records the
+2026-11-16 review findings, the smallest proposed fixes and their verification.
+Implementation is now requested. For that queue, Codex and Claude share the work sequentially:
+the active agent monitors available limit signals and reserves capacity for
+checks and a complete `HANDOFF.md`, then stops before its hard limit. Every
+change, check result and unfinished step must be documented so the next agent
+can resume without the chat, with no separate ownership. Preserve issue 9's
+recorded model amendments and historical evaluation results; the fix plan
+explains their scope.
+
 ## What this is
 
 A customer-support assistant for a fictional pharmacy storefront, Meridian. It answers questions about products, stock, stores and orders from real data, shows the source behind every answer, and hands medical questions to a pharmacist. It ships as two small services (the assistant and a mock Meridian API), an embeddable chat widget, and an evaluation on 60 labeled conversations.
@@ -297,7 +307,7 @@ Keys are read from a gitignored `.env` file at the repo root, which the Makefile
 
 ## Build order
 
-Four days. Nine issues and a tenth for the README, one pull request each. The issues are the files in `docs/issues/`. Claude Code builds them one at a time, in the order 1, 2, 3, 4, 7, 5, 6, 8, 9, 10. It keeps a handoff note as it works, so when it runs out of quota Codex picks the issue up in the same folder. CI must be green on every pull request before Claude merges it; the user reads each pull request afterwards, and anything to change becomes a follow-up fix. The three issues where a mistake would reach a customer (4, 6 and 7) are also reviewed by Codex after they merge.
+Four days. Nine issues and a tenth for the README, one pull request each. The issues are the files in `docs/issues/`. Claude Code builds them one at a time, in the order 1, 2, 3, 4, 7, 5, 6, 8, 9, 10. The active agent keeps a handoff note as it works, monitors available limits and stops before exhausting its quota, with every change and check documented so the other agent can resume in the same folder. CI must be green on every pull request before Claude merges it; the user reads each pull request afterwards, and anything to change becomes a follow-up fix. The three issues where a mistake would reach a customer (4, 6 and 7) are also reviewed by Codex after they merge.
 
 | # | Issue | What it builds | Builder | Day | Starts after |
 | --- | --- | --- | --- | --- | --- |
