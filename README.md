@@ -65,7 +65,38 @@ make run          # then open http://localhost:8000/demo
 
 If a key is missing, `make run` stops and names the variable it needs.
 
-<!-- The sections below are written at the end of the build. -->
+## Demo
+
+A 5-7 minute walk through the flows. Start both services with `make run`, open
+<http://localhost:8000/demo> and click "Chat with Meridian Pharmacy". The demo page's
+widget is set to store-001, Meridian Downtown. The order details below are synthetic
+records from `data/orders.json`.
+
+1. **A cited answer.** Ask "What are the directions for Meridian All Day Allergy?". The
+   reply is the label's directions, word for word. Open the source chip under it to see
+   the catalog text it came from.
+2. **A store question.** Ask "Are you open on Sunday?". The hours come from a live
+   lookup, and its chip shows when the lookup ran.
+3. **An order, kept private.** Ask "Where is my order?". The reply is a form, not an
+   answer: enter `MRD-ORD-48213` and `maria.garcia@example.com`. The reply shows the
+   status, the delivery estimate and the item count, nothing else.
+4. **A wrong contact.** Submit the same order number with `someone@example.com`. The
+   reply is the one message every failed check gets, so it doesn't reveal whether the
+   order exists.
+5. **A safety refusal.** Ask "I'm pregnant, can I take Meridian All Day Allergy?". The
+   assistant says it can't diagnose or say whether a medicine is right for you, shows the
+   label's warnings word for word and offers the pharmacist card.
+6. **A pharmacist ticket.** Click "Ask a pharmacist" on that card. The reply shows the
+   request number (`TCK-...`), and the button stays disabled: one ticket per card.
+7. **An emergency.** Send "My son swallowed a bottle of pills". A red banner with the 911
+   text appears at once, before any model call, with a pharmacist card under it.
+8. **The keyboard.** Tab moves through the launcher, the input, the source chips and the
+   buttons; Enter opens a chip; Escape closes the panel.
+
+Demo video: not recorded yet. Its link goes here once it is.
+
+To see every reply type without a server, serve the repo root with
+`python -m http.server` and open `/widget/preview.html`.
 
 ## Architecture
 
@@ -468,3 +499,58 @@ What the reviews and checks caught:
   card to its own offer, with regression tests and a browser check.
 
 ## Limitations and next steps
+
+### Measured quality
+
+- Held-out answer accuracy is 85% against a 90% target, and p95 latency is 17.2 s
+  against 4 s (measured on Groq, rate-limit waits included). The current default model
+  has not been measured on the held-out set, and its 12-case development run can't
+  establish reliability.
+- Every case and calibration label is an AI judgment. Independent human review is still
+  pending, so the judge's 20/20 is agreement with AI labels.
+- The judge sees only the latest customer question, so a follow-up such as "How do I
+  take it?" can lose the product it refers to. This gap in the evaluator was confirmed
+  offline; it isn't known to have caused any reported failure.
+
+### Safety and privacy gaps found in review and left open
+
+- The emergency rules miss a symptom and "now" in different sentences ("I had chest pain
+  last year. I have it again now."), and "My throat feels tight right now" matches no
+  pattern. The router is the backup while the model is up.
+- Redaction misses phone numbers outside the US format; a unit-less dose list such as
+  "250/500/1000" can read as a phone number; and "$12345", lot numbers and NDC fragments
+  become `[number]`.
+- Order verification is the order number plus the matching email or phone, with no
+  one-time code.
+
+### Product
+
+- The alias table maps one brand per ingredient, so a bare "Prilosec", "Imodium",
+  "Pepto" or "Motrin" finds nothing. Search is exact matching plus keywords, with no
+  embeddings.
+- Sessions live in memory: a restart forgets every conversation, and its old cards then
+  get the "out of date" reply.
+- If a ticket is created but its reply is lost, and a newer card appears before the
+  retry, the retry is refused as out of date although the first attempt's ticket exists.
+- The widget's browser check (`widget/handoff-test.html`) runs by hand, not in CI, and
+  the keyboard and live checks are manual. In `widget/preview.html`, the failed-handoff
+  example has no "Try again" button.
+- The plan named gpt-oss-120b on Groq as the runtime and GPT-6 Luna on OpenAI as the
+  judge. The evaluation issue's amendments (`docs/issues/09-eval.md`) moved every role to
+  Groq and then to OpenCode Go, as the Setup and Evaluation sections describe.
+
+### Next steps
+
+- A one-time code to prove control of the email or phone before showing an order.
+- Independent human review of the labels, a hand audit of the judge on the test set,
+  and a fresh held-out run of the current default, written to separate files.
+- The small quality follow-up in `docs/FIXES.md` section D: diagnose dev-009 and the
+  slowest stages on the development set, and give the judge the conversation's context
+  if that gap turns out to matter.
+- Fixes for the open safety and privacy gaps above.
+- Holiday hours, typo tolerance in search, clarifying questions with buttons, and turns
+  that ask two things at once.
+- Embedding search, if keyword misses show up in the evaluation.
+- Browser tests of the widget and a type checker in CI.
+- A local open-weight model compared with the hosted one; Arabic or Spanish; staff
+  analytics; a fine-tuned router.
