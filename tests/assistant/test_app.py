@@ -1,6 +1,7 @@
 """POST /chat returns a cited answer on the fake model; the widget is served when it exists."""
 
 import asyncio
+import logging
 from datetime import UTC, datetime
 from pathlib import Path
 from threading import Event
@@ -496,3 +497,35 @@ async def saturated_emergency_reply():
 
 def test_emergency_http_reply_bypasses_saturated_normal_workers():
     asyncio.run(saturated_emergency_reply())
+
+
+def test_immediate_http_emergency_keeps_redacted_history_offer_and_logs(caplog):
+    caplog.set_level(logging.INFO)
+    api = TestClient(create_api(DATA, staff_key="test-staff-key"))
+    calls = []
+    api.event_hooks["request"].append(calls.append)
+    fake = FakeSender([ROUTED, PLAN])
+    steps = pipeline.Steps(retrieve=search)
+    client = TestClient(create_app(SETTINGS, steps, fake, api, NO_WIDGET))
+    message = "I cannot breathe. Call me at +44 20 7946 0958."
+    card = client.post("/chat", json={**CHAT, "message": message}).json()
+    assert card["emergency"] and card["offer_id"]
+    assert fake.requests == [] and calls == []
+    assert client.post("/chat", json=CHAT).json()["reply_type"] == "label_sections"
+    assert "I cannot breathe. Call me at [phone]." in str(fake.requests)
+    ticket = client.post(
+        "/handoff",
+        json={
+            "session_id": CHAT["session_id"],
+            "confirmed": True,
+            "offer_id": card["offer_id"],
+        },
+    ).json()
+    assert ticket["ticket_id"]
+    summary = api.get(
+        f"/v1/tickets/{ticket['ticket_id']}", headers={"X-Staff-Key": "test-staff-key"}
+    ).json()["summary"]
+    assert summary["risk_label"] == summary["urgency"] == "emergency"
+    assert summary["customer_messages"][0] == "I cannot breathe. Call me at [phone]."
+    assert "+44 20 7946 0958" not in str(fake.requests) + str(summary) + caplog.text
+    assert "reply=emergency" in caplog.text
