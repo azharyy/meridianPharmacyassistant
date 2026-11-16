@@ -54,13 +54,6 @@ strict structured outputs. DeepSeek V4.1 Flash is listed the same way but reject
 such request with HTTP 400, so it is not offered. OpenCode describes Go as built for coding agents and
 monitors its traffic. An OpenAI API key is unused.
 
-The historical held-out results in [`eval/REPORT.md`](eval/REPORT.md) were measured before this
-change, on Groq-hosted GPT-OSS 120B with a Groq Qwen 3.8 27B judge (its calibration is
-kept in `eval/results/calibration-groq-qwen.md`). The newer OpenCode pair measured
-the code at issue 33. The [provider results comparison](eval/experiments/opencode-2026-11-16/PROVIDER_COMPARISON.md)
-shows both configurations with their actual models, judges and code fingerprints;
-the historical files remain unchanged.
-
 ```bash
 make run          # then open http://localhost:8000/demo
 ```
@@ -361,19 +354,15 @@ make eval              # the 60 test cases with exact matching first; then write
 
 Each run writes its raw results as JSON and a short Markdown summary to `eval/results/`.
 `make eval-compare` refuses a development run made on different code, so run
-`make eval-dev` first. These Make targets use default output paths; use the isolated
-procedure below for the requested new held-out run, preserving the historical files.
+`make eval-dev` first. These Make targets write to the default paths; for a new held-out
+run, use the isolated procedure below so the historical files stay unchanged.
 Live client construction, evaluation and calibration reject non-OpenCode roles.
 `make check` tests the harness offline, with both models faked.
 
 ### Fresh OpenCode held-out comparison
 
-Status on 2026-11-16: **completed**, using GLM-5.3 for both runtime variants and
-Kimi K3.1 Pro as judge. The existing key worked through the project's `uv --env-file`
-loader; the earlier missing-key claim had checked only the inherited process
-environment. No key value was displayed. The user explicitly authorized these live
-runs. All newly executed evaluations used OpenCode; the Groq comparison uses its
-preserved results, with no fresh Groq calls.
+Run on 2026-11-16 with GLM-5.3 for both runtime variants and Kimi K3.1 Pro as judge.
+The Groq comparison reuses its preserved results, with no new Groq calls.
 
 | Metric | OpenCode baseline | OpenCode improved |
 | --- | --- | --- |
@@ -512,6 +501,8 @@ beside the corrected ones ([eval/results/LABEL_AUDIT.md](eval/results/LABEL_AUDI
 | OpenCode GLM-5.3-Flash + Kimi judge | 12-case [development run](eval/results/dev.md) after issue 17 | 12/12 (100%) | 10.209 s |
 | OpenCode GLM-5.3 + Kimi judge | Earlier 12-case [development comparison](eval/results/dev-compare-before-17.md) | 12/12 (100%) | 2.083 s |
 | OpenCode GLM-5.3-Flash + Kimi judge | Earlier 12-case [development run](eval/results/dev-before-17.md) | 11/12 (91.7%) | 8.157 s |
+| Groq GPT-OSS 120B and 20B + Qwen judge | Historical 12-case [development comparison](eval/results/dev-groq20b.md) | 9/12 and 9/12 (75.0%) | 13.342 s and 29.221 s |
+| Groq GPT-OSS 120B + Qwen judge | Historical 12-case [development run cut short by rate limits](eval/results/dev-quota-limited.md) | 4/12 (33.3%) | 1.392 s |
 
 The historical held-out and development runs measured the code of their time. The new
 OpenCode runs include the E1-E5 review fixes and empty-completion fallback fix, with
@@ -520,10 +511,10 @@ scored 20/20 against AI labels. The earlier post-issue-17 measurements remain ar
 their lower latency does not describe the latest run.
 
 In the earlier post-issue-17 run both OpenCode models scored 12/12. GLM-5.3 was much faster, with a p95 of
-1.9 s against 10.2 s, and is the only configuration here inside the 4-second target. It
+1.9 s against 10.2 s, inside the 4-second target; on issue 33's code its p95 was 12.4 s. It
 costs about 6.3 times as much in tokens (an estimated $0.0170 per run against $0.0027), and
-it became the default; GLM-5.3-Flash stays selectable. Flash's two runs show how much a
-12-case run varies: 11/12 then 12/12, and a p95 of 8.2 s then 10.2 s. Its earlier failure,
+it became the default; GLM-5.3-Flash stays selectable. Flash's three runs show how much a
+12-case run varies: 11/12, 12/12, then 10/12, with a p95 of 8.2 s, 10.2 s, then 13.5 s. Its earlier failure,
 dev-009, is a prescription question it labeled as dosing beyond the label. The reply then
 showed another product's directions, a defect issue 17 fixed. In the later run it labeled
 the question correctly, so that 12/12 reflects the model on that run, not the fix.
@@ -550,10 +541,10 @@ again, and when the agents could run live commands or assign labels.
 | Issues 14 and 15: the stale-card fix | Codex (contract) and Claude Code (binding and widget) | Claude Code reviewed the contract | #11, #12 |
 | Issue 10: this README | Claude Code drafted it; I checked and reworded it | | #13 |
 | Issues 17 and 18: the quality follow-up | Claude Code, after a read-only diagnosis of the saved development runs | I chose the fix and, after re-running the development set, the default model | #14, #15 |
-| Issue 33: fresh live checks and historical/current comparison | Codex, using the existing project credential loader on my explicit instruction | Raw case/configuration fingerprints and paired results checked; no tuning against test questions | Local issue branch |
+| Issues 23-34: the review fixes (redaction, emergency rules, risk labels, emergency scheduling, evaluation fingerprints, empty completions), the OpenCode evaluation and comparison, and this cleanup | Codex; Claude Code finished issue 34 | Codex checked case and configuration fingerprints and the paired results, with no tuning against test questions; Claude Code audited the stack for dead code and stale docs before merge | PR_NUMBER |
 
-Merged issues used one branch and one pull request each; newer local checkpoints
-await publication and review. Acceptance criteria name the tests proving them. Both agents followed the same rules in `AGENTS.md`: module
+Most issues were merged one pull request each; issues 23-34 were built as local
+checkpoints and merged together in one pull request. Acceptance criteria name the tests proving them. Both agents followed the same rules in `AGENTS.md`: module
 boundaries a test enforces, no real model in any test, customer-facing text only from
 templates. They shared one note, `HANDOFF.md` (kept out of git): the issue, the ticked
 criteria and their tests, the last check result, the decisions and the next step. When
@@ -577,7 +568,7 @@ What the reviews and checks caught:
   policy. It was corrected after the live runs, the same replies were rescored, and the
   original results are kept.
 - **Rate limits scored as answers.** Groq's free-tier limits turned development runs into
-  fallback replies (4/12 at worst). The evaluation now waits out short limits, and stops
+  fallback replies ([4/12 at worst](eval/results/dev-quota-limited.md)). The evaluation now waits out short limits, and stops
   without saving anything when a limit is too long to wait out.
 - **A stale pharmacist card.** Codex's whole-project review found that an old emergency
   card, clicked after a newer fallback card, filed a routine ticket. Issue 15 binds every
@@ -622,12 +613,13 @@ What the reviews and checks caught:
 - Order verification is the order number plus the matching email or phone, with no
   one-time code.
 
-These fixes have offline regression coverage ([fix plan](docs/FIXES.md#e-feasible-follow-ups-from-the-latest-review-completed-locally));
+These fixes have offline regression coverage ([fix plan](docs/FIXES.md#e-feasible-follow-ups-from-the-latest-review-completed));
 the new live pair measures the fixed code while original measurements remain intact.
 Evaluation fingerprints now include API/contract code and actual policy documents.
 The issue 33 runs have matching fingerprints for their measured code. Issue 34's
-unused report-option and docstring cleanup changes that fingerprint and was checked
-offline only; saved runs cannot be mixed with new code in a same-code comparison.
+cleanup removed unreachable code and the catalog prompt's store-lookup option, which
+always ended in a failed lookup. It changes that fingerprint and was checked offline
+only; saved runs cannot be mixed with new code in a same-code comparison.
 
 ### Product
 
@@ -649,7 +641,7 @@ offline only; saved runs cannot be mixed with new code in a same-code comparison
   accuracy, excess handoff offers and timeout reliability using development/synthetic
   cases. Preserve the completed held-out evidence rather than tuning against its questions.
 - Give the judge a conversation's earlier messages if follow-ups become a bigger share of
-  the cases; today they are 2 of 30 judged held-out turns.
+  the cases; each historical Groq held-out run had 2 among its 30 judged turns.
 - Fixes for the open safety and privacy gaps above.
 - Holiday hours, typo tolerance in search, clarifying questions with buttons, and turns
   that ask two things at once.

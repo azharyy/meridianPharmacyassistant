@@ -38,7 +38,7 @@ callers cannot trigger them.
   `TurnResult.tool` (only tests read it); `search`'s `k <= 0` guard (k is always
   5); the catalog prompt's store-lookup option (refused for every intent that
   reaches the catalog agent). Update the tests that only exercised them.
-- [ ] 4. Trim documentation that repeats another file or no longer matches the
+- [x] 4. Trim documentation that repeats another file or no longer matches the
   current version, and fix stale facts and typos. Keep every file a kept
   document cites; local links resolve.
 

@@ -6,34 +6,24 @@ scripted or supplied through a fake SDK HTTP transport. No external model call,
 key file, held-out case inspection or saved evaluation update was used.
 
 Live follow-up, 2026-11-16 ([issue 33](issues/33-provider-results-comparison.md)):
-completed with GLM-5.3, GLM-5.3-Flash and Kimi K3.1 Pro on OpenCode. The user
-explicitly authorized project credential loading and live calls. The existing
-key worked through `uv --env-file`; the earlier missing-key conclusion had only
-checked the inherited environment. No key value was displayed or copied.
-
-Kimi calibration scored 20/20; GLM development 12/12; Flash development 10/12.
-The full60 pair scored 46/60 baseline and 49/60 improved. Improved groundedness
-was 38/38, escalation precision 23/28, recall 23/23, emergency recall 6/6, leaks
-0/60, p95 13.118 seconds. Accuracy, precision and latency miss project targets.
-The [provider results comparison](../eval/experiments/opencode-2026-11-16/PROVIDER_COMPARISON.md)
-compares these to archived Groq scores without attributing differences solely
-to provider: code and judge also differ. The actual cases and judge prompt match.
-No successful run was restarted after continuation because fingerprints matched.
-The full offline suite now passes 1,461 tests; original browser acceptance is
-still blocked. Offline checks and these separate live measurements are distinct.
+OpenCode calibration, development and held-out runs completed; the
+[provider results comparison](../eval/experiments/opencode-2026-11-16/PROVIDER_COMPARISON.md)
+has their numbers and how they compare with the archived Groq runs. The full offline
+suite now passes 1,457 tests. Offline checks and these separate live measurements are
+distinct.
 
 ## Results
 
 | Check | Result | Evidence and scope |
 | --- | --- | --- |
-| Ruff lint and format | PASS | Full repository checks; exact commands/outcomes recorded in HANDOFF. |
-| Full offline suite | PASS | Latest 1,461 tests, including contracts, architecture, catalog/data, API, assistant, SDK boundaries and evaluation harness. Original system checkpoint had 1,456. |
+| Ruff lint and format | PASS | Full repository checks; the commands are under [Reproduction](#reproduction-and-remaining-acceptance). |
+| Full offline suite | PASS | Latest 1,457 tests, including contracts, architecture, catalog/data, API, assistant, SDK boundaries and evaluation harness. Original system checkpoint had 1,456; issue 34 removed four cases that only tested deleted dead code. |
 | Installed dependencies | PASS | `uv --cache-dir .uv-system-check pip check --python .venv/Scripts/python.exe`: 31 packages compatible. No install. |
 | Catalog integration matrix | PASS | 302 in-process HTTP turns through real default retrieval/tool wiring and mock API, with scripted models. |
 | Separate assistant/API over TCP | PASS | 12 flow groups against two ephemeral loopback uvicorn services; actual HTTP client between services. |
 | Widget JavaScript syntax | PASS | `node --check widget/meridian-chat.js` and Node syntax checks for both inline HTML scripts; external script paths exist. |
 | Browser interaction/rendering | BLOCKED | Browser host unavailable; native Chrome fallback stopped because Computer Use could not confidently determine the current URL. No bypass or alternative browser automation attempted. |
-| Live model evaluation | COMPLETED, TARGETS MISSED | User-authorized OpenCode calibration, two12-case development runs and two60-case held-out runs; see linked raw results/report. Offline checks remain fake. |
+| Live model evaluation | COMPLETED, TARGETS MISSED | User-authorized OpenCode calibration, two 12-case development runs and two 60-case held-out runs; see linked raw results/report. Offline checks remain fake. |
 
 ## Catalog integration matrix
 
@@ -118,7 +108,8 @@ Browser acceptance remains open:
 - Serve the repository statically, then open `widget/preview.html`: expect 20/20
   examples. Open `widget/handoff-test.html`: expect PASS 8/8 for its deferred-fetch
   handoff/retry/concurrency scenarios. Neither fixture was executed in a browser
-  during this verification.
+  during this verification. Later, issue 34 rendered `widget/preview.html` in
+  Edge headless: 20/20 examples, and the refreshed `08-handoff.png`.
 - The user runs `make run` and follows the README demo: product/source chip,
   stock/store answers, private order form and wrong contact, safety refusal,
   confirmed pharmacist ticket, emergency banner, keyboard/Enter/Escape and focus.

@@ -1,32 +1,18 @@
 # Review fixes and submission plan
 
-Updated 2026-11-16 after the user authorized implementation of the
-[issue 23](issues/23-review-fix-plan.md) plan. E1-E5 are implemented and tested
-locally in issues 24-28; [issue 29](issues/29-review-fix-documentation.md) records
-completion and remaining validation. The implementation commits are stacked on
-local issue branches, pending publication/review. [Issue 33](issues/33-provider-results-comparison.md)
-has now completed fresh live calibration, development checks and the full held-out pair.
-
-Current evaluation policy ([issue 32](issues/32-opencode-evaluation.md)) is
-OpenCode Go only: GLM-5.3 runtime, GLM-5.3-Flash development comparison and
-Kimi K3.1 Pro judge. The new held-out pair scored 46/60 baseline and 49/60 improved,
-with improved p95 13.118s; accuracy, escalation precision and latency miss targets.
-The [measured comparison](../eval/experiments/opencode-2026-11-16/PROVIDER_COMPARISON.md)
-preserves historical evidence and identifies changed code/judge as confounders.
+E1-E5 below were planned in [issue 23](issues/23-review-fix-plan.md), built in
+issues 24-28 and recorded in [issue 29](issues/29-review-fix-documentation.md).
+Evaluation uses OpenCode Go only ([issue 32](issues/32-opencode-evaluation.md));
+[issue 33](issues/33-provider-results-comparison.md) measured the fixed code, and the
+[provider results comparison](../eval/experiments/opencode-2026-11-16/PROVIDER_COMPARISON.md)
+holds the numbers and their confounders.
 
 The earlier A-D queue has been addressed through issues 14-22: offer binding,
 README completion, the named-product fix, the default-model decision and the
 judge-context investigation. A-D below summarize those outcomes and link their
 issue scopes and tests. The video and validation gaps remain pending.
 
-The initial plan is [issue 13](issues/13-fix-plan.md). Record each future issue's
-implementation criteria in `HANDOFF.md` once implementation is requested.
-
-Use one shared queue. Codex and Claude can both build every item; there are no
-separate owners. The active agent works through the queue while reserving enough
-capacity for checks and a complete handoff, then stops **before** its hard limit.
-Everything it did must be recorded in `HANDOFF.md`; the next agent continues
-from that record without needing the chat.
+The initial plan is [issue 13](issues/13-fix-plan.md).
 
 ## Review findings and fixes
 
@@ -115,12 +101,12 @@ scores and original-label artifacts; a new held-out experiment needs its own
 user authorization and separate outputs. The later authorized OpenCode experiment
 is recorded in [issue 33](issues/33-provider-results-comparison.md).
 
-## E. Feasible follow-ups from the latest review (completed locally)
+## E. Feasible follow-ups from the latest review (completed)
 
 All reproductions below used synthetic inputs and offline fakes. The review's
-baseline was 1,365 passing tests. E1-E5 now have regression coverage and 1,454
-tests pass, with Ruff lint/format green. Full checks and commits were recorded
-after each criterion in HANDOFF.md. Existing dependencies/contracts were sufficient.
+baseline was 1,365 passing tests. E1-E5 have regression coverage; the suite passed
+1,454 tests when they were complete, with Ruff lint/format green, and each criterion
+was checked and committed separately. Existing dependencies/contracts were sufficient.
 No improvement to live model scores is claimed by these offline checks.
 
 ### E1. Close the reproduced phone-redaction gaps
@@ -276,9 +262,8 @@ Acceptance:
   paths and matching metadata for the code measured in issue 33. The user's explicit authorization
   permitted credential loading/live evaluation for this experiment; future live
   work still follows AGENTS.md unless the user authorizes it.
-- Preserve the disclosed historical metrics and one-net-case improvement. The
-  90% accuracy/four-second p95 targets are project goals, not submission thresholds
-  from the brief. No metric improvement is claimed for this planning update.
+- Preserve the disclosed historical metrics and one-net-case improvement. No metric
+  improvement is claimed for this planning update.
 
 ### Deferred at this stage
 
@@ -298,8 +283,6 @@ Acceptance:
 
 ## Next action
 
-E1-E5 code and this completion note are ready for review on local stacked issue
-branches. Publish/review one issue at a time, consolidating same-issue follow-up
-commits as needed without rewriting main or a remote branch. Keep E6's video,
-human-label review, live widget acceptance and any new live measurements pending
-until they are actually completed. Do not restart E1-E5 or rerun archived evaluations.
+E1-E5 are complete. Keep E6's video, human-label review, live widget acceptance and
+any new live measurements pending until they are actually completed. Do not restart
+E1-E5 or rerun archived evaluations.
