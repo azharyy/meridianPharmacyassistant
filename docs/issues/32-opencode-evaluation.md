@@ -15,12 +15,12 @@ historical amendments. Active runtime GLM-5.3; comparison GLM-5.3-Flash; judge
 Kimi K3.1 Pro, all on OpenCode Go with OPENCODE_API_KEY.
 
 Acceptance criteria (full offline check and HANDOFF checkpoint each):
-- [ ] 1. Live evaluation/client construction/calibration reject non-OpenCode or
+- [x] 1. Live evaluation/client construction/calibration reject non-OpenCode or
   mixed-provider roles before requests. Tests use synthetic settings and fakes;
   historical result/calibration validation still works without relabeling data.
   Add an optional CLI output directory so the requested new comparison can use
   its own experiment/results tree without replacing archived measurements.
-- [ ] 2. PLAN and FIXES contain no Groq plan instructions; update obsolete model,
+- [x] 2. PLAN and FIXES contain no Groq plan instructions; update obsolete model,
   key, second-provider and human-label claims. README/TEST_REPORT distinguish
   OpenCode-only future evals, historical measurements and actual pending status.
   Remove cancelled-rerun artifacts. Verify links and full suite; no fresh scores

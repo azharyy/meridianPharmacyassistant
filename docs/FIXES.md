@@ -6,6 +6,11 @@ locally in issues 24-28; [issue 29](issues/29-review-fix-documentation.md) recor
 completion and remaining validation. The implementation commits are stacked on
 local issue branches, pending publication/review. No live measurements were rerun.
 
+Current evaluation policy ([issue 32](issues/32-opencode-evaluation.md)) is
+OpenCode Go only: GLM-5.3 runtime, GLM-5.3-Flash development comparison and
+Kimi K3.1 Pro judge. The newly requested held-out pair is pending credentials
+and user-run commands from the README, using a fresh experiment/results directory.
+
 The earlier A-D queue has been addressed through issues 14-22: offer binding,
 README completion, the named-product fix, the default-model decision and the
 judge-context investigation. A-D below preserve the historical proposals, not
@@ -246,8 +251,8 @@ current model. Record this narrow issue amendment in the handoff.
 
    | Configuration | Evidence | Accuracy | p95 |
    | --- | --- | --- | --- |
-   | Groq GPT-OSS 120B + Qwen judge | Historical 60-case [held-out comparison](../eval/REPORT.md) | 50/60 -> 51/60 (83.3% -> 85.0%) | 25.545 s -> 17.226 s |
-   | OpenCode GLM-5.3-Flash + Kimi judge | Saved 12-case [development run](../eval/results/dev.md); current default model | 11/12 (91.7%) | 8.157 s |
+   | Archived previous configuration | Historical 60-case [held-out comparison](../eval/REPORT.md), not current OpenCode measurements | 50/60 -> 51/60 (83.3% -> 85.0%) | 25.545 s -> 17.226 s |
+   | OpenCode GLM-5.3-Flash + Kimi judge | Historical 12-case [development run](../eval/results/dev.md) | 11/12 (91.7%) | 8.157 s |
    | OpenCode GLM-5.3 + Kimi judge | Saved 12-case [development comparison](../eval/results/dev-compare.md) | 12/12 (100%) | 2.083 s |
 
 4. State that these are saved measurements of their recorded implementations,
@@ -475,10 +480,11 @@ Acceptance:
   refusal and confirmed ticket summary. Keep video status pending until it exists.
 - Human review of safety/calibration labels and live widget/keyboard acceptance
   remain explicit validation tasks. Do not present AI labels as human-reviewed.
-- Keep the historical 60-case Groq comparison, original-label artifacts and
+- Keep the historical 60-case comparison, original-label artifacts and
   matching calibration intact. GLM-5.3's 12-case development result does not
-  establish current held-out quality. A new held-out experiment needs a separate
-  user decision, compatible calibration and separate output paths. Codex does
+  establish current held-out quality. The user has requested a new OpenCode
+  held-out pair; it remains pending credentials, compatible calibration and
+  separate output paths. Codex does
   not run `make run`, `make eval*` or `make judge*` under the repo rules.
 - Preserve the disclosed historical metrics and one-net-case improvement. The
   90% accuracy/four-second p95 targets are project goals, not submission thresholds

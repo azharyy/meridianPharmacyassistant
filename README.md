@@ -41,13 +41,12 @@ OPENCODE_API_KEY=your_opencode_key_here
 | --- | --- | --- |
 | `OPENCODE_API_KEY` | `make run` and all eval targets | An API key from [opencode.ai/auth](https://opencode.ai/auth), used with an OpenCode Go subscription. It serves the assistant and the judge |
 | `MERIDIAN_RUNTIME_MODEL` | Optional | `glm-5.3` (default) or `glm-5.3-flash` |
-| `MERIDIAN_RUNTIME_PROVIDER` | Optional | `opencode` (default) or `groq`, for `make run` only; the eval targets always use OpenCode Go |
-| `GROQ_API_KEY` | Only with `MERIDIAN_RUNTIME_PROVIDER=groq` | A Groq API key, starting with `gsk_`. With `groq` the runtime is GPT-OSS 120B (or `openai/gpt-oss-20b`) |
+| `MERIDIAN_RUNTIME_PROVIDER` | Optional | Use `opencode` for the active plan; live evaluation and calibration reject other providers |
 | `MERIDIAN_STAFF_KEY` | Optional | The header value for reading a ticket back in the demo. Default: `dev-staff-key` |
 
 Format: one `NAME=value` per line, with no quotes, no spaces around `=` and no `export`.
 
-Every model call goes to OpenCode Go and uses only models included in the Go plan: the
+All active evaluation roles use OpenCode Go and models from the Go plan: the
 assistant runs on GLM-5.3, the development comparison on its smaller sibling GLM-5.3-Flash,
 and the eval judge is Kimi K3.1 Pro, from a different model family than both. They are Go
 models OpenCode lists with structured output on its chat-completions API; every call uses
@@ -58,7 +57,8 @@ monitors its traffic. An OpenAI API key is unused.
 The held-out results in [`eval/REPORT.md`](eval/REPORT.md) were measured before this
 change, on Groq-hosted GPT-OSS 120B with a Groq Qwen 3.8 27B judge (its calibration is
 kept in `eval/results/calibration-groq-qwen.md`). The test set was not run again on the
-new default, so those numbers describe the Groq configuration.
+new default, so those numbers describe the historical Groq configuration. They are
+preserved evidence, not the active evaluation plan or current OpenCode scores.
 
 ```bash
 make run          # then open http://localhost:8000/demo
@@ -149,9 +149,9 @@ flowchart TD
 Steps 4, 5 and 8 are the RAG pipeline: retrieval finds the records, the catalog agent
 picks the records and sections that answer, and the renderer copies their text and cites
 it. Tool use goes through the plan as well, not native function calling: a stock or store
-lookup is a field in the plan, which the tool executor checks before anything runs. Groq,
-the first runtime, couldn't combine function calling with strict structured outputs in
-one request, and a plan field is easier for code to check. The order lookup is not a
+lookup is a field in the plan, which the tool executor checks before anything runs.
+This gives code a structured request whose intent, evidence and arguments can be
+validated before execution. The order lookup is not a
 model tool at all: the form sends the number and the contact straight to code.
 
 Shorter paths, all in `assistant/pipeline.py`:
@@ -360,10 +360,44 @@ make eval              # the 60 test cases with exact matching first; then write
 
 Each run writes its raw results as JSON and a short Markdown summary to `eval/results/`.
 `make eval-compare` refuses a development run made on different code, so run
-`make eval-dev` first. The saved held-out runs were measured on Groq (see below);
-running `make eval-baseline` and `make eval` again replaces them with runs of the
-current default, and git keeps the originals. `make check` tests the harness offline,
-with the runtime and the judge both faked.
+`make eval-dev` first. These Make targets use default output paths; use the isolated
+procedure below for the requested new held-out run, preserving the historical files.
+Live client construction, evaluation and calibration reject non-OpenCode roles.
+`make check` tests the harness offline, with both models faked.
+
+### Fresh OpenCode held-out comparison
+
+Status on 2026-11-16: **pending**. The requested full baseline/improved pair now uses
+OpenCode only: GLM-5.3 for both runtime variants and Kimi K3.1 Pro for the judge.
+The agent's process has no `OPENCODE_API_KEY`, so no fresh live call or score has
+been produced. The cancelled provider rerun made no calls.
+
+The user runs the following in PowerShell, with their own configured key. The
+`uv --env-file` option loads it locally; never paste a key into chat. Choose a
+new experiment directory for each run, stop if any command fails, and retain
+incomplete outputs as incomplete rather than describing them as a paired result.
+
+```powershell
+$env:MERIDIAN_LLM = "live"
+$env:MERIDIAN_RUNTIME_PROVIDER = "opencode"
+$env:MERIDIAN_RUNTIME_MODEL = "glm-5.3"
+$runResults = "eval/experiments/opencode-current/results"
+if (Test-Path $runResults) { throw "Choose a fresh experiment directory." }
+uv run --no-sync --env-file .env python -m eval.cli calibrate --output-dir $runResults
+if ($LASTEXITCODE -ne 0) { throw "Calibration failed; stop here." }
+$env:MERIDIAN_EXACT_MATCH = "0"
+uv run --no-sync --env-file .env python -m eval.cli baseline --output-dir $runResults
+if ($LASTEXITCODE -ne 0) { throw "Baseline failed; stop here." }
+$env:MERIDIAN_EXACT_MATCH = "1"
+uv run --no-sync --env-file .env python -m eval.cli improved --output-dir $runResults
+if ($LASTEXITCODE -ne 0) { throw "Improved run failed; stop here." }
+```
+
+This writes a new `eval/experiments/opencode-current/REPORT.md` and raw results
+under its `results/` directory. Calibration, cases, prompts, implementation and
+model settings must match across the pair; the retrieval flag is the intended
+difference. Report measured scores only after both runs finish. Historical
+`eval/REPORT.md` and `eval/results/` remain evidence of their original configuration.
 
 ### The cases
 
@@ -580,9 +614,6 @@ results remain intact.
 - The widget's browser check (`widget/handoff-test.html`) runs by hand, not in CI, and
   the keyboard and live checks are manual. In `widget/preview.html`, the failed-handoff
   example has no "Try again" button.
-- The plan named gpt-oss-120b on Groq as the runtime and GPT-6 Luna on OpenAI as the
-  judge. The evaluation issue's amendments (`docs/issues/09-eval.md`) moved every role to
-  Groq and then to OpenCode Go, as the Setup and Evaluation sections describe.
 
 ### Next steps
 

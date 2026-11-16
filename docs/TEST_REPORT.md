@@ -4,6 +4,18 @@ Code tested: `1c6e27b`, including the local E1-E5 fixes. All model responses wer
 scripted or supplied through a fake SDK HTTP transport. No external model call,
 key file, held-out case inspection or saved evaluation update was used.
 
+Evaluation policy update, 2026-11-16 ([issue 32](issues/32-opencode-evaluation.md)):
+future live evaluations and calibration use OpenCode Go only. Runtime: GLM-5.3;
+development comparison: GLM-5.3-Flash; judge: Kimi K3.1 Pro. The requested fresh
+60-case baseline/improved pair is pending: `OPENCODE_API_KEY` is unavailable in
+the agent's process, and no key file was read. The README provides isolated
+user-run `--output-dir` commands. This does not turn the fake checks below into
+live measurements; historical provider results remain archived under their actual
+configuration. The cancelled alternate-provider rerun made no calls. After this
+policy change, the full offline suite passes 1,461 tests; live-provider and isolated
+output-directory regression tests are included. The original HTTP/browser status
+below is unchanged.
+
 ## Results
 
 | Check | Result | Evidence and scope |
