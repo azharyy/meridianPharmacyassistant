@@ -89,6 +89,12 @@ class SearchIndex:
         ids.extend(self.keyword_ids(query))
         return [self.records[key] for key in dict.fromkeys(ids)][:k]
 
+    def named(self, query: str) -> ProductRecord | None:
+        """The product the words name by SKU, name, ingredient or brand alias, never a keyword
+        hit: a label that merely mentions a medicine is not that medicine."""
+        skus = exact_products(query, self.products, self.aliases)
+        return self.records[skus[0]] if skus else None
+
     def keyword_ids(self, query: str) -> list[str]:
         tokens = list(dict.fromkeys(re.findall(r"\w+", query.casefold(), flags=re.UNICODE)))
         if not tokens:

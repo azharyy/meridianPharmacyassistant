@@ -73,6 +73,19 @@ def test_bm25_puts_the_distinctive_section_first(index):
     assert found[0].source_id == "policies/delivery.md#delivery-area"
 
 
+def test_a_named_product_is_found_only_by_its_sku_name_ingredient_or_alias():
+    index = SearchIndex(exact_match=False)  # the strict lookup ignores the retrieval flag
+    try:
+        assert index.search("warfarin", 1)[0].sku == "MRD-PAN-002"  # its warnings mention it
+        assert index.named("warfarin") is None
+        assert index.named("Meridian All Day Allergy").sku == "MRD-ALG-012"
+        assert index.named("Can I take MRD-ALG-012 twice?").sku == "MRD-ALG-012"
+        assert index.named("Advil").sku == "MRD-PAN-001"
+        assert "Acetaminophen" in index.named("acetaminophen").active_ingredients
+    finally:
+        index.close()
+
+
 def test_default_paths_load_the_catalog_and_each_policy_section():
     index = SearchIndex()
     try:

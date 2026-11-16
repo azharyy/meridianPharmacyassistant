@@ -193,6 +193,19 @@ def test_store_questions_use_the_widget_store_or_list_both_without_a_catalog_cal
         assert all(before <= source.retrieved_at <= datetime.now(UTC) for source in reply.sources)
 
 
+@pytest.mark.parametrize(
+    ("mention", "sources"), [("warfarin", []), ("Advil", ["MRD-PAN-001#directions"])]
+)
+def test_a_risk_reply_shows_a_label_only_for_a_product_the_customer_named(mention, sources):
+    dosing = ROUTED.model_copy(
+        update={"risk_label": RiskLabel.DOSING_BEYOND_LABEL, "product_mentions": [mention]}
+    )
+    with TestClient(create_app(SETTINGS, None, FakeSender([dosing]), NO_API, NO_WIDGET)) as client:
+        reply = client.post("/chat", json={**CHAT, "message": "Can I take a double dose?"}).json()
+    assert reply["reply_type"] == "dosing_beyond_label"
+    assert [source["id"] for source in reply["sources"]] == sources
+
+
 def test_default_app_retrieves_real_records_and_executes_the_models_stock_request():
     api = TestClient(create_api(DATA, staff_key="test-staff-key"))
     steps, index = default_steps(SETTINGS)
