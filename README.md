@@ -541,7 +541,7 @@ again, and when the agents could run live commands or assign labels.
 | Issues 14 and 15: the stale-card fix | Codex (contract) and Claude Code (binding and widget) | Claude Code reviewed the contract | #11, #12 |
 | Issue 10: this README | Claude Code drafted it; I checked and reworded it | | #13 |
 | Issues 17 and 18: the quality follow-up | Claude Code, after a read-only diagnosis of the saved development runs | I chose the fix and, after re-running the development set, the default model | #14, #15 |
-| Issues 23-34: the review fixes (redaction, emergency rules, risk labels, emergency scheduling, evaluation fingerprints, empty completions), the OpenCode evaluation and comparison, and this cleanup | Codex; Claude Code finished issue 34 | Codex checked case and configuration fingerprints and the paired results, with no tuning against test questions; Claude Code audited the stack for dead code and stale docs before merge | PR_NUMBER |
+| Issues 23-34: the review fixes (redaction, emergency rules, risk labels, emergency scheduling, evaluation fingerprints, empty completions), the OpenCode evaluation and comparison, and this cleanup | Codex; Claude Code finished issue 34 | Codex checked case and configuration fingerprints and the paired results, with no tuning against test questions; Claude Code audited the stack for dead code and stale docs before merge | #20 |
 
 Most issues were merged one pull request each; issues 23-34 were built as local
 checkpoints and merged together in one pull request. Acceptance criteria name the tests proving them. Both agents followed the same rules in `AGENTS.md`: module
