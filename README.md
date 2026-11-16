@@ -40,7 +40,7 @@ OPENCODE_API_KEY=your_opencode_key_here
 | Variable | Needed for | What it is |
 | --- | --- | --- |
 | `OPENCODE_API_KEY` | `make run` and all eval targets | An API key from [opencode.ai/auth](https://opencode.ai/auth), used with an OpenCode Go subscription. It serves the assistant and the judge |
-| `MERIDIAN_RUNTIME_MODEL` | Optional | `glm-5.3-flash` (default) or `glm-5.3` |
+| `MERIDIAN_RUNTIME_MODEL` | Optional | `glm-5.3` (default) or `glm-5.3-flash` |
 | `MERIDIAN_RUNTIME_PROVIDER` | Optional | `opencode` (default) or `groq`, for `make run` only; the eval targets always use OpenCode Go |
 | `GROQ_API_KEY` | Only with `MERIDIAN_RUNTIME_PROVIDER=groq` | A Groq API key, starting with `gsk_`. With `groq` the runtime is GPT-OSS 120B (or `openai/gpt-oss-20b`) |
 | `MERIDIAN_STAFF_KEY` | Optional | The header value for reading a ticket back in the demo. Default: `dev-staff-key` |
@@ -48,7 +48,7 @@ OPENCODE_API_KEY=your_opencode_key_here
 Format: one `NAME=value` per line, with no quotes, no spaces around `=` and no `export`.
 
 Every model call goes to OpenCode Go and uses only models included in the Go plan: the
-assistant runs on GLM-5.3-Flash, the development comparison on its larger sibling GLM-5.3,
+assistant runs on GLM-5.3, the development comparison on its smaller sibling GLM-5.3-Flash,
 and the eval judge is Kimi K3.1 Pro, from a different model family than both. They are Go
 models OpenCode lists with structured output on its chat-completions API; every call uses
 strict structured outputs. DeepSeek V4.1 Flash is listed the same way but rejected every
@@ -338,7 +338,7 @@ Each target needs `OPENCODE_API_KEY` in `.env` and pins its own model and retrie
 ```bash
 make judge-calibrate   # the judge against the 20 labeled pairs
 make eval-dev          # the 12 development cases
-make eval-compare      # GLM-5.3 on the development cases, beside the saved GLM-5.3-Flash run
+make eval-compare      # GLM-5.3-Flash on the development cases, beside the saved GLM-5.3 run
 make eval-baseline     # the 60 test cases with keyword search alone
 make eval              # the 60 test cases with exact matching first; then writes eval/REPORT.md
 ```
@@ -434,17 +434,25 @@ beside the corrected ones ([eval/results/LABEL_AUDIT.md](eval/results/LABEL_AUDI
 | Configuration | Evidence | Accuracy | p95 |
 | --- | --- | --- | --- |
 | Groq GPT-OSS 120B + Qwen judge | Historical 60-case [held-out comparison](eval/REPORT.md) | 50/60 -> 51/60 (83.3% -> 85.0%) | 25.545 s -> 17.226 s |
-| OpenCode GLM-5.3-Flash + Kimi judge | Saved 12-case [development run](eval/results/dev.md); the current default model | 11/12 (91.7%) | 8.157 s |
-| OpenCode GLM-5.3 + Kimi judge | Saved 12-case [development comparison](eval/results/dev-compare.md) | 12/12 (100%) | 2.083 s |
+| OpenCode GLM-5.3 + Kimi judge | 12-case [development comparison](eval/results/dev-compare.md) after issue 17; the default model | 12/12 (100%) | 1.928 s |
+| OpenCode GLM-5.3-Flash + Kimi judge | 12-case [development run](eval/results/dev.md) after issue 17 | 12/12 (100%) | 10.209 s |
+| OpenCode GLM-5.3 + Kimi judge | Earlier 12-case [development comparison](eval/results/dev-compare-before-17.md) | 12/12 (100%) | 2.083 s |
+| OpenCode GLM-5.3-Flash + Kimi judge | Earlier 12-case [development run](eval/results/dev-before-17.md) | 11/12 (91.7%) | 8.157 s |
 
-These are saved measurements of the code each run used, not fresh measurements of the
-current code (the stale-card fix came later). The current default's held-out quality has
-not been measured: the default moved to OpenCode Go after the held-out runs, which were
-kept rather than run again. On the development set GLM-5.3 was more accurate and faster
-than GLM-5.3-Flash, at about eight times the token cost (estimated $0.0164 per run,
-against at least $0.0020); twelve cases can't establish that, so the default is
-unchanged. GLM-5.3-Flash's one development failure, dev-009, is a prescription question:
-it got the wrong reply type and risk label, missed its required text and failed the judge.
+The held-out comparison and the earlier development runs measured the code of their time.
+The two later development runs measured the code after the stale-card fix (issue 15) and
+the named-product fix (issue 17). Held-out quality has not been measured on any OpenCode
+model: the default moved to OpenCode Go after the held-out runs, which were kept rather
+than run again.
+
+After issue 17 both OpenCode models scored 12/12. GLM-5.3 was much faster, with a p95 of
+1.9 s against 10.2 s, and is the only configuration here inside the 4-second target. It
+costs about 6.3 times as much in tokens (an estimated $0.0170 per run against $0.0027), and
+it became the default; GLM-5.3-Flash stays selectable. Flash's two runs show how much a
+12-case run varies: 11/12 then 12/12, and a p95 of 8.2 s then 10.2 s. Its earlier failure,
+dev-009, is a prescription question it labeled as dosing beyond the label. The reply then
+showed another product's directions, a defect issue 17 fixed. In the later run it labeled
+the question correctly, so that 12/12 reflects the model on that run, not the fix.
 
 The six product questions phrased with a brand name or an everyday word come from
 `eval/cases/handwritten_questions.md`. A fresh AI agent wrote them from an ingredient
@@ -466,7 +474,8 @@ again, and when the agents could run live commands or assign labels.
 | Issues 11, 12, 5 and 6: review fixes, preflight, retrieval, answering | Codex | Claude Code, with read-only reviewers over four rounds; every confirmed defect fixed with a regression test | #7-#9 |
 | Issue 9: evaluation | Codex (loader, runner, metrics, CLI, live runs) and Claude Code (judge, calibration, results, the move to OpenCode Go) | Each checked the other's work when taking over | #10 |
 | Issues 14 and 15: the stale-card fix | Codex (contract) and Claude Code (binding and widget) | Claude Code reviewed the contract | #11, #12 |
-| Issue 10: this README | Claude Code drafted it; I checked and reworded it | | |
+| Issue 10: this README | Claude Code drafted it; I checked and reworded it | | #13 |
+| Issues 17 and 18: the quality follow-up | Claude Code, after a read-only diagnosis of the saved development runs | I chose the fix and, after re-running the development set, the default model | #14, #15 |
 
 Each issue was one branch and one pull request, with acceptance criteria that each
 named the test proving them. Both agents followed the same rules in `AGENTS.md`: module
@@ -498,6 +507,10 @@ What the reviews and checks caught:
 - **A stale pharmacist card.** Codex's whole-project review found that an old emergency
   card, clicked after a newer fallback card, filed a routine ticket. Issue 15 binds every
   card to its own offer, with regression tests and a browser check.
+- **Another product's label.** Diagnosing GLM-5.3-Flash's one development failure showed
+  that a medicine outside the catalog could bring up another product's label: a warfarin
+  question got acetaminophen's directions, because that label's warnings mention warfarin.
+  Issue 17 shows a label only for a product the customer named exactly.
 
 ## Limitations and next steps
 
@@ -545,9 +558,8 @@ What the reviews and checks caught:
 - A one-time code to prove control of the email or phone before showing an order.
 - Independent human review of the labels, a hand audit of the judge on the test set,
   and a fresh held-out run of the current default, written to separate files.
-- The small quality follow-up in `docs/FIXES.md` section D: diagnose dev-009 and the
-  slowest stages on the development set, and give the judge the conversation's context
-  if that gap turns out to matter.
+- Give the judge the conversation's context, if that gap turns out to matter: the one
+  item of the quality follow-up in `docs/FIXES.md` section D still open.
 - Fixes for the open safety and privacy gaps above.
 - Holiday hours, typo tolerance in search, clarifying questions with buttons, and turns
   that ask two things at once.

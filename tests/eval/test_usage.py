@@ -7,7 +7,7 @@ import httpx
 import pytest
 
 from assistant.llm import sdk_sender
-from assistant.settings import COMPARISON_RUNTIME_MODEL, DEFAULT_RUNTIME_MODEL, runtime_role
+from assistant.settings import runtime_role
 from eval.judge.judge import Verdict
 from eval.usage import MeteredModel, UsageCapture, token_counts
 
@@ -31,7 +31,7 @@ def body(role, usage):
 
 @pytest.mark.parametrize(
     "runtime_model,cost",
-    [(DEFAULT_RUNTIME_MODEL, 0.000238), (COMPARISON_RUNTIME_MODEL, 0.002166)],
+    [("glm-5.3-flash", 0.000238), ("glm-5.3", 0.002166)],
 )
 def test_actual_sdk_response_hooks_capture_cache_counts_without_double_counting_reasoning(
     runtime_model, cost
@@ -102,7 +102,7 @@ def test_optional_cache_counters_default_to_zero_as_the_api_defines():
 
 
 def test_a_transport_failure_then_retry_does_not_disappear_from_usage_accounting():
-    role, capture, calls = runtime_role(), UsageCapture(), []
+    role, capture, calls = runtime_role("glm-5.3-flash"), UsageCapture(), []
 
     def send(request):
         calls.append(request)
@@ -122,7 +122,7 @@ def test_a_transport_failure_then_retry_does_not_disappear_from_usage_accounting
 
 
 def test_rate_limited_attempts_count_as_unbilled_but_other_failures_stay_unknown():
-    role, capture = runtime_role(), UsageCapture()
+    role, capture = runtime_role("glm-5.3-flash"), UsageCapture()
     for response in (
         httpx.Response(429, headers={"Retry-After": "6"}),
         httpx.Response(200, json=body(role, {"prompt_tokens": 1000, "completion_tokens": 100})),
