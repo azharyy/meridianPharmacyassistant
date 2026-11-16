@@ -55,6 +55,11 @@ HANDOFF_CREATED_TEXT = (
     "Your request has gone to a Meridian pharmacist. Your request number is {ticket_id}."
 )
 HANDOFF_FAILED_TEXT = "Sorry, your request didn't go through. Please try again."
+# For a card that a newer one replaced, or that the session never showed: nothing is sent.
+HANDOFF_STALE_TEXT = (
+    "That card is out of date, so nothing was sent. If this is an emergency, call 911. "
+    "To reach a pharmacist, use the newest card or the Talk to a pharmacist button."
+)
 
 
 @dataclass(frozen=True)

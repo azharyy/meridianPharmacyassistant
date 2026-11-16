@@ -171,12 +171,14 @@ def fulfill(routed, plan: CatalogPlan, records: list[Record], steps: Steps, http
     return TurnResult(reply, routed, found, reviewed, tool, risk)
 
 
-def record_offer(session: Session, result: TurnResult) -> None:
-    """The card on this reply becomes the session's current offer. A reply without one keeps
-    the earlier offer: an older card's Confirm still files that card's risk and urgency."""
-    if result.reply.handoff_offered:
-        reason = "fallback" if result.reply.reply_type is ReplyType.FALLBACK else "risk"
-        session.offer_handoff(result.risk, reason)
+def record_offer(session: Session, reply: ChatReply, risk: RiskLabel) -> ChatReply:
+    """The card on this reply becomes the session's current offer, and the reply carries that
+    offer's ID, so its Confirm files exactly this offer. A reply without a card keeps the
+    earlier offer confirmable; a newer card retires it."""
+    if not reply.handoff_offered:
+        return reply
+    reason = "fallback" if reply.reply_type is ReplyType.FALLBACK else "risk"
+    return reply.model_copy(update={"offer_id": session.offer_handoff(risk, reason).id})
 
 
 def verify_order(
@@ -187,8 +189,7 @@ def verify_order(
     reply_type = ReplyType.ORDER_STATUS if verified is not None else ReplyType.ORDER_NOT_VERIFIED
     plan = CatalogPlan(reply_type=reply_type, records=[], tool=None)
     reply = steps.render(plan, [], RiskLabel.NONE, verified)
-    record_offer(session, TurnResult(reply))
-    return reply
+    return record_offer(session, reply, RiskLabel.NONE)
 
 
 def log_reference(session_id: str) -> str:
@@ -218,7 +219,7 @@ def run_turn(
         finally:
             CONVERSATION.reset(conversation)
     result.timings = timings
-    record_offer(session, result)
+    result.reply = record_offer(session, result.reply, result.risk)
     session.add(Turn(message=message, reply=result.reply, routed=result.routed))
     log.info("turn session=%s reply=%s ms=%s", log_id, result.reply.reply_type, timings)
     return result

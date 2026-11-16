@@ -11,7 +11,7 @@ from pathlib import Path
 
 import httpx
 import yaml
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -81,9 +81,12 @@ def create_app(
     def verify_order(request: OrderFormRequest) -> ChatReply:
         return pipeline.verify_order(request, sessions.get(request.session_id), turn_steps, api)
 
-    @app.post("/handoff", response_model=HandoffReply)
-    def handoff(request: HandoffRequest) -> HandoffReply:
-        return escalation.handoff(request.session_id, sessions.get(request.session_id), api)
+    @app.post("/handoff", response_model=HandoffReply, responses={409: {"model": HandoffReply}})
+    def handoff(request: HandoffRequest, response: Response) -> HandoffReply:
+        session = sessions.get(request.session_id)
+        reply = escalation.handoff(request.session_id, session, api, request.offer_id)
+        response.status_code = 409 if reply == escalation.STALE else 200  # 409: nothing was filed
+        return reply
 
     if widget.is_dir():
         app.mount("/widget", StaticFiles(directory=widget), name="widget")

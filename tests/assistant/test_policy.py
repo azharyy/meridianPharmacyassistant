@@ -95,6 +95,13 @@ def test_handoff_texts_show_the_ticket_or_offer_a_retry():
     assert "try again" in policy.HANDOFF_FAILED_TEXT
 
 
+def test_an_out_of_date_card_says_nothing_was_sent_and_still_names_911():
+    # The old card may be an emergency card, so its rejection repeats the 911 instruction.
+    assert "nothing was sent" in policy.HANDOFF_STALE_TEXT
+    assert "call 911" in policy.HANDOFF_STALE_TEXT
+    assert "try again" not in policy.HANDOFF_STALE_TEXT.lower()
+
+
 def test_order_form_wording_is_complete():
     for text in (
         policy.ORDER_FORM_TEXT,

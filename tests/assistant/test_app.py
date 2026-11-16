@@ -22,6 +22,7 @@ NO_API = httpx.Client(transport=httpx.MockTransport(lambda request: httpx.Respon
 CHAT = {"session_id": "session-0001", "message": QUESTION}
 DATA = Path(__file__).resolve().parents[2] / "data"
 NO_WIDGET = Path("no-widget-folder")
+STALE_ID = "6f1c2d3e-4b5a-4c7d-8e9f-0a1b2c3d4e5f"  # a well-formed UUID4 that is no session's offer
 
 
 def web(fake: FakeSender, widget: Path = Path("no-widget-folder")) -> TestClient:
@@ -92,6 +93,26 @@ def test_a_handoff_needs_the_customers_confirmation():
     assert response.status_code == 422
 
 
+def test_an_old_emergency_card_after_a_fallback_files_nothing_and_a_current_one_files():
+    api = TestClient(create_api(DATA, staff_key="test-staff-key"))
+    steps = pipeline.Steps(retrieve=search)
+    client = TestClient(create_app(SETTINGS, steps, FakeSender(), api, NO_WIDGET))
+    emergency = {**CHAT, "message": "I cannot breathe"}
+    old = client.post("/chat", json=emergency).json()
+    assert client.post("/chat", json=CHAT).json()["reply_type"] == "fallback"  # the model is down
+    confirm = {"session_id": CHAT["session_id"], "confirmed": True}
+    stale = client.post("/handoff", json={**confirm, "offer_id": old["offer_id"]})
+    assert stale.status_code == 409
+    assert stale.json() == {"ticket_id": None, "text": policy.HANDOFF_STALE_TEXT}
+    assert api.app.state.desks.tickets.count() == 0
+    current = client.post("/chat", json=emergency).json()
+    filed = client.post("/handoff", json={**confirm, "offer_id": current["offer_id"]}).json()
+    ticket = api.get(f"/v1/tickets/{filed['ticket_id']}", headers={"X-Staff-Key": "test-staff-key"})
+    summary = ticket.json()["summary"]
+    assert (summary["risk_label"], summary["urgency"]) == ("emergency", "emergency")
+    assert api.app.state.desks.tickets.count() == 1
+
+
 @pytest.mark.parametrize("path", ["/chat", "/handoff", "/orders/verify"])
 def test_widget_json_preflight_from_another_origin(path):
     response = web(FakeSender()).options(
@@ -116,6 +137,7 @@ def test_widget_json_preflight_from_another_origin(path):
         ("/chat", {"session_id": "invalid"}, 422),
         ("/handoff", {"session_id": "session-0001", "confirmed": True}, 200),
         ("/handoff", {"session_id": "session-0001", "confirmed": False}, 422),
+        ("/handoff", {"session_id": "session-0001", "confirmed": True, "offer_id": STALE_ID}, 409),
         ("/orders/verify", {}, 422),
     ],
 )

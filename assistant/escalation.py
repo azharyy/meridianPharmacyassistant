@@ -1,20 +1,23 @@
 """Hand a conversation to a pharmacist: one ticket per offer, with a summary built by code.
 
-A ticket is created only when the customer confirms, through POST /handoff. Its idempotency key
-is the session ID and the offer's number, so confirming twice, or retrying after a failure,
-never creates a second ticket. With no card on screen, the header button makes an offer of its
-own, marked as requested by the customer. The summary holds redacted messages only.
+A ticket is created only when the customer confirms, through POST /handoff, and only for the
+session's current offer: a card names its offer by ID, and an older or unknown card files
+nothing. The idempotency key is the session ID and the offer's ID, so confirming twice, or
+retrying after a failure, never creates a second ticket. The header button sends no ID: it files
+the current offer or, with no card on screen, an offer of its own, marked as requested by the
+customer. The summary holds redacted messages only.
 """
 
 import httpx
 
 from assistant import api_client
-from assistant.policy import HANDOFF_CREATED_TEXT, HANDOFF_FAILED_TEXT
+from assistant.policy import HANDOFF_CREATED_TEXT, HANDOFF_FAILED_TEXT, HANDOFF_STALE_TEXT
 from assistant.session import HandoffOffer, Session
 from contracts.api import TicketCreateRequest, TicketSummary
 from contracts.chat import ChatReply, HandoffReply
 from contracts.taxonomy import RiskLabel
 
+STALE = HandoffReply(ticket_id=None, text=HANDOFF_STALE_TEXT)  # the app sends it with HTTP 409
 RECENT_TURNS = 5
 URGENCY = {
     RiskLabel.EMERGENCY: "emergency",
@@ -42,11 +45,16 @@ def summarize(session: Session, offer: HandoffOffer) -> TicketSummary:
     )
 
 
-def handoff(session_id: str, session: Session, http: httpx.Client) -> HandoffReply:
-    """The ticket for the session's current offer, created once; a failure keeps the offer."""
-    offer = session.offer_handoff(RiskLabel.NONE, "customer_requested", reuse=True)
+def handoff(
+    session_id: str, session: Session, http: httpx.Client, offer_id: str | None = None
+) -> HandoffReply:
+    """The ticket for the confirmed offer, created once; a failure keeps the offer for a retry.
+    The offer is captured before the ticket call, so a newer card can't change what is filed."""
+    offer = session.confirm_offer(offer_id)
+    if offer is None:
+        return STALE
     if offer.ticket_id is None:
-        key = f"{session_id}:{offer.number}"
+        key = f"{session_id}:{offer.id}"
         request = TicketCreateRequest(idempotency_key=key, summary=summarize(session, offer))
         try:
             offer.ticket_id = api_client.create_ticket(http, request).ticket_id

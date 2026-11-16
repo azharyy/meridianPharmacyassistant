@@ -4,6 +4,7 @@ import json
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from threading import Barrier, Event
+from uuid import uuid4
 
 import httpx
 import pytest
@@ -11,9 +12,9 @@ from fastapi.testclient import TestClient
 
 from api.app import create_app as create_api
 from assistant import pipeline
-from assistant.escalation import handoff, summarize
+from assistant.escalation import STALE, handoff, summarize
 from assistant.llm import FakeSender, ModelClient
-from assistant.policy import HANDOFF_CREATED_TEXT, HANDOFF_FAILED_TEXT
+from assistant.policy import HANDOFF_CREATED_TEXT, HANDOFF_FAILED_TEXT, HANDOFF_STALE_TEXT
 from assistant.render import render_risk
 from assistant.session import Session, Turn
 from assistant.settings import load_settings
@@ -54,17 +55,37 @@ def test_simultaneous_header_confirmations_create_one_offer_and_ticket():
     ready = Barrier(2)
 
     class SimultaneousSession(Session):
-        def offer_handoff(self, *args, **kwargs):
+        def confirm_offer(self, offer_id):
             # Both confirmations reach allocation before either can create an offer.
             ready.wait(timeout=5)
-            return super().offer_handoff(*args, **kwargs)
+            return super().confirm_offer(offer_id)
 
     session, api = SimultaneousSession(), mock_api()
     with ThreadPoolExecutor(max_workers=2) as pool:
         pending = [pool.submit(handoff, SESSION_ID, session, api) for _ in range(2)]
         replies = [future.result(timeout=10) for future in pending]
     assert replies[0] == replies[1]
-    assert session.offers_made == api.app.state.desks.tickets.count() == 1
+    assert api.app.state.desks.tickets.count() == 1  # a second offer would have its own key
+
+
+def test_an_old_or_unknown_card_files_nothing_and_allocates_no_offer():
+    calls = []
+
+    def record(request: httpx.Request) -> httpx.Response:
+        calls.append(request)
+        return httpx.Response(500)
+
+    api = httpx.Client(transport=httpx.MockTransport(record))
+    session = medical_session()
+    old = session.handoff_offer
+    current = session.offer_handoff(RiskLabel.NONE, "fallback")
+    for offer_id in (old.id, str(uuid4())):
+        assert handoff(SESSION_ID, session, api, offer_id) == STALE
+    empty = Session()
+    assert handoff(SESSION_ID, empty, api, old.id) == STALE
+    assert calls == [] and empty.handoff_offer is None and session.handoff_offer is current
+    assert (old.ticket_id, current.ticket_id) == (None, None)
+    assert (STALE.ticket_id, STALE.text) == (None, HANDOFF_STALE_TEXT)
 
 
 def test_simultaneous_confirmations_of_a_card_return_one_ticket():
@@ -142,10 +163,11 @@ def test_a_failed_creation_says_so_and_the_retry_reuses_the_same_key():
 
     api = httpx.Client(base_url="http://api.test", transport=httpx.MockTransport(handle))
     session = medical_session()
-    failed = handoff(SESSION_ID, session, api)
+    card = session.handoff_offer.id
+    failed = handoff(SESSION_ID, session, api, card)
     assert (failed.ticket_id, failed.text) == (None, HANDOFF_FAILED_TEXT)
-    assert handoff(SESSION_ID, session, api).ticket_id == "TCK-1001"
-    assert [body["idempotency_key"] for body in sent] == [f"{SESSION_ID}:1"] * 2
+    assert handoff(SESSION_ID, session, api, card).ticket_id == "TCK-1001"
+    assert [body["idempotency_key"] for body in sent] == [f"{SESSION_ID}:{card}"] * 2
 
 
 def test_the_summary_holds_every_field():
