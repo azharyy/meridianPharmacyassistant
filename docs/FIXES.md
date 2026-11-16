@@ -1,10 +1,10 @@
 # Review fixes and submission plan
 
-Updated 2026-11-16 after the latest whole-project review, under
-[issue 23](issues/23-review-fix-plan.md). **Planning only: the user explicitly
-said not to start implementation.** Section E is the proposed next queue; none
-of its fixes has been implemented by this update. A later user instruction is
-needed to begin a fix.
+Updated 2026-11-16 after the user authorized implementation of the
+[issue 23](issues/23-review-fix-plan.md) plan. E1-E5 are implemented and tested
+locally in issues 24-28; [issue 29](issues/29-review-fix-documentation.md) records
+completion and remaining validation. The implementation commits are stacked on
+local issue branches, pending publication/review. No live measurements were rerun.
 
 The earlier A-D queue has been addressed through issues 14-22: offer binding,
 README completion, the named-product fix, the default-model decision and the
@@ -21,7 +21,7 @@ capacity for checks and a complete handoff, then stops **before** its hard limit
 Everything it did must be recorded in `HANDOFF.md`; the next agent continues
 from that record without needing the chat.
 
-## What matters most
+## Review findings and fixes
 
 | Priority | Problem and evidence | Smallest useful fix |
 | --- | --- | --- |
@@ -319,20 +319,22 @@ the required submission. Create a narrowly scoped issue only after diagnosis.
    limitation. Do not claim 90% held-out accuracy or sub-four-second general p95
    from offline tests, a changed configuration or a twelve-case development run.
 
-## E. Feasible follow-ups from the latest review (not started)
+## E. Feasible follow-ups from the latest review (completed locally)
 
 All reproductions below used synthetic inputs and offline fakes. The review's
-baseline was Ruff lint/format green and 1,365 passing tests. Those checks do not
-cover the reproduced defects. Implement these later as separate issues in the
-priority order above, using installed dependencies and existing contracts only.
-Each future issue names relevant PLAN sections and runs the full offline checks
-after each acceptance criterion. Do not change protected files to make a fix fit.
+baseline was 1,365 passing tests. E1-E5 now have regression coverage and 1,454
+tests pass, with Ruff lint/format green. Full checks and commits were recorded
+after each criterion in HANDOFF.md. Existing dependencies/contracts were sufficient.
+No improvement to live model scores is claimed by these offline checks.
 
 ### E1. Close the reproduced phone-redaction gaps
 
 Proposed slug: `phone-redaction`. Scope: `assistant/redaction.py`,
 `tests/assistant/test_redaction.py`, and integration tests in
 `tests/assistant/test_pipeline.py` / `test_escalation.py`.
+
+Completed in [issue 24](issues/24-phone-redaction.md), including sentence-boundary
+regressions found during review.
 
 `Call me at +44 20 7946 0958` survives redaction; the review observed it in the
 fake model's request and the ticket summary. Add bounded recognition for
@@ -342,9 +344,9 @@ redaction, ages, doses and SKUs; do not turn every numeric sequence into a phone
 Document supported forms without claiming universal contact recognition.
 
 Acceptance:
-- [ ] Synthetic international and context-marked local numbers are absent from
+- [x] Synthetic international and context-marked local numbers are absent from
   fake-model requests, stored messages, captured logs and ticket summaries.
-- [ ] Existing US/email/order cases still redact. Dose ranges, strengths, ages
+- [x] Existing US/email/order cases still redact. Dose ranges, strengths, ages
   and catalog identifiers keep their existing intended behavior. No new package
   or changes to private order verification are needed.
 
@@ -354,6 +356,9 @@ Proposed slug: `emergency-recognition`. Scope:
 `assistant/safety/emergency.py`, `tests/assistant/safety/test_emergency.py`, and
 `tests/assistant/test_pipeline.py`. This issue changes detection only; E4 handles
 HTTP scheduling. Emergency/injection precedence and fixed replies stay intact.
+
+Completed in [issue 25](issues/25-emergency-recognition.md), including reviewed
+strength-unit and medicine-container regressions.
 
 Handle explicit current recurrence across adjacent sentences, for example
 `I had a seizure last year. I am having one again now.`, and current throat
@@ -365,12 +370,12 @@ Keep recognition patterns centralized at the top of the existing module; do not
 add a medical dosing engine or a model call.
 
 Acceptance:
-- [ ] The recurrence and throat-tightness regressions return the fixed emergency
+- [x] The recurrence and throat-tightness regressions return the fixed emergency
   reply and offer with zero model/API calls, including when the model is down.
-- [ ] The ordinary-ingestion examples do not trigger the emergency detector;
+- [x] The ordinary-ingestion examples do not trigger the emergency detector;
   explicit overdose, swallowed medicine bottles and child ingestion remain
   covered. Existing historical-event and label-question tests still pass.
-- [ ] `I had a seizure last year. Are you open now?` does not become an emergency.
+- [x] `I had a seizure last year. Are you open now?` does not become an emergency.
   A present-time word elsewhere must not globally override historical context.
 
 ### E3. Withhold ambiguous product labels in safety replies
@@ -379,6 +384,10 @@ Proposed slug: `unambiguous-risk-label`. Scope:
 `assistant/retrieval/index.py`, `assistant/retrieval/exact.py` only as needed,
 their mirrored tests, and integration assertions in
 `tests/assistant/test_app.py` / `tests/eval/test_runner.py`.
+
+Completed in [issue 26](issues/26-unambiguous-risk-label.md). Caller inspection
+also required `assistant/pipeline.py`: pass all routed product mentions to the
+strict lookup instead of discarding later mentions. No general retrieval change.
 
 `named("diphenhydramine 2% spray")` currently chooses oral 25 mg tablets;
 `famotidine 10 mg` chooses 20 mg. The full risk path displays those directions
@@ -393,13 +402,13 @@ form/strength parser at this stage. Conflicting explicit identifiers must also
 abstain. Preserve ordinary catalog retrieval, which may return multiple records.
 
 Acceptance:
-- [ ] The spray and strength examples never show another variant's directions
+- [x] The spray and strength examples never show another variant's directions
   in full fake-model HTTP responses. Ambiguous cases retain the fixed refusal
   and offer, with no orphan label sources.
-- [ ] Exact SKU/full-name and unambiguous ingredient/alias matches still show
+- [x] Exact SKU/full-name and unambiguous ingredient/alias matches still show
   verbatim text with correct sources. Multiple explicit products do not silently
   select the first. Behavior is independent of the retrieval feature flag.
-- [ ] Normal catalog search/comparisons and eval evidence capture still work;
+- [x] Normal catalog search/comparisons and eval evidence capture still work;
   an intentionally omitted label is not recorded as displayed evidence.
 
 ### E4. Keep emergencies responsive when normal work is saturated
@@ -407,6 +416,9 @@ Acceptance:
 Proposed slug: `emergency-request-scheduling`. Scope: `assistant/app.py`,
 `assistant/pipeline.py` only for a small shared emergency-path extraction if
 necessary, and their mirrored tests. Depends on preserving E2's detector behavior.
+
+Completed in [issue 27](issues/27-emergency-request-scheduling.md); the dispatch
+change fits in app.py and reuses the pipeline without extraction.
 
 The synchronous `/chat` handler waits for a shared worker before it even checks
 the message. The review filled all 40 available workers with event-blocked fake
@@ -420,11 +432,11 @@ HTTP or ticket I/O may run on the event loop. Do not convert the whole service t
 async, add a second renderer, or hold session locks across network calls.
 
 Acceptance:
-- [ ] An event-controlled HTTP test fills the normal-work capacity and proves an
+- [x] An event-controlled HTTP test fills the normal-work capacity and proves an
   emergency finishes before those calls are released, with zero model/API calls.
   Derive capacity from the test limiter; use events and a bounded failure timeout,
   not a sleep-based performance assertion.
-- [ ] The immediate path keeps redaction, fixed reply, offer identity, session
+- [x] The immediate path keeps redaction, fixed reply, offer identity, session
   recording and logging behavior. Normal chat, private verification, stale-card
   rejection and overlapping ticket/model work retain their existing checks.
 
@@ -434,6 +446,9 @@ Proposed slug: `eval-input-fingerprint`. Scope: `eval/cli.py` and
 `tests/eval/test_cli.py` / `test_compare.py`. No cases, judge prompts, metric
 definitions, saved reports or runtime behavior change.
 
+Completed in [issue 28](issues/28-eval-input-fingerprint.md). Saved results and
+calibration artifacts remain unchanged; old development fingerprints are incompatible.
+
 `implementation_digest()` omits `api/` and `contracts/` code and checks a root
 `policies/` directory instead of `data/policies/`. Include those actual runtime
 inputs alongside existing assistant/eval code, prompts, catalog and public data.
@@ -442,11 +457,11 @@ files, keys, generated caches, results and held-out case contents; the case set
 already has its own separate fingerprint.
 
 Acceptance:
-- [ ] Temporary fixtures show that changing a policy, API module or contract
+- [x] Temporary fixtures show that changing a policy, API module or contract
   module changes the digest; identical inputs produce the same digest.
-- [ ] Comparisons reject different implementation fingerprints before live
+- [x] Comparisons reject different implementation fingerprints before live
   work. Adding unrelated/cache/result files does not change the digest.
-- [ ] Archived measurements remain byte-for-byte unchanged. State that old
+- [x] Archived measurements remain byte-for-byte unchanged. State that old
   development fingerprints are incompatible with new runs; any later comparison
   needs a fresh compatible pair, run by the user, not silent report replacement.
 
@@ -487,7 +502,8 @@ Acceptance:
 
 ## Next action
 
-Finish and verify issue 23's documentation only, then stop. No queued code fix,
-model run, Git synchronization or deployment starts from this planning request.
-When the user later requests implementation, create the E1 issue and branch
-first, unless they explicitly select another queued item.
+E1-E5 code and this completion note are ready for review on local stacked issue
+branches. Publish/review one issue at a time, consolidating same-issue follow-up
+commits as needed without rewriting main or a remote branch. Keep E6's video,
+human-label review, live widget acceptance and any new live measurements pending
+until they are actually completed. Do not restart E1-E5 or rerun archived evaluations.

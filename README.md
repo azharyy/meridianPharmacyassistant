@@ -544,16 +544,29 @@ What the reviews and checks caught:
   failed on its reply type and risk label. The evaluator is unchanged, because changing
   it would need a new calibration for no measured effect.
 
-### Safety and privacy gaps found in review and left open
+### Safety and privacy after the review fixes
 
-- The emergency rules miss a symptom and "now" in different sentences ("I had chest pain
-  last year. I have it again now."), and "My throat feels tight right now" matches no
-  pattern. The router is the backup while the model is up.
-- Redaction misses phone numbers outside the US format; a unit-less dose list such as
-  "250/500/1000" can read as a phone number; and "$12345", lot numbers and NDC fragments
-  become `[number]`.
+- Emergency rules now cover explicit recurrence across adjacent sentences and throat
+  tightness. Ordinary water, single-tablet and strength statements no longer independently
+  trigger overdose. These are bounded patterns, not universal emergency recognition.
+- Recognized emergencies bypass the normal HTTP worker queue; an event-controlled test
+  proves the reply completes while all normal workers remain blocked.
+- Redaction covers US phones, explicit +/00 international prefixes with 8-15 digits,
+  and seven-digit local numbers introduced by phone/call/text context. Arbitrary phone
+  spellings remain outside that coverage. A unit-less dose list such as "250/500/1000"
+  can still read as a phone; "$12345", lot numbers and NDC fragments become `[number]`.
+- Safety replies omit label sections when an ingredient or alias identifies multiple
+  products, or explicit product identifiers conflict. A unique full name/SKU or
+  unambiguous ingredient/alias still gives verbatim cited text; ordinary retrieval is
+  unchanged. This avoids choosing tablet directions for a spray or guessing a strength.
 - Order verification is the order number plus the matching email or phone, with no
   one-time code.
+
+These fixes have offline regression coverage ([fix plan](docs/FIXES.md#e-feasible-follow-ups-from-the-latest-review-completed-locally));
+they do not change the saved live measurements. Evaluation fingerprints now include API
+and contract code and the actual policy documents. Old development fingerprints are
+incompatible: a future comparison needs a fresh compatible user-run pair, while archived
+results remain intact.
 
 ### Product
 
