@@ -47,7 +47,7 @@ run: | .venv  ## Start the API on port 8001 and the assistant on port 8000. Need
 
 eval-dev eval-baseline eval: export MERIDIAN_LLM := live
 eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_PROVIDER := opencode
-eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_MODEL := glm-5.3-flash
+eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_MODEL := glm-5.3
 eval-dev eval: export MERIDIAN_EXACT_MATCH := 1
 eval-baseline: export MERIDIAN_EXACT_MATCH := 0
 
@@ -64,7 +64,7 @@ eval: | .venv  ## Run the same labeled test set with exact matching enabled.
 
 judge-calibrate: export MERIDIAN_LLM := live
 judge-calibrate: export MERIDIAN_RUNTIME_PROVIDER := opencode
-judge-calibrate: export MERIDIAN_RUNTIME_MODEL := glm-5.3-flash
+judge-calibrate: export MERIDIAN_RUNTIME_MODEL := glm-5.3
 judge-calibrate: | .venv  ## Check the OpenCode Go Kimi judge against the 20 labeled pairs.
 	$(PY) -m eval.cli calibrate
 
@@ -72,7 +72,7 @@ judge-calibrate: | .venv  ## Check the OpenCode Go Kimi judge against the 20 lab
 
 eval-compare: export MERIDIAN_LLM := live
 eval-compare: export MERIDIAN_RUNTIME_PROVIDER := opencode
-eval-compare: export MERIDIAN_RUNTIME_MODEL := glm-5.3
+eval-compare: export MERIDIAN_RUNTIME_MODEL := glm-5.3-flash
 eval-compare: export MERIDIAN_EXACT_MATCH := 1
-eval-compare: | .venv  ## Compare GLM-5.3 with the saved GLM-5.3-Flash development run.
+eval-compare: | .venv  ## Compare GLM-5.3-Flash with the saved GLM-5.3 development run.
 	$(PY) -m eval.cli dev-compare

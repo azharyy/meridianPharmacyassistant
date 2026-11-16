@@ -73,7 +73,7 @@ def live_client(
         (
             "opencode",
             "https://opencode.ai/inference/go/openai/v1/chat/completions",
-            "glm-5.3-flash",
+            "glm-5.3",
         ),
     ],
 )

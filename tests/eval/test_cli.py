@@ -119,7 +119,7 @@ def test_missing_live_keys_stop_before_models_or_api_start():
     [
         SETTINGS,
         load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_EXACT_MATCH": "0"}),
-        load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_MODEL": "glm-5.3"}),
+        load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_MODEL": "glm-5.3-flash"}),
         load_settings({"MERIDIAN_LLM": "live", "MERIDIAN_RUNTIME_PROVIDER": "groq"}),
     ],
 )
@@ -202,7 +202,7 @@ def test_make_targets_set_live_models_and_matching_flags_without_shell_commands(
     makefile = Path("Makefile").read_text()
     assert "eval-dev eval-baseline eval: export MERIDIAN_LLM := live" in makefile
     assert "eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_PROVIDER := opencode" in makefile
-    assert "eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_MODEL := glm-5.3-flash" in makefile
+    assert "eval-dev eval-baseline eval: export MERIDIAN_RUNTIME_MODEL := glm-5.3" in makefile
     assert "eval-dev eval: export MERIDIAN_EXACT_MATCH := 1" in makefile
     assert "eval-baseline: export MERIDIAN_EXACT_MATCH := 0" in makefile
     for name in ("dev", "baseline", "improved"):

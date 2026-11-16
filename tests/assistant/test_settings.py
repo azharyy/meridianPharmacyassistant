@@ -18,7 +18,7 @@ def test_defaults_are_the_fake_model_with_opencode_go_for_every_role():
     runtime = settings.runtime
     assert (runtime.provider, runtime.model, runtime.reasoning_effort) == (
         "opencode",
-        "glm-5.3-flash",
+        "glm-5.3",
         "low",
     )
     assert (runtime.base_url, runtime.key_variable) == (GO, "OPENCODE_API_KEY")
@@ -112,7 +112,7 @@ def test_exact_match_flag_and_api_url():
 
 @pytest.mark.parametrize(
     ("model", "expected"),
-    [(None, "glm-5.3-flash"), ("glm-5.3", "glm-5.3")],
+    [(None, "glm-5.3"), ("glm-5.3-flash", "glm-5.3-flash")],
 )
 def test_the_runtime_moves_to_an_opencode_go_model_by_settings_alone(model, expected):
     env = {"MERIDIAN_RUNTIME_PROVIDER": "opencode"}

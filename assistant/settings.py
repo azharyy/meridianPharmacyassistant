@@ -13,8 +13,8 @@ GROQ_URL = "https://api.groq.com/openai/v1"
 OPENCODE_GO_URL = "https://opencode.ai/inference/go/openai/v1"
 DEFAULT_API_URL = "http://127.0.0.1:8001"
 DEFAULT_PROVIDER = "opencode"
-DEFAULT_RUNTIME_MODEL = "glm-5.3-flash"
-COMPARISON_RUNTIME_MODEL = "glm-5.3"
+DEFAULT_RUNTIME_MODEL = "glm-5.3"
+COMPARISON_RUNTIME_MODEL = "glm-5.3-flash"
 # provider: (base URL, key variable, runtime models it may use; the first is the default)
 PROVIDERS = {
     # Go-plan models that OpenCode lists with structured output on chat completions and "low"
