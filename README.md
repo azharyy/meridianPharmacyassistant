@@ -421,4 +421,50 @@ the alias table had been written locally, not before it.
 
 ## AI usage
 
+I built this with two AI coding agents, Claude Code and Codex, and directed both. An AI
+drafted the plan (`docs/PLAN.md`) and the issue files (`docs/issues/`). I edited them,
+chose between the options the agents raised, and made the calls the code couldn't: which
+model providers to use (Groq only at first, then OpenCode Go for every role), how the
+pharmacist card behaves, keeping the Groq held-out runs instead of spending the test set
+again, and when the agents could run live commands or assign labels.
+
+| Work | Built by | Reviewed and fixed by | Pull requests |
+| --- | --- | --- | --- |
+| Issues 1-4, 7 and 8: contracts, pipeline, catalog and data, mock API, safety and escalation, widget | Claude Code | Codex, after merge; its seven findings became issue 11 | #1-#6 |
+| Issues 11, 12, 5 and 6: review fixes, preflight, retrieval, answering | Codex | Claude Code, with read-only reviewers over four rounds; every confirmed defect fixed with a regression test | #7-#9 |
+| Issue 9: evaluation | Codex (loader, runner, metrics, CLI, live runs) and Claude Code (judge, calibration, results, the move to OpenCode Go) | Each checked the other's work when taking over | #10 |
+| Issues 14 and 15: the stale-card fix | Codex (contract) and Claude Code (binding and widget) | Claude Code reviewed the contract | #11, #12 |
+| Issue 10: this README | Claude Code drafted it; I checked and reworded it | | |
+
+Each issue was one branch and one pull request, with acceptance criteria that each
+named the test proving them. Both agents followed the same rules in `AGENTS.md`: module
+boundaries a test enforces, no real model in any test, customer-facing text only from
+templates. They shared one note, `HANDOFF.md` (kept out of git): the issue, the ticked
+criteria and their tests, the last check result, the decisions and the next step. When
+one agent hit its usage limit, the other picked the issue up from the note, after
+checking the working tree against it. A fresh agent, told not to open the alias table,
+the retrieval code, the prompts or the safety rules, drafted the evaluation cases, and
+fresh agents labeled them. Codex
+had no Git access at first, so its work was committed during reviews and takeovers until
+I gave it Git permissions.
+
+What the reviews and checks caught:
+
+- **Every live call failing.** OpenCode Go rejects a request without an
+  `x-opencode-session` header. Claude Code had treated the header as optional, so the
+  first OpenCode runs scored only the emergency case. A probe without a key showed the
+  cause; each conversation now sends an opaque session ID.
+- **A model that couldn't take the request format.** DeepSeek V4.1 Flash, listed with
+  structured output, rejected every strict request, so GLM-5.3 replaced it as the
+  comparison model.
+- **A wrong gold label.** test-057's expected refusal contradicted the plan's safety
+  policy. It was corrected after the live runs, the same replies were rescored, and the
+  original results are kept.
+- **Rate limits scored as answers.** Groq's free-tier limits turned development runs into
+  fallback replies (4/12 at worst). The evaluation now waits out short limits, and stops
+  without saving anything when a limit is too long to wait out.
+- **A stale pharmacist card.** Codex's whole-project review found that an old emergency
+  card, clicked after a newer fallback card, filed a routine ticket. Issue 15 binds every
+  card to its own offer, with regression tests and a browser check.
+
 ## Limitations and next steps
